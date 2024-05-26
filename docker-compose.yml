@@ -1,0 +1,21 @@
+﻿# Compose that will be responsible for running the fullstack app.  
+services:
+#  Do the migration stuff for the db 
+  postgres:
+    image: postgres:latest
+    container_name: postgres_web_test
+    ports:
+      - "6500:5432"
+    volumes:
+      - progresDB:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+  
+  backend:
+    image: backend
+    build:
+      context: .
+      dockerfile: Backend/Dockerfile
+
+volumes:
+  progresDB:
