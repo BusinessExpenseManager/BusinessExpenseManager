@@ -50,6 +50,6 @@ docker-compose up -d
 To stop the running containers, use the following command:
 
 ```sh 
-Stopping the Application
+docker-compose down
 ```
 
