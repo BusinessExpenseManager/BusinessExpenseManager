@@ -10,12 +10,9 @@ public static class CategoryEndpoints
 {
     public static void Map(WebApplication app)
     {
-        app.MapGet("/", GetAllCategories);
-        app.MapPut("/{id}", AddCategories);
-    }
-
-    private static async Task AddCategories(string id, ILogger<Program> logger, IDbConnection connection)
-    {
+        var group = app.MapGroup("/category");
+        // Assuming that we won't need pagination for categories.
+        group.MapGet("/", GetAllCategories);
     }
 
     private static async Task<JsonHttpResult<ApiMessage<IEnumerable<Category>>>> GetAllCategories(

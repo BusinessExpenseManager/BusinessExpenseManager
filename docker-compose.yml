@@ -3,7 +3,7 @@ services:
 #  Do the migration stuff for the db 
   postgres:
     image: postgres:latest
-    container_name: postgres_web_test
+    container_name: postgres_web_test_2
     ports:
       - "6500:5432"
     volumes:
@@ -11,11 +11,11 @@ services:
     env_file:
       - ./.env
   
-  backend:
-    image: backend
-    build:
-      context: .
-      dockerfile: Backend/Dockerfile
+#  backend:
+#    image: backend
+#    build:
+#      context: .
+#      dockerfile: Backend/Dockerfile
 
 volumes:
   progresDB:

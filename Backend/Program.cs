@@ -22,10 +22,8 @@ app.UseCors(corsPolicyBuilder =>
 // TODO: add authorization
 
 // TODO: add all endpoints
-BudgetEndpoints.Map(app);
+GoalEndpoints.Map(app);
 BusinessEndpoints.Map(app);
 CategoryEndpoints.Map(app);
-ExpenseEndpoints.Map(app);
-IncomeEndpoints.Map(app);
 
 app.Run();
