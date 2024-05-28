@@ -8,14 +8,14 @@ CREATE TABLE IF NOT EXISTS BusinessUser
 (
     id                SERIAL PRIMARY KEY,
     uuid_from_cognito VARCHAR(50) NOT NULL
-    );
+);
 
 CREATE TABLE IF NOT EXISTS Businesses
 (
     id               SERIAL PRIMARY KEY,
     name             VARCHAR(50),
     created_datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-    );
+);
 
 CREATE TABLE IF NOT EXISTS Goals
 (
@@ -25,13 +25,13 @@ CREATE TABLE IF NOT EXISTS Goals
     goal_monetary_value MONEY        NOT NULL,
     goal_due_datetime   TIMESTAMP    NOT NULL,
     created_datetime    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
-    );
+);
 
 CREATE TABLE IF NOT EXISTS Categories
 (
     id   SERIAL PRIMARY KEY,
     name VARCHAR(15) NOT NULL
-    );
+);
 
 CREATE TABLE IF NOT EXISTS CategoryBudgets
 (
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS CategoryBudgets
     business_id    INTEGER NOT NULL REFERENCES Businesses (id),
     category_id    INTEGER NOT NULL REFERENCES Categories (id),
     monthly_budget INTEGER NOT NULL
-    );
+);
 
 CREATE TABLE IF NOT EXISTS MonetaryFlows
 (
@@ -49,6 +49,6 @@ CREATE TABLE IF NOT EXISTS MonetaryFlows
     category_id      INTEGER   NOT NULL REFERENCES Categories (id),
     monetary_value   MONEY     NOT NULL,
     created_datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-    );
+);
 
 

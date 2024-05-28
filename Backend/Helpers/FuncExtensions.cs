@@ -6,7 +6,7 @@ namespace Backend.Helpers;
 public static class FuncExtensions
 {
     /// <summary>
-    /// Invokes async function without throwing the exception.
+    ///     Invokes async function without throwing the exception.
     /// </summary>
     /// <typeparam name="TResult">The result type.</typeparam>
     /// <param name="function">The function to invoke.</param>
@@ -27,9 +27,9 @@ public static class FuncExtensions
         return result;
     }
 
-    
+
     /// <summary>
-    /// Invokes async value function without throwing the exception.
+    ///     Invokes async value function without throwing the exception.
     /// </summary>
     /// <typeparam name="TResult">The result type.</typeparam>
     /// <param name="function">The function to invoke.</param>

@@ -15,7 +15,7 @@ public class PagingData
         const string offsetKey = "offset";
 
         Enum.TryParse<SortDirection>(context.Request.Query[sortDirectionKey],
-            ignoreCase: true, out var sortDirection);
+            true, out var sortDirection);
         if (!int.TryParse(context.Request.Query[offsetKey], out var offset)) offset = 0;
         var result = new PagingData
         {

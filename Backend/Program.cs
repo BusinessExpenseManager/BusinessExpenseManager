@@ -1,10 +1,14 @@
 using System.Data;
 using Backend.Api;
+using Backend.Model.Domain;
+using Backend.Model.Validators;
+using FluentValidation;
 using Npgsql;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Services.AddLogging();
 builder.Services.AddCors();
+builder.Services.AddScoped<IValidator<GoalAdd>, GoalValidator>();
 
 var connectionString = builder.Configuration["Database:ConnectionString"] ??
                        throw new Exception("No connection string found");

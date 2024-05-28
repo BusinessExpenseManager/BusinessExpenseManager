@@ -4,3 +4,14 @@ GET {{Backend_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+PUT {{Backend_HostAddress}}/goal/add
+Content-Type: application/json
+
+{
+  "Name": "Washing machine",
+  "Description": "Heart",
+  "GoalMonetaryValue": 12,
+  "GoalDueDatetime": "2024-05-28 Tue 15:33:03"
+}
+
