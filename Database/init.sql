@@ -1,55 +1,54 @@
-﻿CREATE TABLE "Businesses"
+﻿DROP TABLE IF EXISTS Businesses;
+DROP TABLE IF EXISTS Goals;
+DROP TABLE IF EXISTS Categories;
+DROP TABLE IF EXISTS CategoryBudgets;
+DROP TABLE IF EXISTS MonetaryFlows;
+
+CREATE TABLE IF NOT EXISTS BusinessUser
 (
-    "id"               integer PRIMARY KEY,
-    "name"             nvarchar(50),
-    "created_datetime" datetime
-);
+    id                SERIAL PRIMARY KEY,
+    uuid_from_cognito VARCHAR(50) NOT NULL
+    );
 
-CREATE TABLE "Goals"
+CREATE TABLE IF NOT EXISTS Businesses
 (
-    "id"                  integer PRIMARY KEY,
-    "name"                nvarchar(15),
-    "description"         nvarchar(150),
-    "goal_monetary_value" money,
-    "goal_due_datetime"   datetime,
-    "created_datetime"    datetime
-);
+    id               SERIAL PRIMARY KEY,
+    name             VARCHAR(50),
+    created_datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
 
-CREATE TABLE "MonetaryFlows"
+CREATE TABLE IF NOT EXISTS Goals
 (
-    "id"               integer PRIMARY KEY,
-    "business_id"      integer,
-    "goal_id"          integer,
-    "category_id"      integer,
-    "monetary_value"   money,
-    "created_datetime" datetime
-);
+    id                  SERIAL PRIMARY KEY,
+    name                VARCHAR(15)  NOT NULL,
+    description         VARCHAR(150) NOT NULL,
+    goal_monetary_value MONEY        NOT NULL,
+    goal_due_datetime   TIMESTAMP    NOT NULL,
+    created_datetime    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
 
-CREATE TABLE "Categories"
+CREATE TABLE IF NOT EXISTS Categories
 (
-    "id"   integer PRIMARY KEY,
-    "name" nvarchar(15)
-);
+    id   SERIAL PRIMARY KEY,
+    name VARCHAR(15) NOT NULL
+    );
 
-CREATE TABLE "CategoryBudgets"
+CREATE TABLE IF NOT EXISTS CategoryBudgets
 (
-    "id"             integer PRIMARY KEY,
-    "business_id"    integer,
-    "category_id"    integer,
-    "monthly_budget" integer
-);
+    id             SERIAL PRIMARY KEY,
+    business_id    INTEGER NOT NULL REFERENCES Businesses (id),
+    category_id    INTEGER NOT NULL REFERENCES Categories (id),
+    monthly_budget INTEGER NOT NULL
+    );
 
-ALTER TABLE "MonetaryFlows"
-    ADD FOREIGN KEY ("business_id") REFERENCES "Businesses" ("id");
+CREATE TABLE IF NOT EXISTS MonetaryFlows
+(
+    id               SERIAL PRIMARY KEY,
+    business_id      INTEGER   NOT NULL REFERENCES Businesses (id),
+    goal_id          INTEGER   NOT NULL REFERENCES Goals (id),
+    category_id      INTEGER   NOT NULL REFERENCES Categories (id),
+    monetary_value   MONEY     NOT NULL,
+    created_datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
 
-ALTER TABLE "MonetaryFlows"
-    ADD FOREIGN KEY ("goal_id") REFERENCES "Goals" ("id");
 
-ALTER TABLE "MonetaryFlows"
-    ADD FOREIGN KEY ("category_id") REFERENCES "Categories" ("id");
-
-ALTER TABLE "CategoryBudgets"
-    ADD FOREIGN KEY ("business_id") REFERENCES "Businesses" ("id");
-
-ALTER TABLE "CategoryBudgets"
-    ADD FOREIGN KEY ("category_id") REFERENCES "Categories" ("id");
