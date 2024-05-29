@@ -2,6 +2,8 @@ using System.Data;
 using Backend.Api;
 using Backend.Model.Domain;
 using Backend.Model.Validators;
+using Backend.Types;
+using Dapper;
 using FluentValidation;
 using Npgsql;
 
@@ -9,11 +11,15 @@ var builder = WebApplication.CreateSlimBuilder(args);
 builder.Services.AddLogging();
 builder.Services.AddCors();
 builder.Services.AddScoped<IValidator<GoalAdd>, GoalValidator>();
+builder.Services.AddScoped<IValidator<BusinessAdd>, BusinessValidator>();
+builder.Services.AddScoped<IValidator<PagingData>, PagingDataValidator>();
+
 
 var connectionString = builder.Configuration["Database:ConnectionString"] ??
                        throw new Exception("No connection string found");
 
 await using var dataSource = NpgsqlDataSource.Create(connectionString);
+DefaultTypeMap.MatchNamesWithUnderscores = true;
 var connection = await dataSource.OpenConnectionAsync();
 builder.Services.AddSingleton<IDbConnection>(_ => connection);
 

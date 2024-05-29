@@ -4,24 +4,20 @@ namespace Backend.Types;
 
 public class PagingData
 {
-    public string? SortBy { get; init; }
-    public SortDirection SortDirection { get; init; }
-    public int Offset { get; init; } = 1;
+    public int Page { get; private init; } = 1;
 
-    public static ValueTask<PagingData?> BindAsync(HttpContext context, ParameterInfo parameter)
+    private static int PageSize => 10;
+
+    public int PageOffset => (Page - 1) * PageSize;
+
+    public static ValueTask<PagingData?> BindAsync(HttpContext context, ParameterInfo _)
     {
-        const string sortByKey = "sort_by";
-        const string sortDirectionKey = "sort_dir";
-        const string offsetKey = "offset";
+        const string pageKey = "page";
 
-        Enum.TryParse<SortDirection>(context.Request.Query[sortDirectionKey],
-            true, out var sortDirection);
-        if (!int.TryParse(context.Request.Query[offsetKey], out var offset)) offset = 0;
+        if (!int.TryParse(context.Request.Query[pageKey], out var page)) page = 1;
         var result = new PagingData
         {
-            SortBy = context.Request.Query[sortByKey],
-            SortDirection = sortDirection,
-            Offset = offset
+            Page = page
         };
 
         return ValueTask.FromResult<PagingData?>(result);

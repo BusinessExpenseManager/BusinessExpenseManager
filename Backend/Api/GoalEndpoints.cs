@@ -1,10 +1,12 @@
 ﻿using System.Data;
-using Backend.Helpers;
 using Backend.Model.Domain;
 using Backend.Model.Validators;
 using Backend.Types;
 using Dapper;
-using Microsoft.AspNetCore.Http.HttpResults;
+using DotNext;
+using DotNext.Reflection;
+using Microsoft.AspNetCore.Mvc;
+using static Backend.Helpers.QuerySqlHelper;
 
 namespace Backend.Api;
 
@@ -13,52 +15,40 @@ public static class GoalEndpoints
     public static void Map(WebApplication app)
     {
         var group = app.MapGroup("/goal");
-        group.MapGet("/", GetAllGoals);
-        group.MapGet("/{id:int}", GetGoal);
+        group.MapGet("/",
+            (ILogger<Program> logger, IDbConnection connection, PagingData page) =>
+                GetAllGoals(logger, connection, page).Task).AddEndpointFilter<ValidationFilter<PagingData>>();
 
-        group.MapPut("/add", AddGoal)
-            .AddEndpointFilter<ValidationFilter<GoalAdd>>();
+        group.MapGet("/{id:int}",
+            (ILogger<Program> logger, IDbConnection connection, int id) => GetGoal(logger, connection, id).Task);
+
+        group.MapPut("/add",
+            (ILogger<Program> logger, IDbConnection connection, [FromBody] GoalAdd goal) =>
+                AddGoal(logger, connection, goal).Task).AddEndpointFilter<ValidationFilter<GoalAdd>>();
     }
 
-    // TODO: what do we need from one goal
-    private static Task GetGoal(ILogger<Program> logger, IDbConnection connection, int id)
-    {
-        throw new NotImplementedException();
-    }
+    private static ApiTask<Goal> GetGoal(
+        ILogger<Program> logger,
+        IDbConnection connection,
+        int id
+    ) =>
+        RunSqlQueryTask(logger, "Unable to get goal with id " + id + "",
+            () => connection.QuerySingleAsync<Goal>("SELECT * FROM goals WHERE id = @id;", new { id }));
 
-    private static async Task<JsonHttpResult<ApiMessage<int>>> AddGoal(ILogger<Program> logger,
-        IDbConnection connection, GoalAdd goal)
-    {
-        // Call proc to insert goal
-        var func = () =>
-            connection.QuerySingleAsync<int>(
-                "INSERT INTO goals (name, description, goal_monetary_value, goal_due_datetime) values (@Name, @Description, @GoalMonetaryValue, @GoalDueDatetime) RETURNING id;",
-                goal);
+    private static ApiTask<int> AddGoal(
+        ILogger<Program> logger,
+        IDbConnection connection,
+        [FromBody] GoalAdd goal
+    ) =>
+        RunSqlQueryTask(logger, "Unable to add goal", () => connection.QuerySingleAsync<int>(
+            "INSERT INTO goals (name, description, goal_monetary_value, goal_due_datetime) values (@Name, @Description, @GoalMonetaryValue, @GoalDueDatetime) RETURNING id;",
+            goal));
 
-        var result = await func.TryInvokeAsync();
-
-        var apiMessageWrapper =
-            ResponseHelper.QueryResultMapper(result, "Unable to add goal", StatusCodes.Status500InternalServerError);
-
-        if (apiMessageWrapper.SystemError.GetValue(out var error)) logger.LogError(error, "Add goal Failed: ");
-
-        return TypedResults.Json(apiMessageWrapper.ApiMessage, statusCode: apiMessageWrapper.StatusCode);
-    }
-
-    // TODO: pagination
-    private static async Task<JsonHttpResult<ApiMessage<IEnumerable<Goal>>>> GetAllGoals(ILogger<Program> logger,
-        IDbConnection connection, PagingData pageData)
-    {
-        var func = () =>
-            connection.QueryAsync<Goal>("SELECT * FROM GOAL LIMIT 20 OFFSET 20;");
-        var result = await func.TryInvokeAsync();
-
-        var apiMessageWrapper =
-            ResponseHelper.QueryResultMapper(result, "Unable to get all goals",
-                StatusCodes.Status500InternalServerError);
-
-        if (apiMessageWrapper.SystemError.GetValue(out var error)) logger.LogError(error, "Get all goals Failed: ");
-
-        return TypedResults.Json(apiMessageWrapper.ApiMessage, statusCode: apiMessageWrapper.StatusCode);
-    }
+    private static ApiTask<IEnumerable<Goal>> GetAllGoals(
+        ILogger<Program> logger,
+        IDbConnection connection,
+        PagingData pageData
+    ) =>
+        RunSqlQueryTask(logger, "Unable to get all goals",
+            () => connection.QueryAsync<Goal>("SELECT * FROM goals LIMIT 10 OFFSET @PageOffset;", pageData));
 }

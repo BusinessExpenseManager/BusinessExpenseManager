@@ -7,9 +7,9 @@ public record Goal(
     int Id,
     string Name,
     string Description,
-    double GoalMonetaryValue,
-    DateTime GoalDueDatetime
-);
+    decimal GoalMonetaryValue,
+    DateTime GoalDueDatetime,
+    DateTime CreatedDatetime);
 
 public record GoalAdd(
     string Name,
