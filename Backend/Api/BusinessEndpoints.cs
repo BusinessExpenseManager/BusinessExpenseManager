@@ -2,6 +2,7 @@
 using Backend.Model.Domain;
 using Backend.Types;
 using Dapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using static Backend.Helpers.QuerySqlHelper;
 
 namespace Backend.Api;
@@ -11,30 +12,24 @@ public static class BusinessEndpoints
     public static void Map(WebApplication app)
     {
         var group = app.MapGroup("/business");
-        group.MapGet("/",
-            (ILogger<Program> logger, IDbConnection connection) => GetBusinesses(logger, connection).Task);
-
-        group.MapPut("/add",
-            (ILogger<Program> logger, IDbConnection connection, BusinessAdd business) =>
-                AddBusiness(logger, connection, "123", business.Name).Task);
+        group.MapGet("/", GetBusinesses);
+        group.MapPut("/add", AddBusiness);
     }
 
-    private static ApiTask<IEnumerable<Business>> GetBusinesses(ILogger<Program> logger, IDbConnection connection)
-    {
-        return RunSqlQueryTask(logger, "Unable to get all businesses", Func);
+    private static Task<JsonHttpResult<ApiMessage<IEnumerable<Business>>>> GetBusinesses(
+        ILogger<Program> logger,
+        IDbConnection connection) =>
+        RunSqlQuery(logger, "Unable to get all businesses",
+            () => connection.QueryAsync<Business>("SELECT * FROM businesses where user_guid = '123' LIMIT 1;"));
 
-        // TODO: cognito from middleware 
-        Task<IEnumerable<Business>> Func() =>
-            connection.QueryAsync<Business>("SELECT * FROM businesses where user_guid = '123' LIMIT 1;");
-    }
-
-    private static ApiTask<int> AddBusiness(ILogger<Program> logger, IDbConnection connection, string userGuid,
+    private static Task<JsonHttpResult<ApiMessage<int>>> AddBusiness(
+        ILogger<Program> logger,
+        IDbConnection connection,
+        string userGuid,
         string name)
     {
-        return RunSqlQueryTask(logger, "Unable to add businesses", Func);
-
-        Task<int> Func() =>
+        return RunSqlQuery(logger, "Unable to add businesses", () =>
             connection.QuerySingleAsync<int>("INSERT INTO businesses(name, user_guid)  VALUES (@1, @2);",
-                new { name, userGuid });
+                new { name, userGuid }));
     }
 }

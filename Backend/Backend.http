@@ -31,3 +31,9 @@ GET {{Backend_HostAddress}}/goal
 
 ### GET 10 goals page 2
 GET {{Backend_HostAddress}}/goal?page=1
+
+### Get all monetry flows
+GET {{Backend_HostAddress}}/monetary_flow
+
+###
+GET {{Backend_HostAddress}}/monetary_flow/test/12

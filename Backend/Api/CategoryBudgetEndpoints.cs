@@ -1,9 +1,4 @@
-﻿using System.Data;
-using Backend.Types;
-using Dapper;
-using Microsoft.AspNetCore.Http.HttpResults;
-
-namespace Backend.Api;
+﻿namespace Backend.Api;
 
 public class CategoryBudgetEndpoints
 {

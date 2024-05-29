@@ -24,16 +24,18 @@ var connection = await dataSource.OpenConnectionAsync();
 builder.Services.AddSingleton<IDbConnection>(_ => connection);
 
 var app = builder.Build();
+
+
 // TODO: no to all methods and all headers.. 
 app.UseCors(corsPolicyBuilder =>
     corsPolicyBuilder.WithOrigins(["http://localhost:123"]).AllowAnyHeader().AllowAnyMethod());
 // TODO: add HttpsRedirection for real app  
 // app.UseHttpsRedirection();
 // TODO: add authorization
-
 // TODO: add all endpoints
 GoalEndpoints.Map(app);
 BusinessEndpoints.Map(app);
 CategoryEndpoints.Map(app);
+MonetaryFlowEndpoints.Map(app);
 
 app.Run();

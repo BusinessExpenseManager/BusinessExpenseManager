@@ -5,12 +5,7 @@ namespace Backend.Helpers;
 
 public static class QuerySqlHelper
 {
-    public static ApiTask<T> RunSqlQueryTask<T>(ILogger logger, string message, Func<Task<T>> func)
-    {
-        return new ApiTask<T>(RunSqlQuery(logger, message, func));
-    }
-
-    private static async Task<JsonHttpResult<ApiMessage<T>>> RunSqlQuery<T>(ILogger logger, string message,
+    public static async Task<JsonHttpResult<ApiMessage<T>>> RunSqlQuery<T>(ILogger logger, string message,
         Func<Task<T>> func)
     {
         var result = await func.TryInvokeAsync();
