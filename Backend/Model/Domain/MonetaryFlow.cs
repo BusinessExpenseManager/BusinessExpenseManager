@@ -1,4 +1,6 @@
-﻿namespace Backend.Model.Domain;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Backend.Model.Domain;
 
 public record MonetaryFlow(
     int Id,

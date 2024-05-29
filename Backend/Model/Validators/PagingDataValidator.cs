@@ -1,7 +1,5 @@
-﻿using Backend.Model.Domain;
-using Backend.Types;
+﻿using Backend.Types;
 using FluentValidation;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Backend.Model.Validators;
 

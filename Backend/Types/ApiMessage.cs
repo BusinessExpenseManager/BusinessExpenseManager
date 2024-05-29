@@ -1,9 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 using DotNext;
 using DotNext.Text.Json;
 
 namespace Backend.Types;
 
+[SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Global")]
 public record ApiMessage<T>(
     bool Success,
     [property: JsonConverter(typeof(OptionalConverterFactory))]

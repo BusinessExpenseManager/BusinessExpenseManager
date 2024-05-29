@@ -1,7 +1,9 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace Backend.Types;
 
+[SuppressMessage("ReSharper", "UnusedMember.Global")]
 public class PagingData
 {
     public int Page { get; private init; } = 1;
