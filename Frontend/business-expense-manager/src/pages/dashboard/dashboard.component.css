@@ -1,0 +1,45 @@
+mat-sidenav-container {
+  height:100%;
+}
+
+mat-sidenav {
+  padding: 3rem;
+  border-radius: 0;
+  background-color: var(--primary);
+}
+
+.link {
+  color: white;
+  align-items: center;
+}
+
+.nav-bar {
+  color: var(--seconary);
+  display: flex;
+  flex-direction: column;
+  gap: 4em;
+}
+
+.nav-bar > h1 {
+  font-weight: normal;
+  text-align: center;
+}
+
+.links {
+  margin-bottom: auto;
+  text-align: center;
+}
+
+mat-sidenav button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: var(--seconary);
+  float: right;
+}
+
+.active {
+  background-color: var(--tertiary);
+  border-radius: 0!important;
+}

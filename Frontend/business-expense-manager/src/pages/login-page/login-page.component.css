@@ -34,7 +34,7 @@ article > section:last-child {
   background-color: var(--primary);
 }
 
-@media (max-width: 767px) {
+@media (max-width: 800px) {
   article > section:first-child {
     display: none;
   }

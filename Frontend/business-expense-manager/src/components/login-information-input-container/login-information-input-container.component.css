@@ -43,7 +43,7 @@ button {
   padding: 0.7em;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 800px) {
   form {
     width: 80%;
   }
