@@ -32,10 +32,11 @@ app.UseCors(corsPolicyBuilder =>
 // TODO: add HttpsRedirection for real app  
 // app.UseHttpsRedirection();
 // TODO: add authorization
-// TODO: add all endpoints
+
 GoalEndpoints.Map(app);
 BusinessEndpoints.Map(app);
 CategoryEndpoints.Map(app);
 MonetaryFlowEndpoints.Map(app);
+CategoryBudgetEndpoints.Map(app);
 
 app.Run();

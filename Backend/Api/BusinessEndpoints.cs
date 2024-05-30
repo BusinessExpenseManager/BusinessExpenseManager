@@ -19,7 +19,7 @@ public static class BusinessEndpoints
     private static Task<JsonHttpResult<ApiMessage<IEnumerable<Business>>>> GetBusinesses(
         ILogger<Program> logger,
         IDbConnection connection) =>
-        RunSqlQuery(logger, "Unable to get all businesses",
+        RunSqlQuery(logger, "Unable to get business",
             () => connection.QueryAsync<Business>("SELECT * FROM businesses where user_guid = '123' LIMIT 1;"));
 
     private static Task<JsonHttpResult<ApiMessage<int>>> AddBusiness(
