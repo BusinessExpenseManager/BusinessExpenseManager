@@ -15,8 +15,15 @@ builder.Services.AddScoped<IValidator<BusinessAdd>, BusinessValidator>();
 builder.Services.AddScoped<IValidator<PagingData>, PagingDataValidator>();
 
 
-var connectionString = builder.Configuration["Database:ConnectionString"] ??
-                       throw new Exception("No connection string found");
+var connectionString = new NpgsqlConnectionStringBuilder
+{
+    Host = builder.Configuration["DB_URL"] ?? throw new Exception("No DB_URL found"),
+    Password = builder.Configuration["DB_PASSWORD"] ?? throw new Exception("No DB_PASSWORD found"),
+    Username = builder.Configuration["DB_USERNAME"] ?? throw new Exception("No DB_USERNAME found"),
+    //TODO: better 
+    Port = int.Parse(builder.Configuration["DB_PORT"] ?? "5432"),
+    Database = builder.Configuration["DB_DATABASE"] ?? "bem"
+};
 
 await using var dataSource = NpgsqlDataSource.Create(connectionString);
 DefaultTypeMap.MatchNamesWithUnderscores = true;
