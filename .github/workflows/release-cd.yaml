@@ -9,6 +9,9 @@ on:
       account-id:
         required: true
         type: string
+      db-name:
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -38,8 +41,8 @@ jobs:
 
     - name: Upload new Frontend Files
       run: |
-        aws s3 rm --recursive s3://${{ inputs.account-id  }}-wordle
-        aws s3 cp ./Frontend/dist/business-expense-manager/browser s3://${{ inputs.account-id  }}-wordle --recursive
+        aws s3 rm --recursive s3://${{ inputs.account-id  }}-${{ inputs.db-name }}
+        aws s3 cp ./Frontend/dist/business-expense-manager/browser s3://${{ inputs.account-id  }}-${{ inputs.db-name }} --recursive
 
 
   api-deploy:

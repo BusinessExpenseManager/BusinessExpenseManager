@@ -42,4 +42,5 @@ jobs:
     with:
       aws-role: ${{ vars.AWS_ROLE }}
       account-id: ${{ vars.ACCOUNT_ID }}
+      db-name: ${{ vars.DB_NAME }}
 
