@@ -30,11 +30,16 @@ jobs:
         aws-region: "eu-west-1"
         role-session-name: GitHub_to_AWS_via_FederatedOIDC
 
-    # Needs to be modified to run the ng build production command and then upload those files
-    # - name: Upload new Frontend Files
-    #   run: |
-    #     aws s3 rm --recursive s3://${{ inputs.account-id  }}-wordle
-    #     # aws s3 cp ./Frontend s3://${{ inputs.account-id  }}-wordle --recursive
+    - name: Build
+      working-directory: ./Frontend/business-expense-manager
+      run: |
+        npm install
+        npm run deploy
+
+    - name: Upload new Frontend Files
+      run: |
+        aws s3 rm --recursive s3://${{ inputs.account-id  }}-wordle
+        aws s3 cp ./Frontend/dist/business-expense-manager/browser s3://${{ inputs.account-id  }}-wordle --recursive
 
 
   api-deploy:
