@@ -1,5 +1,5 @@
 --changeset karl:dml:mockData:categories
-INSERT INTO categories (name) VALES
+INSERT INTO categories (name) VALUES
 ('Transport'),
 ('Interest'),
 ('Savings'),
