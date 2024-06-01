@@ -44,7 +44,7 @@ jobs:
       - name: Perform migration test
         uses: liquibase-github-actions/validate@v4.26.0
         with:
-          changelogFile: "./database/changelog.yaml"
+          changelogFile: "./Database/changelog.yaml"
           url: "jdbc:postgresql://${{ env.DB_ENDPOINT }}:5432/${{ inputs.db-name }}"
           password: "${{ env.DB_DETAILS_PASSWORD }}"
           username: "${{ env.DB_DETAILS_USERNAME }}"

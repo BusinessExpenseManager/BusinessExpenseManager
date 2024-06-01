@@ -4,9 +4,9 @@ resource "aws_s3_bucket" "frontend" {
 }
 
 resource "aws_s3_object" "frontend_default" {
-  bucket = aws_s3_bucket.frontend.id
-  key    = "index.html"
-  source = "./DummyVersions/index.html"
+  bucket       = aws_s3_bucket.frontend.id
+  key          = "index.html"
+  source       = "./DummyVersions/index.html"
   content_type = "text/html"
 
   lifecycle {
