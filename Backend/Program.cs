@@ -1,5 +1,6 @@
 using System.Data;
 using Backend.Helpers;
+using Backend.Helpers.Cognito;
 using Backend.Helpers.Module;
 using Backend.Model.Domain;
 using Backend.Model.Validators;
@@ -14,7 +15,7 @@ builder.Services.AddCors();
 builder.Services.AddScoped<IValidator<GoalAdd>, GoalValidator>();
 builder.Services.AddScoped<IValidator<BusinessAdd>, BusinessValidator>();
 builder.Services.AddScoped<IValidator<PagingData>, PagingDataValidator>();
-// builder.Services.AddScoped<CognitoService>();
+builder.Services.AddScoped<ICognitoService, CognitoService>();
 
 
 /*builder.Services.AddAuthorization();
@@ -41,7 +42,7 @@ builder.Services.AddSingleton<IDbConnection>(_ => connection);
 
 var app = builder.Build();
 
-// app.UseMiddleware<CognitoMiddleware>();
+app.UseMiddleware<CognitoMiddleware>();
 
 /*app.UseCors(corsPolicyBuilder =>
     corsPolicyBuilder.WithOrigins(["http://localhost:123"])
@@ -50,11 +51,7 @@ var app = builder.Build();
 
 app.UseAuthorization();
 app.UseAuthentication();
-
-app.Use((context, func) =>
-{
-    return func(context);
-});*/
+*/
 
 
 ModuleLoader.LoadModules(app);

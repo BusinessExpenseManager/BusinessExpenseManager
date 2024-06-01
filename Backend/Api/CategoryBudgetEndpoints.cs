@@ -1,12 +1,17 @@
 ﻿using System.Data;
+using Backend.Helpers;
+using Backend.Helpers.Cognito;
+using Backend.Helpers.Extention;
 using Backend.Helpers.Module;
+using Backend.Model;
 using Backend.Model.Domain;
 using Backend.Types;
 using Dapper;
 using Microsoft.AspNetCore.Http.HttpResults;
-using static Backend.Helpers.QuerySqlHelper;
 
 namespace Backend.Api;
+
+using static ResponseHelper;
 
 public class CategoryBudgetEndpoints : IModule
 {
@@ -20,17 +25,21 @@ public class CategoryBudgetEndpoints : IModule
     private static Task<JsonHttpResult<ApiMessage<IEnumerable<CategoryBudget>>>> AddCategoryBudget(
         ILogger<Program> logger,
         IDbConnection connection,
-        CategoryBudgetAdd budgetAdd) =>
+        CategoryBudgetAdd budgetAdd,
+        ICognitoService cognito) =>
         RunSqlQuery(logger, "Unable to add budget category",
             () => connection.QueryAsync<CategoryBudget>(
                 "INSERT INTO category_budgets(business_id, category_id, monthly_budget) VALUES (@BusinessId, @CategoryId, @MonthlyBudget);",
-                budgetAdd));
+                new DynamicParameters(budgetAdd).MergeObject(cognito.Get())
+            ));
 
     private static Task<JsonHttpResult<ApiMessage<IEnumerable<CategoryBudget>>>> GetPagedCategoryBudget(
         ILogger<Program> logger,
         IDbConnection connection,
-        PagingData pageData) =>
+        PagingData pageData,
+        ICognitoService cognito) =>
         RunSqlQuery(logger, "Unable to get paged category budgets",
             () => connection.QueryAsync<CategoryBudget>("SELECT * FROM category_budgets Limit 10 OFFSET @PageOffset;",
-                pageData));
+                new DynamicParameters(pageData).MergeObject(cognito.Get())
+            ));
 }
