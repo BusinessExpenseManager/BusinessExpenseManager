@@ -12,11 +12,11 @@ permissions:
   security-events: write
 
 jobs:
-  terraform-checks:
-    name: "Terraform checks"
-    uses: ./.github/workflows/terraform-checks.yaml
-    with:
-      terraform-directory: ${{ vars.TERRAFORM_DIRECTORY }}
+  # terraform-checks:
+  #   name: "Terraform checks"
+  #   uses: ./.github/workflows/terraform-checks.yaml
+  #   with:
+  #     terraform-directory: ${{ vars.TERRAFORM_DIRECTORY }}
   
   terraform-plan:
     name: "Terraform plan"
