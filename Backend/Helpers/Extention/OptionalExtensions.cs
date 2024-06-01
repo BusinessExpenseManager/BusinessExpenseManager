@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using DotNext;
 
-namespace Backend.Helpers;
+namespace Backend.Helpers.Extention;
 
 public static class OptionalExtensions
 {

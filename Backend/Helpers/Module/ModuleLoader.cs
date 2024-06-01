@@ -10,7 +10,7 @@ public static class ModuleLoader
     {
         Assembly.GetExecutingAssembly().GetTypes()
             .Where(t => typeof(IModule).IsAssignableFrom(t) && t.IsClass)
-            .Select(type => (IModule)Activator.CreateInstance(type))
-            .ForEach<IModule>(dataClass => dataClass.ResisterEndpoints(app));
+            .Select(type => Activator.CreateInstance(type) as IModule)
+            .ForEach(dataClass => dataClass?.ResisterEndpoints(app));
     }
 }
