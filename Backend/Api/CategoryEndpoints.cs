@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Backend.Helpers.Module;
 using Backend.Model.Domain;
 using Backend.Types;
 using Dapper;
@@ -8,9 +9,9 @@ using static Backend.Helpers.QuerySqlHelper;
 
 namespace Backend.Api;
 
-public static class CategoryEndpoints
+public class CategoryEndpoints : IModule
 {
-    public static void Map(WebApplication app)
+    public void ResisterEndpoints(IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/category");
 

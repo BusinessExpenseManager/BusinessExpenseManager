@@ -1,15 +1,19 @@
 ﻿using System.Data;
+using Backend.Helpers;
+using Backend.Helpers.Module;
+using Backend.Model;
 using Backend.Model.Domain;
 using Backend.Types;
 using Dapper;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using static Backend.Helpers.QuerySqlHelper;
 
 namespace Backend.Api;
 
-public static class BusinessEndpoints
+public class BusinessEndpoints : IModule
 {
-    public static void Map(WebApplication app)
+    public void ResisterEndpoints(IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/business");
         group.MapGet("/", GetBusinesses);
@@ -31,5 +35,6 @@ public static class BusinessEndpoints
         RunSqlQuery(logger, "Unable to add businesses", () =>
             connection.QuerySingleAsync<int>(
                 "INSERT INTO businesses(name, user_cognito_identifier)  VALUES (@Name, @CognitoIdentifier);",
-                (business, "")));
+                new DynamicParameters(business).MergeProperty("CognitoIdentifier", "123")
+            ));
 }

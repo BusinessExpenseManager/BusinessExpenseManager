@@ -16,7 +16,7 @@ public record MonetaryFlowAdd(
     decimal MonetaryValue);
 
 public record MonetaryFlowDelete(
-    int Id
+    int FlowId
 );
 
 public record MonetaryFlowItems(

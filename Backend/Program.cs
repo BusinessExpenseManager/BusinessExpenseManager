@@ -1,6 +1,6 @@
 using System.Data;
-using System.Net.Http.Headers;
-using Backend.Api;
+using Backend.Helpers;
+using Backend.Helpers.Module;
 using Backend.Model.Domain;
 using Backend.Model.Validators;
 using Backend.Types;
@@ -14,6 +14,9 @@ builder.Services.AddCors();
 builder.Services.AddScoped<IValidator<GoalAdd>, GoalValidator>();
 builder.Services.AddScoped<IValidator<BusinessAdd>, BusinessValidator>();
 builder.Services.AddScoped<IValidator<PagingData>, PagingDataValidator>();
+// builder.Services.AddScoped<CognitoService>();
+
+
 /*builder.Services.AddAuthorization();
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer(options =>
@@ -38,6 +41,7 @@ builder.Services.AddSingleton<IDbConnection>(_ => connection);
 
 var app = builder.Build();
 
+// app.UseMiddleware<CognitoMiddleware>();
 
 /*app.UseCors(corsPolicyBuilder =>
     corsPolicyBuilder.WithOrigins(["http://localhost:123"])
@@ -52,10 +56,7 @@ app.Use((context, func) =>
     return func(context);
 });*/
 
-GoalEndpoints.Map(app);
-BusinessEndpoints.Map(app);
-CategoryEndpoints.Map(app);
-MonetaryFlowEndpoints.Map(app);
-CategoryBudgetEndpoints.Map(app);
+
+ModuleLoader.LoadModules(app);
 
 app.Run();

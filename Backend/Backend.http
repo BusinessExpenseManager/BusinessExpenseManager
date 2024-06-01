@@ -1,5 +1,35 @@
 @Backend_HostAddress = http://localhost:5057
 
+
+
+
+
+
+
+
+
+
+
+
+### Get all monetry flows
+GET {{Backend_HostAddress}}/monetary_flow
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 GET {{Backend_HostAddress}}/weatherforecast/
 Accept: application/json
 
@@ -30,10 +60,11 @@ GET {{Backend_HostAddress}}/goal/132132121
 GET {{Backend_HostAddress}}/goal
 
 ### GET 10 goals page 2
-GET {{Backend_HostAddress}}/goal?page=1
 
-### Get all monetry flows
-GET {{Backend_HostAddress}}/monetary_flow
+GET {{Backend_HostAddress}}/business/test/1
+
+
+
 
 ### DELETE mone flow
 PATCH {{Backend_HostAddress}}/monetary_flow/delete
