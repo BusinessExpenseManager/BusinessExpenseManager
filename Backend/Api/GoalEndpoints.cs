@@ -42,4 +42,5 @@ public static class GoalEndpoints
     ) =>
         RunSqlQuery(logger, "Unable to get all goals",
             () => connection.QueryAsync<Goal>("SELECT * FROM goals LIMIT 10 OFFSET @PageOffset;", pageData));
+    
 }

@@ -11,7 +11,17 @@ public record MonetaryFlow(
     DateTime CreatedDatetime);
 
 public record MonetaryFlowAdd(
-    int BusinessId,
     int GoalId,
     int CategoryId,
     decimal MonetaryValue);
+
+public record MonetaryFlowDelete(
+    int Id
+);
+
+public record MonetaryFlowItems(
+    int FlowId,
+    string GoalName,
+    string CategoryName,
+    decimal MonetaryValue,
+    DateTime CreatedDatetime);
