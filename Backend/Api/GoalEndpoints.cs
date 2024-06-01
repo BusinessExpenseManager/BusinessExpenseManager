@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Backend.Helpers.Module;
 using Backend.Model.Domain;
 using Backend.Model.Validators;
 using Backend.Types;
@@ -8,9 +9,9 @@ using static Backend.Helpers.QuerySqlHelper;
 
 namespace Backend.Api;
 
-public static class GoalEndpoints
+public class GoalEndpoints : IModule
 {
-    public static void Map(WebApplication app)
+    public void ResisterEndpoints(IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/goal");
         group.MapGet("/", GetAllGoals).AddEndpointFilter<ValidationFilter<PagingData>>();
@@ -42,5 +43,4 @@ public static class GoalEndpoints
     ) =>
         RunSqlQuery(logger, "Unable to get all goals",
             () => connection.QueryAsync<Goal>("SELECT * FROM goals LIMIT 10 OFFSET @PageOffset;", pageData));
-    
 }

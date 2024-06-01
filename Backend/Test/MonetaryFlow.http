@@ -1,0 +1,26 @@
+﻿@Backend_HostAddress = http://localhost:5057
+
+### Get all the monetary_flows for a user
+GET {{Backend_HostAddress}}/monetary_flow
+Authorization: Bearer {{$auth.token()}}
+
+
+### Add to monetary_flows for user
+PUT {{Backend_HostAddress}}/monetary_flow/add
+Authorization: Bearer {{$auth.token()}}
+Content-Type: application/json
+
+{
+  "GoalId": 1,
+  "CategoryId": 1,
+  "MonetaryValue": 120.27
+}
+
+### Add to monetary_flows for user
+PATCH {{Backend_HostAddress}}/monetary_flow/delete
+Authorization: Bearer {{$auth.token()}}
+Content-Type: application/json
+
+{
+  "FlowId": 6
+}
