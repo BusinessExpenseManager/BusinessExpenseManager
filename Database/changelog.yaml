@@ -2,12 +2,12 @@ databaseChangeLog:
    - include:
       file: ./Database/tableCreates.sql
    - include:
-      file: ./Database/mockData/businesses.sql
+      file: ./Database/MockData/businesses.sql
    - include:
-      file: ./Database/mockData/goals.sql
+      file: ./Database/MockData/goals.sql
    - include:
-      file: ./Database/mockData/categories.sql
+      file: ./Database/MockData/categories.sql
    - include:
-      file: ./Database/mockData/category_budgets.sql
+      file: ./Database/MockData/category_budgets.sql
    - include:
-      file: ./Database/mockData/monetary_flows.sql
+      file: ./Database/MockData/monetary_flows.sql
