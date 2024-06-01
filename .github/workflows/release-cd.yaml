@@ -42,7 +42,7 @@ jobs:
     - name: Upload new Frontend Files
       run: |
         aws s3 rm --recursive s3://${{ inputs.account-id  }}-${{ inputs.db-name }}
-        aws s3 cp ./Frontend/dist/business-expense-manager/browser s3://${{ inputs.account-id  }}-${{ inputs.db-name }} --recursive
+        aws s3 cp ./Frontend/business-expense-manager/dist/business-expense-manager/browser s3://${{ inputs.account-id  }}-${{ inputs.db-name }} --recursive
 
 
   api-deploy:
