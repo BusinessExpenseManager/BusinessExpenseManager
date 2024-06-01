@@ -35,5 +35,31 @@ GET {{Backend_HostAddress}}/goal?page=1
 ### Get all monetry flows
 GET {{Backend_HostAddress}}/monetary_flow
 
+### DELETE mone flow
+PATCH {{Backend_HostAddress}}/monetary_flow/delete
+Content-Type: application/json
+
+{
+  "id": 1
+}
+
+
+
+
 ###
 GET {{Backend_HostAddress}}/monetary_flow/test/12
+Content-Type:application/json
+
+{
+}
+
+
+### PUT monetry flows
+PUT {{Backend_HostAddress}}/monetary_flow/add
+Content-Type: application/json
+
+{
+  "GoalId": 1,
+  "CategoryId": 1,
+  "MonetaryValue": 12.20
+}

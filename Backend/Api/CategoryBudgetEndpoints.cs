@@ -22,7 +22,7 @@ public static class CategoryBudgetEndpoints
         CategoryBudgetAdd budgetAdd) =>
         RunSqlQuery(logger, "Unable to add budget category",
             () => connection.QueryAsync<CategoryBudget>(
-                "INSERT INTO categorybudgets(business_id, category_id, monthly_budget) VALUES (@BusinessId, @CategoryId, @MonthlyBudget);",
+                "INSERT INTO category_budgets(business_id, category_id, monthly_budget) VALUES (@BusinessId, @CategoryId, @MonthlyBudget);",
                 budgetAdd));
 
     private static Task<JsonHttpResult<ApiMessage<IEnumerable<CategoryBudget>>>> GetPagedCategoryBudget(
@@ -30,6 +30,6 @@ public static class CategoryBudgetEndpoints
         IDbConnection connection,
         PagingData pageData) =>
         RunSqlQuery(logger, "Unable to get paged category budgets",
-            () => connection.QueryAsync<CategoryBudget>("SELECT * FROM categorybudgets Limit 10 OFFSET @PageOffset;",
+            () => connection.QueryAsync<CategoryBudget>("SELECT * FROM category_budgets Limit 10 OFFSET @PageOffset;",
                 pageData));
 }

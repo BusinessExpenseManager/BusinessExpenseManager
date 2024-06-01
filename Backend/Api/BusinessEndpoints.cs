@@ -20,16 +20,16 @@ public static class BusinessEndpoints
         ILogger<Program> logger,
         IDbConnection connection) =>
         RunSqlQuery(logger, "Unable to get business",
-            () => connection.QueryAsync<Business>("SELECT * FROM businesses where user_guid = '123' LIMIT 1;"));
+            () => connection.QueryAsync<Business>(
+                "SELECT * FROM businesses where user_cognito_identifier = @CognitoIdentifier LIMIT 1;", ""));
 
     private static Task<JsonHttpResult<ApiMessage<int>>> AddBusiness(
         ILogger<Program> logger,
         IDbConnection connection,
-        string userGuid,
-        string name)
-    {
-        return RunSqlQuery(logger, "Unable to add businesses", () =>
-            connection.QuerySingleAsync<int>("INSERT INTO businesses(name, user_guid)  VALUES (@1, @2);",
-                new { name, userGuid }));
-    }
+        BusinessAdd business
+        /*CognitoUser user*/) =>
+        RunSqlQuery(logger, "Unable to add businesses", () =>
+            connection.QuerySingleAsync<int>(
+                "INSERT INTO businesses(name, user_cognito_identifier)  VALUES (@Name, @CognitoIdentifier);",
+                (business, "")));
 }
