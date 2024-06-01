@@ -1,0 +1,13 @@
+databaseChangeLog:
+   - include:
+      file: ./Database/tableCreates.sql
+   - include:
+      file: ./Database/MockData/businesses.sql
+   - include:
+      file: ./Database/MockData/goals.sql
+   - include:
+      file: ./Database/MockData/categories.sql
+   - include:
+      file: ./Database/MockData/category_budgets.sql
+   - include:
+      file: ./Database/MockData/monetary_flows.sql
