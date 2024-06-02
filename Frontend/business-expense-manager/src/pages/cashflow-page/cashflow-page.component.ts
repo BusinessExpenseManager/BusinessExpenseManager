@@ -1,6 +1,6 @@
 import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {MatIconModule} from "@angular/material/icon";
-import {MatPaginator, MatPaginatorIntl, MatPaginatorModule} from "@angular/material/paginator";
+import {MatPaginator, MatPaginatorIntl, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {MatSortHeader, MatSortModule} from '@angular/material/sort';
 import {MatDialog,} from '@angular/material/dialog';
@@ -36,8 +36,11 @@ export class CashflowPageComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator = new MatPaginator(new MatPaginatorIntl(), ChangeDetectorRef.prototype);
 
   isMobile: boolean = false;
+
   error: boolean = false;
   loading: boolean = true;
+
+  page: number = 1
 
   constructor(
     public dialog: MatDialog,
@@ -49,18 +52,14 @@ export class CashflowPageComponent implements OnInit, AfterViewInit {
     this.getCashFlows();
   }
 
-  onPageChange(event: any) {
-    let page = 1
-    if (event?.pageIndex) {
-      page = event.pageIndex + 1;
-    }
-
-    this.getCashFlows(page)
+  onPageChange(event: PageEvent) {
+    this.page = event.pageIndex + 1;
+    this.getCashFlows()
   }
 
-  getCashFlows(page: number = 1) {
+  getCashFlows() {
     this.error = false;
-    this.monetaryFlowService.getCashFlowsForBusiness(page)
+    this.monetaryFlowService.getCashFlowsForBusiness(this.page)
       .subscribe({
         next: response => {
 
@@ -84,7 +83,7 @@ export class CashflowPageComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  deleteCashFlow(id: number) {
+  deleteCashFlow(CashFlowId: number) {
     // Confirm Deletion
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       enterAnimationDuration: '200ms',
@@ -93,14 +92,26 @@ export class CashflowPageComponent implements OnInit, AfterViewInit {
 
     dialogRef.componentInstance.confirmMessage = 'Are you sure you delete the cash flow record?';
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === true) {
-        // Delete Record
+    dialogRef.afterClosed().subscribe(confirmation => {
+      if (confirmation === true) {
+        // Delete
         this.monetaryFlowService
-          .deleteCashFlow(id)
-          .subscribe((response: any) => {
-            console.log(response);
-            // TODO: Refresh Cash Flow Table if successfully deleted
+          .deleteCashFlow(CashFlowId)
+          .subscribe({
+            next: response => {
+              if (response.success) {
+                this.snackBar.open('Successfully deleted record.', 'X', {"duration": 4000});
+
+                // refresh table
+                this.getCashFlows();
+              } else {
+                const errorMessage = response.message ?? 'An error has occurred deleting the cash flow record.'
+                this.snackBar.open(errorMessage, 'X', {"duration": 4000});
+              }
+            },
+            error: () => {
+              this.snackBar.open('An error has occurred deleting the Cash Flow.', 'X', {"duration": 4000});
+            },
           })
       }
     });

@@ -29,9 +29,10 @@ export class MonetaryFlowService {
       );
   }
 
-  deleteCashFlow(id: number): Observable<string> {
-    return of('');
-    // return this.httpClient.delete<string>(`${this.url}/${id}`);
+  deleteCashFlow(cashFlowId: number): Observable<ApiResponse<number>> {
+    return this
+      .httpClient
+      .delete<ApiResponse<MonetaryFlow[]>>(`${this.baseUrl}/monetary_flow/delete/${cashFlowId}`)
   }
 
 
