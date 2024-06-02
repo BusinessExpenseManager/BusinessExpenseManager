@@ -1,0 +1,50 @@
+article {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4em;
+  color: var(--tertiary);
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: auto;
+  gap: 2em;
+}
+
+input {
+  border: none;
+  background-color: transparent;
+  border-bottom: 1px solid white;
+  color: var(--tertiary);
+  text-align: center;
+  width: 80%;
+  margin: auto;
+}
+
+::placeholder {
+  text-align: center;
+  color: white;
+}
+
+input:focus::placeholder {
+  color: transparent;
+}
+
+button {
+  padding: 0.7em;
+}
+
+@media (max-width: 800px) {
+  form {
+    width: 80%;
+  }
+}

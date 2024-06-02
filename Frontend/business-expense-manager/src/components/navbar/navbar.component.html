@@ -1,0 +1,41 @@
+<mat-toolbar class="mobileNav" *ngIf="isMobile">
+    <app-logo [class.hidden]="sidenav && sidenav.opened" [routerLink]="[{ outlets: { navBar: ['dashboard-page'] } }]"></app-logo>
+  <button mat-icon-button aria-label="Menu icon" (click)="toggleMenu()">
+    <mat-icon>menu</mat-icon>
+  </button>
+</mat-toolbar>
+<mat-sidenav-container autosize>
+  <mat-sidenav [mode]="isMobile ? 'over' : 'side'" [opened]="isMobile ? 'false' : 'true'">
+    <div class="nav-bar">
+      <app-logo [routerLink]="[{ outlets: { navBar: ['dashboard-page'] } }]"></app-logo>
+      <h1>{{StoreName}}</h1>
+      <mat-nav-list class="links" (click)="toggleMenu()">
+        <a mat-list-item routerLinkActive="active" [routerLink]="[{ outlets: { navBar: ['dashboard-page'] } }]">
+          <span class="link">
+            <span>Dashboard</span>
+          </span>
+        </a>
+        <a mat-list-item [routerLink]="[{ outlets: { navBar: ['goals'] } }]" routerLinkActive="active">
+          <span class="link">
+            <span>Goals</span>
+          </span>
+        </a>
+        <a mat-list-item [routerLink]="[{ outlets: { navBar: ['cashflow'] } }]" routerLinkActive="active">
+          <span class="link">
+              <span>Cash Flows</span>
+          </span>
+        </a>
+        <a mat-list-item [routerLink]="[{ outlets: { navBar: ['categories'] } }]" routerLinkActive="active">
+          <span class="link">
+              <span>Category Budgets</span>
+          </span>
+        </a>
+      </mat-nav-list>
+    </div>
+    <button routerLink="/login">Logout</button>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <router-outlet name="navBar"></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
