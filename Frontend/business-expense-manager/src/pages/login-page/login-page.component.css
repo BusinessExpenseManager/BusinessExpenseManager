@@ -31,7 +31,7 @@ article > section:last-child {
   grid-template-columns: 1fr;
   justify-content: center;
   align-items: center;
-  background-color: var(--primary);
+  background-color: var(--secondary);
 }
 
 @media (max-width: 800px) {

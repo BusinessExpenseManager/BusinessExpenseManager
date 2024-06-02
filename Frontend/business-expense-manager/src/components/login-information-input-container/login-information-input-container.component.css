@@ -3,7 +3,7 @@ article {
   display: flex;
   flex-direction: column;
   gap: 4em;
-  color: var(--seconary);
+  color: var(--tertiary);
 }
 
 section {
@@ -24,7 +24,7 @@ input {
   border: none;
   background-color: transparent;
   border-bottom: 1px solid white;
-  color: var(--seconary);
+  color: var(--tertiary);
   text-align: center;
   width: 80%;
   margin: auto;
