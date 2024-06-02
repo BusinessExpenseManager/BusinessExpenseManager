@@ -1,40 +1,40 @@
 ﻿using System.Data;
-using Backend.Model.Domain;
+using Backend.Helpers;
+using Backend.Helpers.Cognito;
 using Backend.Types;
+using Backend.Types.Endpoint;
 using Dapper;
-using static Backend.Helpers.QuerySqlHelper;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Backend.Api;
 
-public static class BusinessEndpoints
+public class BusinessEndpoints
 {
-    public static void Map(WebApplication app)
+    public static void ResisterEndpoints(IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/business");
-        group.MapGet("/",
-            (ILogger<Program> logger, IDbConnection connection) => GetBusinesses(logger, connection).Task);
-
-        group.MapPut("/add",
-            (ILogger<Program> logger, IDbConnection connection, BusinessAdd business) =>
-                AddBusiness(logger, connection, "123", business.Name).Task);
+        group.MapGet("/", GetBusinesses);
+        group.MapPost("/add", AddBusiness);
     }
 
-    private static ApiTask<IEnumerable<Business>> GetBusinesses(ILogger<Program> logger, IDbConnection connection)
-    {
-        return RunSqlQueryTask(logger, "Unable to get all businesses", Func);
+    private static Task<JsonHttpResult<ApiMessage<IEnumerable<Business>>>> GetBusinesses(
+        ILogger<Program> logger,
+        IDbConnection connection,
+        ICognitoService cognito
+    ) =>
+        ResponseHelper.RunSqlQuery(logger, "Unable to get business",
+            () => connection.QueryAsync<Business>(
+                "SELECT id, name, created_datetime  FROM businesses where user_cognito_identifier = @UserCognitoIdentifier LIMIT 1;",
+                cognito.Get()));
 
-        // TODO: cognito from middleware 
-        Task<IEnumerable<Business>> Func() =>
-            connection.QueryAsync<Business>("SELECT * FROM businesses where user_guid = '123' LIMIT 1;");
-    }
-
-    private static ApiTask<int> AddBusiness(ILogger<Program> logger, IDbConnection connection, string userGuid,
-        string name)
-    {
-        return RunSqlQueryTask(logger, "Unable to add businesses", Func);
-
-        Task<int> Func() =>
-            connection.QuerySingleAsync<int>("INSERT INTO businesses(name, user_guid)  VALUES (@1, @2);",
-                new { name, userGuid });
-    }
+    private static Task<JsonHttpResult<ApiMessage<int>>> AddBusiness(
+        ILogger<Program> logger,
+        IDbConnection connection,
+        BusinessAdd business,
+        ICognitoService cognito) =>
+        ResponseHelper.RunSqlQuery(logger, "Unable to add businesses", () =>
+            connection.QuerySingleAsync<int>(   
+                "INSERT INTO businesses(name, user_cognito_identifier)  VALUES (@Name, @UserCognitoIdentifier);",
+                new DynamicParameters(business).MergeObject(cognito.Get())
+            ));
 }

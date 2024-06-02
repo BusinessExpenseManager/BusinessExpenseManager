@@ -1,16 +1,16 @@
 ﻿using System.Data;
-using Backend.Model.Domain;
+using Backend.Helpers;
 using Backend.Types;
+using Backend.Types.Endpoint;
 using Dapper;
 using Microsoft.AspNetCore.Http.HttpResults;
-using static Backend.Helpers.QuerySqlHelper;
 
 
 namespace Backend.Api;
 
-public static class CategoryEndpoints
+public class CategoryEndpoints
 {
-    public static void Map(WebApplication app)
+    public static void ResisterEndpoints(IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/category");
 
@@ -18,10 +18,9 @@ public static class CategoryEndpoints
     }
 
     // Assuming that we won't need pagination for categories.
-    private static ApiTask<IEnumerable<Category>> GetAllCategories(
-        ILogger<Program> logger, IDbConnection connection)
-    {
-        return RunSqlQueryTask(logger, "Unable to get all categories", Func);
-        Task<IEnumerable<Category>> Func() => connection.QueryAsync<Category>("SELECT * FROM categories;");
-    }
+    private static Task<JsonHttpResult<ApiMessage<IEnumerable<Category>>>> GetAllCategories(
+        ILogger<Program> logger,
+        IDbConnection connection) =>
+        ResponseHelper.RunSqlQuery(logger, "Unable to get all categories",
+            () => connection.QueryAsync<Category>("SELECT id, name FROM categories;"));
 }

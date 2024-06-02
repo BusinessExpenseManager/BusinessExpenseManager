@@ -1,15 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using Backend.Helpers;
 
-namespace Backend.Model.Domain;
-
-public record Goal(
-    int Id,
-    string Name,
-    string Description,
-    decimal GoalMonetaryValue,
-    DateTime GoalDueDatetime,
-    DateTime CreatedDatetime);
+namespace Backend.Types.Endpoint;
 
 public record GoalAdd(
     string Name,
