@@ -1,6 +1,7 @@
 using System.Data;
 using Backend.Api;
 using Backend.Helpers;
+using Backend.Helpers.Cognito;
 using Dapper;
 using Npgsql;
 
@@ -19,6 +20,7 @@ await using var dataSource = NpgsqlDataSource.Create(connectionString);
 DefaultTypeMap.MatchNamesWithUnderscores = true;
 var connection = await dataSource.OpenConnectionAsync();
 builder.Services.AddSingleton<IDbConnection>(_ => connection);
+builder.Services.AddScoped<ICognitoService, CognitoService>();
 
 builder.Services.AddLogging();
 // builder.Services.AddCors();
