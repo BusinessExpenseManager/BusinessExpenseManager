@@ -1,1 +1,18 @@
-<p>view-goals-page works!</p>
+<div class="header-bar">
+  <p>In Progress</p>
+  <button class="goal-button">
+    <!-- <mat-icon>
+            +
+        </mat-icon> -->
+    <p>(+) Add new goal</p>
+  </button>
+</div>
+<div class="goals-container">
+  <app-card *ngFor="let card of inProgressCards" [card]="card"> </app-card>
+</div>
+<div class="header-bar">
+  <p>Completed</p>
+</div>
+<div class="goals-container">
+  <app-card *ngFor="let card of completedCards" [card]="card"> </app-card>
+</div>
