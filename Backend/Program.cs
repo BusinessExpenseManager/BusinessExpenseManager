@@ -1,49 +1,31 @@
+using System.Data;
+using Dapper;
+using Npgsql;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+var connectionString = new NpgsqlConnectionStringBuilder
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+    Host = builder.Configuration["DB_URL"] ?? throw new Exception("No DB_URL found"),
+    Password = builder.Configuration["DB_PASSWORD"] ?? throw new Exception("No DB_PASSWORD found"),
+    Username = builder.Configuration["DB_USERNAME"] ?? throw new Exception("No DB_USERNAME found"),
+    Port = builder.Configuration.GetValue<int?>("DB_PORT") ?? NpgsqlConnection.DefaultPort,
+    Database = builder.Configuration["DB_DATABASE"] ?? "bem"
 };
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+await using var dataSource = NpgsqlDataSource.Create(connectionString);
+DefaultTypeMap.MatchNamesWithUnderscores = true;
+var connection = await dataSource.OpenConnectionAsync();
+builder.Services.AddSingleton<IDbConnection>(_ => connection);
 
-app.MapGet("/", () =>
-{
-    return "Health GOOD";
-})
-.WithName("HealthCheck")
-.WithOpenApi();
+builder.Services.AddLogging();
+// builder.Services.AddCors();
+var app = builder.Build();
+
+
+app.MapGet("/", () => "Health GOOD");
+app.MapGet("/1",
+    (IDbConnection connection1) => connection1.QueryAsync<int>(
+        "select count(*) from information_schema.tables where table_type = 'BASE TABLE';"));
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
