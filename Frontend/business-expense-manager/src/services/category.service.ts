@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from "../../environment";
 import {HttpClient} from "@angular/common/http";
 import {Category} from "../models/category.model";
-import {Observable, of} from "rxjs";
+import {Observable} from "rxjs";
+import {ApiResponse} from "../models/api-response.model";
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +14,9 @@ export class CategoryService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getAllCategories() : Observable<Category[]> {
-    return of([
-      {id: 1, name: 'Entertainment'},
-      {id: 1, name: 'Investments'},
-      {id: 1, name: 'Travel'},
-      {id: 1, name: 'Savings'}
-    ])
+  getAllCategories() : Observable<ApiResponse<Category[]>> {
+    return this
+      .httpClient
+      .get<ApiResponse<Category[]>>(`${this.baseUrl}/category`);
   }
 }

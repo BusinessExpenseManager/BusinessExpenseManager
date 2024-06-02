@@ -46,7 +46,6 @@ export class CashFlowDialogComponent implements OnInit {
   numRegex = /^-?\d*[.,]?\d{0,2}$/;
   cashFlowForm = this.fb.group({
     id: [1, Validators.required],
-    businessId: [1, Validators.required],
     date: [new Date(), Validators.required],
     cashFlowType: ['income', Validators.required],
     amount: [0, [Validators.required, Validators.min(0.01), Validators.pattern(this.numRegex)]],
@@ -65,12 +64,22 @@ export class CashFlowDialogComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // used to populate adding of categories
     this.categoryService
       .getAllCategories()
       .subscribe({
         next: response => {
-          this.categories = response;
-        }
+          if (response.success) {
+            this.categories = response.data;
+          } else {
+            const errorMessage = response.message ?? 'An error has occurred fetching the cash flow'
+            this.snackBar.open(errorMessage, 'X', {"duration": 4000});
+          }
+        },
+        error: err => {
+          this.snackBar.open('An error has occurred fetching the Categories.', 'X', {"duration": 4000});
+        },
+
       })
   }
 
@@ -82,7 +91,6 @@ export class CashFlowDialogComponent implements OnInit {
 
       const request: MonetaryFlow = {
         id: form.id as number,
-        businessId: form.businessId as number,
         goal: form.goal,
         category: form.category as string,
         monetaryValue: amount as number,
