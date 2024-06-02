@@ -5,6 +5,7 @@ import {environment} from "../../environment";
 import {MonetaryFlow} from "../models/monetary-flow.model";
 import {ApiResponse} from "../models/api-response.model";
 import {mapMonetaryFlow} from "../mappers/mapper";
+import {CreateCashFlowDto} from "../dtos/create-cash-flow.dto";
 
 @Injectable({
   providedIn: 'root'
@@ -36,8 +37,11 @@ export class MonetaryFlowService {
   }
 
 
-  addCashFlow(cashflow: MonetaryFlow): Observable<string> {
-    return of('');
+  addCashFlow(cashFlow: CreateCashFlowDto): Observable<ApiResponse<number>> {
+    return this
+      .httpClient
+      .post<ApiResponse<MonetaryFlow[]>>(`${this.baseUrl}/monetary_flow/monetary_flow/add`, cashFlow)
+
   }
 
 }

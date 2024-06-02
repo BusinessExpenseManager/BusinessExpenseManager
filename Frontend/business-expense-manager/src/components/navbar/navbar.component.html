@@ -5,7 +5,7 @@
   </button>
 </mat-toolbar>
 <mat-sidenav-container autosize>
-  <mat-sidenav [mode]="isMobile ? 'over' : 'side'" [opened]="isMobile ? 'false' : 'true'">
+  <mat-sidenav [mode]="isMobile ? 'over' : 'side'" [opened]="isMobile ? 'false' : 'true'" disableClose>
     <div class="nav-bar">
       <app-logo [routerLink]="[{ outlets: { navBar: ['dashboard-page'] } }]"></app-logo>
       <h1>{{StoreName}}</h1>

@@ -101,8 +101,6 @@ export class CashflowPageComponent implements OnInit, AfterViewInit {
             next: response => {
               if (response.success) {
                 this.snackBar.open('Successfully deleted record.', 'X', {"duration": 4000});
-
-                // refresh table
                 this.getCashFlows();
               } else {
                 const errorMessage = response.message ?? 'An error has occurred deleting the cash flow record.'
@@ -123,5 +121,11 @@ export class CashflowPageComponent implements OnInit, AfterViewInit {
       enterAnimationDuration: '200ms',
       exitAnimationDuration: '200ms'
     });
+
+    dialogRef.afterClosed().subscribe(saved => {
+      if (saved) {
+        this.getCashFlows()
+      }
+    })
   }
 }

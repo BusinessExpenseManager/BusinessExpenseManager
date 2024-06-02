@@ -15,20 +15,9 @@ export class CategoryService {
   constructor(private httpClient: HttpClient) { }
 
   getAllCategories() : Observable<ApiResponse<Category[]>> {
-    this
+    return this
       .httpClient
       .get<ApiResponse<Category[]>>(`${this.baseUrl}/category`);
-
-    return of({
-      success: true,
-      data: [
-        {id: 1, name: 'Entertainment'},
-        {id: 1, name: 'Investments'},
-        {id: 1, name: 'Travel'},
-        {id: 1, name: 'Savings'}
-      ]
-    });
-
   }
 
 }
