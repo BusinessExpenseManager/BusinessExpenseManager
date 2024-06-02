@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using DotNext;
+﻿using DotNext;
 
 namespace Backend.Helpers;
 
@@ -11,7 +10,6 @@ public static class FuncExtensions
     /// <typeparam name="TResult">The result type.</typeparam>
     /// <param name="function">The function to invoke.</param>
     /// <returns>The invocation result.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static async Task<Result<TResult>> TryInvokeAsync<TResult>(this Func<Task<TResult>> function)
     {
         Result<TResult> result;
@@ -34,7 +32,6 @@ public static class FuncExtensions
     /// <typeparam name="TResult">The result type.</typeparam>
     /// <param name="function">The function to invoke.</param>
     /// <returns>The invocation result.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static async Task<Result<TResult>> TryInvokeAsync<TResult>(this Func<ValueTask<TResult>> function)
     {
         Result<TResult> result;
