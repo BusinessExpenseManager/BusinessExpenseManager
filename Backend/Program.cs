@@ -1,4 +1,5 @@
 using System.Data;
+using Backend.Helpers;
 using Dapper;
 using Npgsql;
 
@@ -25,7 +26,8 @@ var app = builder.Build();
 
 app.MapGet("/", () => "Health GOOD");
 app.MapGet("/1",
-    (IDbConnection connection1) => connection1.QueryAsync<int>(
-        "select count(*) from information_schema.tables where table_type = 'BASE TABLE';"));
+    (ILogger<Program> logger,
+        IDbConnection connection1) => ResponseHelper.RunSqlQuery(logger, "wow", () => connection1.QueryAsync<int>(
+        "select count(*) from information_schema.tables where table_type = 'BASE TABLE';")));
 
 app.Run();
