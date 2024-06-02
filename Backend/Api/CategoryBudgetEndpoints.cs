@@ -1,9 +1,8 @@
 ﻿using System.Data;
 using Backend.Helpers;
 using Backend.Helpers.Cognito;
-using Backend.Model;
-using Backend.Model.Domain;
 using Backend.Types;
+using Backend.Types.Endpoint;
 using Dapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -11,7 +10,7 @@ namespace Backend.Api;
 
 public class CategoryBudgetEndpoints
 {
-    public void ResisterEndpoints(IEndpointRouteBuilder app)
+    public static void ResisterEndpoints(IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/categorybudgets");
         group.MapGet("/", GetPagedCategoryBudget);

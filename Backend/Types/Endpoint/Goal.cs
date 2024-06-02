@@ -1,7 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using Backend.Helpers;
-
-namespace Backend.Model.Domain;
+﻿namespace Backend.Types.Endpoint;
 
 public record Goal(
     int Id,
@@ -10,10 +7,3 @@ public record Goal(
     decimal GoalMonetaryValue,
     DateTime GoalDueDatetime,
     DateTime CreatedDatetime);
-
-public record GoalAdd(
-    string Name,
-    string Description,
-    decimal GoalMonetaryValue,
-    [property: JsonConverter(typeof(DateTimeJsonConverter))]
-    DateTime GoalDueDatetime);

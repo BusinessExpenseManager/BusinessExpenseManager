@@ -28,11 +28,11 @@ var app = builder.Build();
 
 
 app.MapGet("/", () => "Health GOOD");
-app.MapGet("/1",
-    (ILogger<Program> logger,
-        IDbConnection connection1) => ResponseHelper.RunSqlQuery(logger, "wow", () => connection1.QueryAsync<int>(
-        "select count(*) from information_schema.tables where table_type = 'BASE TABLE';")));
 
 BusinessEndpoints.ResisterEndpoints(app);
+CategoryBudgetEndpoints.ResisterEndpoints(app);
+CategoryEndpoints.ResisterEndpoints(app);
+GoalEndpoints.ResisterEndpoints(app);
+MonetaryFlowEndpoints.ResisterEndpoints(app);
 
 app.Run();
