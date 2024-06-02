@@ -1,7 +1,9 @@
-﻿@Backend_HostAddress = http://localhost:5057
+﻿@Backend_HostAddress = https://api.karle.co.za/
 
 ### get all cash flows for business
-GET {{Backend_HostAddress}}/monetary_flow
+GET {{Backend_HostAddress}}/monetary_flow?page=3
+
+
 
 ### REPONSE
 #{
