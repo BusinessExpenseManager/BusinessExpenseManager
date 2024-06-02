@@ -1,4 +1,5 @@
 using System.Data;
+using Backend.Api;
 using Backend.Helpers;
 using Backend.Helpers.Cognito;
 using Backend.Helpers.Module;
@@ -53,7 +54,11 @@ app.UseMiddleware<CognitoMiddleware>();
 // app.UseAuthorization();
 // app.UseAuthentication();
 
-
-ModuleLoader.LoadModules(app);
+new MonetaryFlowEndpoints().ResisterEndpoints(app);
+new BusinessEndpoints().ResisterEndpoints(app);
+new GoalEndpoints().ResisterEndpoints(app);
+new CategoryEndpoints().ResisterEndpoints(app);
+new CategoryBudgetEndpoints().ResisterEndpoints(app);
+// ModuleLoader.LoadModules(app);
 
 app.Run();
