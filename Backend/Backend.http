@@ -1,11 +1,51 @@
 @Backend_HostAddress = http://localhost:5057
 
+
+
+
+
+
+
+
+
+
+
+
+### Get all monetry flows
+GET {{Backend_HostAddress}}/monetary_flow?page=1
+
+### Delete 
+DELETE {{Backend_HostAddress}}/monetary_flow/delete
+Content-Type: application/json
+
+{
+  "FlowId": 1
+}
+
+
+### GET CATS
+GET {{Backend_HostAddress}}/category
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 GET {{Backend_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
 
-PUT {{Backend_HostAddress}}/goal/add
+POST {{Backend_HostAddress}}/goal/add
 Content-Type: application/json
 
 {
@@ -16,12 +56,40 @@ Content-Type: application/json
 }
 
 ###
+GET {{Backend_HostAddress}}/goal?page=1
+
+###
+POST {{Backend_HostAddress}}/goal/add
+
+{
+
+}
+
+###
 
 GET {{Backend_HostAddress}}/business
 Content-Type: application/json
 
 {
 }
+
+
+### 
+GET {{Backend_HostAddress}}/category
+
+###
+POST {{Backend_HostAddress}}/categorybudgets/add
+Content-Type: application/json
+
+{
+  
+}
+
+###
+GET {{Backend_HostAddress}}/category
+
+
+
 
 ### GET One goal
 GET {{Backend_HostAddress}}/goal/132132121
@@ -30,4 +98,37 @@ GET {{Backend_HostAddress}}/goal/132132121
 GET {{Backend_HostAddress}}/goal
 
 ### GET 10 goals page 2
-GET {{Backend_HostAddress}}/goal?page=1
+
+GET {{Backend_HostAddress}}/business/test/1
+
+
+
+
+### DELETE mone flow
+PATCH {{Backend_HostAddress}}/monetary_flow/delete
+Content-Type: application/json
+
+{
+  "id": 1
+}
+
+
+
+
+###
+GET {{Backend_HostAddress}}/monetary_flow/test/12
+Content-Type:application/json
+
+{
+}
+
+
+### PUT monetry flows
+PUT {{Backend_HostAddress}}/monetary_flow/add
+Content-Type: application/json
+
+{
+  "GoalId": 1,
+  "CategoryId": 1,
+  "MonetaryValue": 12.20
+}

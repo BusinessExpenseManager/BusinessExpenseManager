@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using DotNext;
 
-namespace Backend.Helpers;
+namespace Backend.Helpers.Extention;
 
 public static class FuncExtensions
 {
