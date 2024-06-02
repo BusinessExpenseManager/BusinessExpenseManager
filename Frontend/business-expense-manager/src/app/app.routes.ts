@@ -1,24 +1,28 @@
-import { Routes } from '@angular/router';
+import {Routes} from '@angular/router';
 import {LoginPageComponent} from "../pages/login-page/login-page.component";
-import {DashboardComponent} from "../pages/dashboard/dashboard.component";
-import {HomeComponent} from "../components/home/home.component";
-import {GoalPageComponent} from "../pages/goal-page/goal-page.component";
+import {DashboardPageComponent} from "../pages/dashboard-page/dashboard-page.component";
 import {ViewGoalsPageComponent} from "../pages/view-goals-page/view-goals-page.component";
 import {ViewCategoriesPageComponent} from "../pages/view-categories-page/view-categories-page.component";
 import {CashflowPageComponent} from "../pages/cashflow-page/cashflow-page.component";
+import {NavbarComponent} from "../components/navbar/navbar.component";
 
 export const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'home'
+  },
   {
     path: 'login',
     component: LoginPageComponent
   },
   {
-    path: '',
-    component: DashboardComponent,
+    path: 'home',
+    component: NavbarComponent,
     children: [
       {
-        path: 'home',
-        component: HomeComponent,
+        path: 'dashboard-page',
+        component: DashboardPageComponent,
         outlet: 'navBar'
       },
       {
@@ -35,8 +39,7 @@ export const routes: Routes = [
         path: 'categories',
         component: ViewCategoriesPageComponent,
         outlet: 'navBar'
-      },
-
+      }
     ]
   }
 ];

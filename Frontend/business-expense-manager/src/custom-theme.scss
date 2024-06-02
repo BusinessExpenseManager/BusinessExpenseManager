@@ -2,6 +2,7 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
+@use 'sass:map';
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -9,12 +10,142 @@
 // Be sure that you only ever include this mixin once!
 @include mat.core();
 
-// Define the theme object.
+// Note: Color palettes are generated from primary: #50D288, secondary: #1E1F1F, tertiary: #FFFFFF
+$_palettes: (
+  primary: (
+    0: #000000,
+    10: #00210f,
+    20: #00391d,
+    25: #004525,
+    30: #00522d,
+    35: #005f35,
+    40: #50D288,
+    50: #50D288,
+    60: #8afcb7,
+    70: #a0f5be,
+    80: #b0ffcf,
+    90: #c5ffdc,
+    95: #c2ffd2,
+    98: #e9ffeb,
+    99: #f5fff4,
+    100: #ffffff,
+  ),
+  secondary: (
+    0: #000000,
+    10: #191c1a,
+    20: #2e312e,
+    25: #393c39,
+    30: #454744,
+    35: #505350,
+    40: #5c5f5b,
+    50: #757874,
+    60: #8f918d,
+    70: #aaaca7,
+    80: #c5c7c2,
+    90: #e1e3de,
+    95: #f0f1ec,
+    98: #f8faf5,
+    99: #fbfdf8,
+    100: #ffffff,
+  ),
+  tertiary: (
+    0: #000000,
+    10: #191c1a,
+    20: #2e312e,
+    25: #393c39,
+    30: #454744,
+    35: #505350,
+    40: #5c5f5b,
+    50: #757874,
+    60: #8f918d,
+    70: #aaaca7,
+    80: #c5c7c2,
+    90: #e1e3de,
+    95: #f0f1ec,
+    98: #f8faf5,
+    99: #fbfdf8,
+    100: #ffffff,
+  ),
+  neutral: (
+    0: #000000,
+    10: #191c1a,
+    20: #2e312e,
+    25: #393c39,
+    30: #454744,
+    35: #505350,
+    40: #5c5f5b,
+    50: #757874,
+    60: #8f918d,
+    70: #aaaca7,
+    80: #c5c7c2,
+    90: #e1e3de,
+    95: #f0f1ec,
+    98: #f8faf5,
+    99: #fbfdf8,
+    100: #ffffff,
+    4: #0c0f0c,
+    6: #111411,
+    12: #1d201d,
+    17: #282b28,
+    22: #333532,
+    24: #373a37,
+    87: #d9dbd6,
+    92: #e7e9e4,
+    94: #edeee9,
+    96: #f3f4ef,
+  ),
+  neutral-variant: (
+    0: #000000,
+    10: #161d18,
+    20: #2b322c,
+    25: #353d37,
+    30: #414942,
+    35: #4c544d,
+    40: #586059,
+    50: #717971,
+    60: #8b938a,
+    70: #a5ada5,
+    80: #c0c9bf,
+    90: #dce5db,
+    95: #ebf3e9,
+    98: #f3fcf2,
+    99: #f6fff5,
+    100: #ffffff,
+  ),
+  error: (
+    0: #000000,
+    10: #410002,
+    20: #690005,
+    25: #7e0007,
+    30: #93000a,
+    35: #a80710,
+    40: #ba1a1a,
+    50: #de3730,
+    60: #ff5449,
+    70: #ff897d,
+    80: #ffb4ab,
+    90: #ffdad6,
+    95: #ffedea,
+    98: #fff8f7,
+    99: #fffbff,
+    100: #ffffff,
+  ),
+);
+
+$_rest: (
+  secondary: map.get($_palettes, secondary),
+  neutral: map.get($_palettes, neutral),
+  neutral-variant: map.get($_palettes,  neutral-variant),
+  error: map.get($_palettes, error),
+);
+$_primary: map.merge(map.get($_palettes, primary), $_rest);
+$_tertiary: map.merge(map.get($_palettes, tertiary), $_rest);
+
 $business-expense-manager-theme: mat.define-theme((
   color: (
     theme-type: light,
-    primary: mat.$azure-palette,
-    tertiary: mat.$blue-palette,
+    primary: $_primary,
+    tertiary: $_tertiary,
   ),
   density: (
     scale: 0,

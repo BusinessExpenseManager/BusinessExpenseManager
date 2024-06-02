@@ -1,0 +1,19 @@
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-dialog-actions > button {
+  border-radius: 0.1em;
+  box-shadow: 0 0.2em 0.2em rgba(0, 0, 0, 0.3);;
+}
+
+mat-dialog-actions > button:not([disabled]) {
+  color: black;
+}
+
+mat-dialog-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7em;
+}
