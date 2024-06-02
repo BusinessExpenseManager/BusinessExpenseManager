@@ -24,7 +24,7 @@ public class BusinessEndpoints
     ) =>
         ResponseHelper.RunSqlQuery(logger, "Unable to get business",
             () => connection.QueryAsync<Business>(
-                "SELECT * FROM businesses where user_cognito_identifier = @CognitoIdentifier LIMIT 1;",
+                "SELECT id, name, created_datetime  FROM businesses where user_cognito_identifier = @UserCognitoIdentifier LIMIT 1;",
                 cognito.Get()));
 
     private static Task<JsonHttpResult<ApiMessage<int>>> AddBusiness(
@@ -33,8 +33,8 @@ public class BusinessEndpoints
         BusinessAdd business,
         ICognitoService cognito) =>
         ResponseHelper.RunSqlQuery(logger, "Unable to add businesses", () =>
-            connection.QuerySingleAsync<int>(
-                "INSERT INTO businesses(name, user_cognito_identifier)  VALUES (@Name, @CognitoIdentifier);",
+            connection.QuerySingleAsync<int>(   
+                "INSERT INTO businesses(name, user_cognito_identifier)  VALUES (@Name, @UserCognitoIdentifier);",
                 new DynamicParameters(business).MergeObject(cognito.Get())
             ));
 }

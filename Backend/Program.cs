@@ -37,14 +37,11 @@ var app = builder.Build();
 // Post this here to prevent cors errors.
 app.MapGet("/", () => "Health GOOD");
 
-
+app.UseMiddleware<CognitoMiddleware>();
 app.UseCors(corsPolicyBuilder =>
     corsPolicyBuilder.WithOrigins(["https://web.karle.co.za"])
         .WithHeaders(["Content-Type", "Authorization"])
         .WithMethods([HttpMethods.Get, HttpMethods.Post]));
-
-// app.UseAuthorization();
-// app.UseAuthentication();
 
 BusinessEndpoints.ResisterEndpoints(app);
 CategoryBudgetEndpoints.ResisterEndpoints(app);
