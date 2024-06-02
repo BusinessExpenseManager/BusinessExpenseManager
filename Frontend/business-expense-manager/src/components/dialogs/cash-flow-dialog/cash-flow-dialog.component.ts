@@ -14,6 +14,8 @@ import {MonetaryFlowService} from "../../../services/monetary-flow.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MonetaryFlow} from "../../../models/monetary-flow.model";
 import {MatButtonModule} from "@angular/material/button";
+import {GoalService} from "../../../services/goal.service";
+import {Goal} from "../../../models/goal.model";
 
 
 @Component({
@@ -40,7 +42,7 @@ import {MatButtonModule} from "@angular/material/button";
 export class CashFlowDialogComponent implements OnInit {
 
   categories: Category[] = []
-  goals: string[] = []
+  goals: Goal[] = []
   canAddGoal: boolean = false;
 
   numRegex = /^-?\d*[.,]?\d{0,2}$/;
@@ -59,12 +61,17 @@ export class CashFlowDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<CashFlowDialogComponent>,
     private fb: FormBuilder,
     private categoryService: CategoryService,
+    private goalService: GoalService,
     private monetaryFlowService: MonetaryFlowService,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
-    // used to populate adding of categories
+    this.getCategories();
+    this.getGoals();
+  }
+
+  private getCategories() {
     this.categoryService
       .getAllCategories()
       .subscribe({
@@ -72,15 +79,36 @@ export class CashFlowDialogComponent implements OnInit {
           if (response.success) {
             this.categories = response.data;
           } else {
-            const errorMessage = response.message ?? 'An error has occurred fetching the cash flow'
+            const errorMessage = response.message ?? 'An error has occurred fetching the Categories'
             this.snackBar.open(errorMessage, 'X', {"duration": 4000});
           }
         },
         error: err => {
           this.snackBar.open('An error has occurred fetching the Categories.', 'X', {"duration": 4000});
         },
+      });
+  }
 
-      })
+  private getGoals() {
+    this.goalService
+      .getAllGoals()
+      .subscribe({
+        next: response => {
+          if (response.success) {
+            this.goals = response.data;
+
+            if (this.goals.length === 0) {
+              this.snackBar.open('An error has occurred fetching the Goals.', 'X', {"duration": 4000});
+            }
+          } else {
+            const errorMessage = response.message ?? 'There are no goals associated with your business. Please create a goal first.'
+            this.snackBar.open(errorMessage, 'X', {"duration": 4000});
+          }
+        },
+        error: err => {
+          this.snackBar.open('An error has occurred fetching the Goals.', 'X', {"duration": 4000});
+        },
+      });
   }
 
   onSubmit() {
@@ -111,4 +139,5 @@ export class CashFlowDialogComponent implements OnInit {
       this.canAddGoal = this.GoalCategories.includes(category.toLowerCase());
     }
   }
+
 }

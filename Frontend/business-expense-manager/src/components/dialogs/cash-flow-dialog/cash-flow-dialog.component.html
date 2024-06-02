@@ -34,7 +34,7 @@
       <mat-label>Goal</mat-label>
       <mat-select formControlName="goal">
         @for (goal of goals; track goal) {
-          <mat-option [value]="goal">{{goal}}</mat-option>
+          <mat-option [value]="goal">{{goal.name}}</mat-option>
         }
       </mat-select>
     </mat-form-field>
