@@ -1,0 +1,5 @@
+mat-dialog-actions > button {
+  border-radius: 0.1em;
+  box-shadow: 0 0.2em 0.2em rgba(0, 0, 0, 0.3);;
+  color: black;
+}

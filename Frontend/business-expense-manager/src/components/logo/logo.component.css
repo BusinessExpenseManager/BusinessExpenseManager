@@ -12,13 +12,14 @@ img {
   width: 5em;
   justify-self: end;
 }
- p {
-   color: var(--seconary);
-   font-size: x-large;
- }
+
+p {
+ color: var(--tertiary);
+ font-size: x-large;
+}
 
 p > span {
   display: block;
-  color: var(--tertiary);
+  color: var(--primary);
   font-weight: bold;
 }

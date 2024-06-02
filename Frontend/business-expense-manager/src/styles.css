@@ -1,7 +1,7 @@
 :root {
-  --primary: #1E1F1F;
-  --seconary: #FFFFFF;
-  --tertiary: #50D288;
+  --primary: #50D288;
+  --secondary: #1E1F1F;
+  --tertiary: #FFFFFF;
 }
 
 html {
@@ -14,5 +14,25 @@ html {
   box-sizing:border-box;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* Material Specific Edits */
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: transparent !important;
+}
+
+.mat-mdc-form-field-focus-overlay {
+  background-color: transparent !important;
+}
+
+.mat-mdc-dialog-container {
+  --mdc-dialog-container-shape: 0.1em;
+}
+
