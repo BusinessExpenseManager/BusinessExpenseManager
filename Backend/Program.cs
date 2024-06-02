@@ -1,8 +1,11 @@
 using System.Data;
 using Backend.Api;
-using Backend.Helpers;
 using Backend.Helpers.Cognito;
+using Backend.Types;
+using Backend.Types.Endpoint;
+using Backend.Types.Validators;
 using Dapper;
+using FluentValidation;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,14 +23,28 @@ await using var dataSource = NpgsqlDataSource.Create(connectionString);
 DefaultTypeMap.MatchNamesWithUnderscores = true;
 var connection = await dataSource.OpenConnectionAsync();
 builder.Services.AddSingleton<IDbConnection>(_ => connection);
+
 builder.Services.AddScoped<ICognitoService, CognitoService>();
+builder.Services.AddScoped<IValidator<GoalAdd>, GoalValidator>();
+builder.Services.AddScoped<IValidator<BusinessAdd>, BusinessValidator>();
+builder.Services.AddScoped<IValidator<PagingData>, PagingDataValidator>();
 
 builder.Services.AddLogging();
-// builder.Services.AddCors();
+builder.Services.AddCors();
+
 var app = builder.Build();
 
-
+// Post this here to prevent cors errors.
 app.MapGet("/", () => "Health GOOD");
+
+
+app.UseCors(corsPolicyBuilder =>
+    corsPolicyBuilder.WithOrigins(["https://web.karle.co.za"])
+        .WithHeaders(["Content-Type", "Authorization"])
+        .WithMethods([HttpMethods.Get, HttpMethods.Post]));
+
+// app.UseAuthorization();
+// app.UseAuthentication();
 
 BusinessEndpoints.ResisterEndpoints(app);
 CategoryBudgetEndpoints.ResisterEndpoints(app);
