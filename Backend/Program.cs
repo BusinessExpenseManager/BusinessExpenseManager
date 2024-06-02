@@ -47,9 +47,7 @@ app.UseCors(corsPolicyBuilder =>
     corsPolicyBuilder.WithOrigins(["https://web.karle.co.za"])
         .WithHeaders(["Content-Type", "Authorization"])
         .WithMethods([HttpMethods.Get, HttpMethods.Post]));
-
 app.MapGet("/", c => c.Response.WriteAsync("Health is good!!!"));
-
 app.UseMiddleware<CognitoMiddleware>();
 
 // app.UseAuthorization();
