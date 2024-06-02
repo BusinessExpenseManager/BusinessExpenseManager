@@ -1,21 +1,19 @@
 ﻿using System.Data;
 using Backend.Helpers;
 using Backend.Helpers.Cognito;
-using Backend.Model;
-using Backend.Model.Domain;
 using Backend.Types;
+using Backend.Types.Endpoint;
 using Dapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Backend.Api;
-
 
 public class GoalEndpoints
 {
     public static void ResisterEndpoints(IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/goal");
-        group.MapGet("/", GetAllGoals);//.AddEndpointFilter<ValidationFilter<PagingData>>();
+        group.MapGet("/", GetAllGoals); //.AddEndpointFilter<ValidationFilter<PagingData>>();
         // group.MapGet("/{id:int}", GetGoal);
         group.MapPut("/add", AddGoal); //.AddEndpointFilter<ValidationFilter<GoalAdd>>();
     }

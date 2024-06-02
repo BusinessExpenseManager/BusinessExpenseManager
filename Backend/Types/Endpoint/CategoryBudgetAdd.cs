@@ -1,8 +1,7 @@
 ﻿namespace Backend.Types.Endpoint;
 
-public record CategoryBudget(
-    int Id,
+public record CategoryBudgetAdd(
     int BusinessId,
     int CategoryId,
-    string MonthlyBudget
+    int MonthlyBudget
 );
