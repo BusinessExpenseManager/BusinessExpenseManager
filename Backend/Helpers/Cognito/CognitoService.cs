@@ -4,15 +4,7 @@ namespace Backend.Helpers.Cognito;
 
 public class CognitoService : ICognitoService
 {
-    private CognitoUser CognitoUser { get; set; } = null!;
-
-    public CognitoUser Get()
-    {
-        return CognitoUser;
-    }
-
-    public void Set(CognitoUser cognitoUser)
-    {
-        CognitoUser = cognitoUser;
-    }
+    private CognitoUser _cognitoUser = null!;
+    public CognitoUser Get() => _cognitoUser;
+    public void Set(CognitoUser cognitoUser) => _cognitoUser = cognitoUser;
 }

@@ -4,6 +4,6 @@ namespace Backend.Helpers.Cognito;
 
 public interface ICognitoService
 {
-    public CognitoUser Get();
+    CognitoUser Get();
     void Set(CognitoUser cognitoUser);
 }

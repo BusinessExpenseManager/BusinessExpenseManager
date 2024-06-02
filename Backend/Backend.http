@@ -12,9 +12,19 @@
 
 
 ### Get all monetry flows
-GET {{Backend_HostAddress}}/monetary_flow
+GET {{Backend_HostAddress}}/monetary_flow?page=1
+
+### Delete 
+DELETE {{Backend_HostAddress}}/monetary_flow/delete
+Content-Type: application/json
+
+{
+  "FlowId": 1
+}
 
 
+### GET CATS
+GET {{Backend_HostAddress}}/category
 
 
 
@@ -35,7 +45,7 @@ Accept: application/json
 
 ###
 
-PUT {{Backend_HostAddress}}/goal/add
+POST {{Backend_HostAddress}}/goal/add
 Content-Type: application/json
 
 {
@@ -46,12 +56,40 @@ Content-Type: application/json
 }
 
 ###
+GET {{Backend_HostAddress}}/goal?page=1
+
+###
+POST {{Backend_HostAddress}}/goal/add
+
+{
+
+}
+
+###
 
 GET {{Backend_HostAddress}}/business
 Content-Type: application/json
 
 {
 }
+
+
+### 
+GET {{Backend_HostAddress}}/category
+
+###
+POST {{Backend_HostAddress}}/categorybudgets/add
+Content-Type: application/json
+
+{
+  
+}
+
+###
+GET {{Backend_HostAddress}}/category
+
+
+
 
 ### GET One goal
 GET {{Backend_HostAddress}}/goal/132132121

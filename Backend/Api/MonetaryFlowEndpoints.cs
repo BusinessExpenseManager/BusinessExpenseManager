@@ -3,7 +3,6 @@ using Backend.Helpers;
 using Backend.Helpers.Cognito;
 using Backend.Helpers.Extention;
 using Backend.Helpers.Module;
-using Backend.Model;
 using Backend.Model.Domain;
 using Backend.Model.Validators;
 using Backend.Types;
@@ -20,8 +19,8 @@ public class MonetaryFlowEndpoints : IModule
     {
         var group = app.MapGroup("/monetary_flow");
         group.MapGet("/", GetAllMonetaryFlow).AddEndpointFilter<ValidationFilter<PagingData>>();
-        group.MapPut("/add", AddMonetaryFlow);
-        group.MapPatch("/delete", DeleteMonetaryFlow);
+        group.MapPost("/add", AddMonetaryFlow);
+        group.MapDelete("/delete/{id:int}", DeleteMonetaryFlow);
     }
 
     private static Task<JsonHttpResult<ApiMessage<IEnumerable<MonetaryFlowItems>>>> GetAllMonetaryFlow(
@@ -50,10 +49,10 @@ public class MonetaryFlowEndpoints : IModule
         ILogger<Program> logger,
         IDbConnection connection,
         ICognitoService cognito,
-        MonetaryFlowDelete flow) =>
+        int id) =>
         RunSqlQuery(logger, "Unable to delete monetary flow",
             () => connection.QuerySingleAsync<int>(
                 "SELECT * FROM delete_monetary_flow(@CognitoIdentifier, @FlowId)",
-                new DynamicParameters(flow).MergeObject(cognito.Get())
+                new DynamicParameters(new { FlowId = id }).MergeObject(cognito.Get())
             ));
 }

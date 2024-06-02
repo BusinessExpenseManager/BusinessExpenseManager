@@ -44,14 +44,13 @@ var app = builder.Build();
 
 app.UseMiddleware<CognitoMiddleware>();
 
-/*app.UseCors(corsPolicyBuilder =>
-    corsPolicyBuilder.WithOrigins(["http://localhost:123"])
+app.UseCors(corsPolicyBuilder =>
+    corsPolicyBuilder.WithOrigins(["https://web.karle.co.za"])
         .WithHeaders(["Content-Type", "Authorization"])
-        .WithMethods([HttpMethods.Get, HttpMethods.Put]));
+        .WithMethods([HttpMethods.Get, HttpMethods.Post]));
 
-app.UseAuthorization();
-app.UseAuthentication();
-*/
+// app.UseAuthorization();
+// app.UseAuthentication();
 
 
 ModuleLoader.LoadModules(app);

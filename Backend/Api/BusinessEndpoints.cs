@@ -19,7 +19,7 @@ public class BusinessEndpoints : IModule
     {
         var group = app.MapGroup("/business");
         group.MapGet("/", GetBusinesses);
-        group.MapPut("/add", AddBusiness);
+        group.MapPost("/add", AddBusiness);
     }
 
     private static Task<JsonHttpResult<ApiMessage<IEnumerable<Business>>>> GetBusinesses(

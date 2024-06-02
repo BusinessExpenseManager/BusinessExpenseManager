@@ -21,7 +21,7 @@ public class GoalEndpoints : IModule
         var group = app.MapGroup("/goal");
         group.MapGet("/", GetAllGoals).AddEndpointFilter<ValidationFilter<PagingData>>();
         // group.MapGet("/{id:int}", GetGoal);
-        group.MapPut("/add", AddGoal).AddEndpointFilter<ValidationFilter<GoalAdd>>();
+        group.MapPost("/add", AddGoal).AddEndpointFilter<ValidationFilter<GoalAdd>>();
     }
 
     /*private static Task<JsonHttpResult<ApiMessage<Goal>>> GetGoal(

@@ -6,7 +6,7 @@ Authorization: Bearer {{$auth.token()}}
 
 
 ### Add to monetary_flows for user
-PUT {{Backend_HostAddress}}/monetary_flow/add
+POST {{Backend_HostAddress}}/monetary_flow/add
 Authorization: Bearer {{$auth.token()}}
 Content-Type: application/json
 
@@ -16,16 +16,7 @@ Content-Type: application/json
   "MonetaryValue": 120.27
 }
 
-### Add to monetary_flows for user
-PATCH {{Backend_HostAddress}}/monetary_flow/delete
+### Delete to monetary_flows for user
+DELETE {{Backend_HostAddress}}/monetary_flow/delete/6
 Authorization: Bearer {{$auth.token()}}
 Content-Type: application/json
-
-{
-  "FlowId": 6
-}
-
-
-### Add to monetary_flows for user
-GET {{Backend_HostAddress}}/monetary_flow/ww
-Authorization: Bearer {{$auth.token()}}

@@ -19,7 +19,7 @@ public class CategoryBudgetEndpoints : IModule
     {
         var group = app.MapGroup("/categorybudgets");
         group.MapGet("/", GetPagedCategoryBudget);
-        group.MapPut("/add", AddCategoryBudget);
+        group.MapPost("/add", AddCategoryBudget);
     }
 
     private static Task<JsonHttpResult<ApiMessage<IEnumerable<CategoryBudget>>>> AddCategoryBudget(
