@@ -6,7 +6,7 @@
             "name": "Backend",
             "parameters": {
                 "appBundle": "./api",
-                "iisPath": "/",
+                "iisPath": "",
                 "iisWebSite": "Default Web Site"
             }
         }
