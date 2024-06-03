@@ -37,6 +37,9 @@
           <mat-option [value]="category">{{category.name}}</mat-option>
         }
       </mat-select>
+      <mat-hint *ngIf="categories?.length === 0">
+        No Categories Found.
+      </mat-hint>
       <mat-error *ngIf="cashFlowForm.form.controls['category']?.errors">
         <span *ngIf="cashFlowForm.form.controls['category']?.hasError('required')">Required field.</span>
       </mat-error>
@@ -49,6 +52,9 @@
           <mat-option [value]="goal">{{goal.name}}</mat-option>
         }
       </mat-select>
+      <mat-hint *ngIf="goals?.length === 0">
+        No Goals Found.
+      </mat-hint>
       <mat-error *ngIf="cashFlowForm.form.controls['goal']?.errors">
         <span *ngIf="cashFlowForm.form.controls['goal']?.hasError('required')">Required field.</span>
       </mat-error>
