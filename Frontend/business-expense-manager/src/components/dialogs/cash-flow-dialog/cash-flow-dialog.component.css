@@ -17,3 +17,8 @@ mat-dialog-actions {
   grid-template-columns: 1fr 1fr;
   gap: 0.7em;
 }
+
+.error {
+  color: var(--mat-form-field-error-text-color);
+  text-align: center;
+}
