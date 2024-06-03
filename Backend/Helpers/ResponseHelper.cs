@@ -1,8 +1,6 @@
-﻿using System.Data;
-using System.Data.Common;
+﻿using System.Data.Common;
 using Backend.Types;
 using DotNext;
-using DotNext.Threading.Tasks;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Backend.Helpers;
@@ -18,9 +16,15 @@ public static class ResponseHelper
     public static async Task<JsonHttpResult<ApiMessage<T>>> RunSqlQuery<T>(this DbDataSource source, ILogger logger,
         string message, Func<DbConnection, Task<T>> func)
     {
-        var result = await source.OpenConnectionAsync().AsTask().Convert(func.TryInvokeAsync);
+        var openConnection = source.CreateConnection();
+        var result = await func.TryInvokeAsync(openConnection);
         var apiMessage = QueryResultMapper(result, message, StatusCodes.Status500InternalServerError);
         if (apiMessage.SystemError.GetValue(out var error)) logger.LogError(error, "Error occured from run sql: ");
-        return TypedResults.Json(apiMessage.ApiMessage, statusCode: apiMessage.StatusCode);
+        var jsonHttpResult = TypedResults.Json(apiMessage.ApiMessage, statusCode: apiMessage.StatusCode);
+
+        // Flip this kill the connections, but they idle for a bit so when we have many connections that are just idle we know why.
+        await openConnection.CloseAsync();
+        await openConnection.DisposeAsync();
+        return jsonHttpResult;
     }
 }
