@@ -1,24 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <UserSecretsId>4cac98f2-5a28-4b1c-abf1-3d17c0c1dbbb</UserSecretsId>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>7d60f7ef-95d6-4eef-9051-adbbe883e5aa</UserSecretsId>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <Content Include="..\.dockerignore">
-            <Link>.dockerignore</Link>
-        </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Dapper" Version="2.1.35"/>
-        <PackageReference Include="DotNext" Version="5.3.1"/>
-        <PackageReference Include="FluentValidation" Version="11.9.1"/>
-        <PackageReference Include="Npgsql" Version="8.0.3"/>
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="DotNext" Version="5.3.1" />
+    <PackageReference Include="FluentValidation" Version="11.9.1" />
+    <PackageReference Include="Npgsql" Version="8.0.3" />
+  </ItemGroup>
 
 </Project>
