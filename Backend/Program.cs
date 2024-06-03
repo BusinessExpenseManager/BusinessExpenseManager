@@ -30,7 +30,7 @@ builder.Services.AddScoped<IValidator<BusinessAdd>, BusinessValidator>();
 builder.Services.AddScoped<IValidator<PagingData>, PagingDataValidator>();
 
 builder.Services.AddLogging();
-builder.Services.AddCors();
+// builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -38,10 +38,12 @@ var app = builder.Build();
 app.MapGet("/", () => "Health GOOD");
 
 app.UseMiddleware<CognitoMiddleware>();
-app.UseCors(corsPolicyBuilder =>
-    corsPolicyBuilder.WithOrigins(["https://web.karle.co.za"])
-        .WithHeaders(["Content-Type", "Authorization"])
-        .WithMethods([HttpMethods.Get, HttpMethods.Post, HttpMethods.Delete]));
+
+// app.UseCors(corsPolicyBuilder =>
+//     corsPolicyBuilder.WithOrigins(["https://web.karle.co.za"])
+//         .WithHeaders(["Content-Type", "Authorization"])
+//         .WithMethods([HttpMethods.Get, HttpMethods.Post, HttpMethods.Delete]));
+
 
 // Wanted to create these with reflection but that could have broke on AWS due to how it is built so these stay for now.
 BusinessEndpoints.ResisterEndpoints(app);
