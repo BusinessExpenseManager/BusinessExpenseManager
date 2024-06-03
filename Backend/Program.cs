@@ -1,4 +1,5 @@
 using System.Data;
+using System.Data.Common;
 using Backend.Api;
 using Backend.Helpers.Cognito;
 using Backend.Types;
@@ -19,10 +20,9 @@ var connectionString = new NpgsqlConnectionStringBuilder
     Database = builder.Configuration["DB_DATABASE"] ?? "bem"
 };
 
-await using var dataSource = NpgsqlDataSource.Create(connectionString);
+var dataSource = NpgsqlDataSource.Create(connectionString);
 DefaultTypeMap.MatchNamesWithUnderscores = true;
-var connection = await dataSource.OpenConnectionAsync();
-builder.Services.AddSingleton<IDbConnection>(_ => connection);
+builder.Services.AddSingleton<DbDataSource>(_ => dataSource);
 
 builder.Services.AddScoped<ICognitoService, CognitoService>();
 builder.Services.AddScoped<IValidator<GoalAdd>, GoalValidator>();
@@ -41,8 +41,9 @@ app.UseMiddleware<CognitoMiddleware>();
 app.UseCors(corsPolicyBuilder =>
     corsPolicyBuilder.WithOrigins(["https://web.karle.co.za"])
         .WithHeaders(["Content-Type", "Authorization"])
-        .WithMethods([HttpMethods.Get, HttpMethods.Post]));
+        .WithMethods([HttpMethods.Get, HttpMethods.Post, HttpMethods.Delete]));
 
+// Wanted to create these with reflection but that could have broke on AWS due to how it is built so these stay for now.
 BusinessEndpoints.ResisterEndpoints(app);
 CategoryBudgetEndpoints.ResisterEndpoints(app);
 CategoryEndpoints.ResisterEndpoints(app);
