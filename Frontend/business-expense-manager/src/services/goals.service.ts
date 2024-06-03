@@ -15,8 +15,8 @@ export class GoalsService {
 
   getAllGoalsForBusiness(businessId: number): Observable<Goal[]> {
     return of([
-      { title: "Washing machine", description: "I want to afford a washing machine by Christmas", goalMonetaryValue: 10999, goalDueDatetime: new Date(), createdDatetime: new Date()},
-      { title: "New staff member", description: "I want to afford a new admin staff member by Christmas", goalMonetaryValue: 6000, goalDueDatetime: new Date(), createdDatetime: new Date()},
+      { id: 1, name: "Washing machine", description: "I want to afford a washing machine by Christmas", goalMonetaryValue: 10999, goalDueDatetime: new Date(), createdDatetime: new Date()},
+      { id: 1, name: "New staff member", description: "I want to afford a new admin staff member by Christmas", goalMonetaryValue: 6000, goalDueDatetime: new Date(), createdDatetime: new Date()},
     ]);
   }
 

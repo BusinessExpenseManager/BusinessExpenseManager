@@ -1,5 +1,6 @@
 export interface Goal {
-  title: string;
+  id: number;
+  name: string;
   description: string;
   goalMonetaryValue: number;
   goalDueDatetime: Date;

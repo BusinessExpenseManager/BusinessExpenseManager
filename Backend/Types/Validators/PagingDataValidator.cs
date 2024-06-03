@@ -1,9 +1,6 @@
-﻿using Backend.Model.Domain;
-using Backend.Types;
-using FluentValidation;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using FluentValidation;
 
-namespace Backend.Model.Validators;
+namespace Backend.Types.Validators;
 
 public class PagingDataValidator : AbstractValidator<PagingData>
 {

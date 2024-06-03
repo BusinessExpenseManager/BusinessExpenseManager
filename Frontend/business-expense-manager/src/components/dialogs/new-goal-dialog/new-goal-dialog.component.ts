@@ -83,7 +83,8 @@ export class NewGoalDialogComponent implements OnInit {
       const form = this.newGoalForm.getRawValue();
 
       const request: Goal = {
-        title: form.goalName as string,
+        id: form.id as number,
+        name: form.goalName as string,
         description: form.goalDescription as string,
         goalDueDatetime: form.date as Date,
         createdDatetime: form.date as Date,

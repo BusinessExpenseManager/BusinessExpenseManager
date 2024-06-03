@@ -1,7 +1,7 @@
-﻿using Backend.Model.Domain;
+﻿using Backend.Types.Endpoint;
 using FluentValidation;
 
-namespace Backend.Model.Validators;
+namespace Backend.Types.Validators;
 
 public class BusinessValidator : AbstractValidator<BusinessAdd>
 {

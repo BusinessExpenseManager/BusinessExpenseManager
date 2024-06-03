@@ -1,7 +1,6 @@
-﻿using Backend.Types;
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace Backend.Model.Validators;
+namespace Backend.Types.Validators;
 
 public class ValidationFilter<T> : IEndpointFilter
 
