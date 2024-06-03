@@ -33,7 +33,7 @@ public class GoalEndpoints
         GoalAdd goal,
         ICognitoService cognito
     ) =>
-        ResponseHelper.RunSqlQuery(logger, "Unable to add goal", () => connection.QuerySingleAsync<int>(
+        ResponseHelper.RunSqlQuery(logger, "Unable to add goal", async () => await connection.QuerySingleAsync<int>(
             "INSERT INTO goals (name, description, goal_monetary_value, goal_due_datetime) values (@Name, @Description, @GoalMonetaryValue, @GoalDueDatetime) RETURNING id;",
             new DynamicParameters(goal).MergeObject(cognito.Get())
         ));
@@ -44,8 +44,7 @@ public class GoalEndpoints
         PagingData pageData,
         ICognitoService cognito
     ) =>
-        ResponseHelper.RunSqlQuery(logger, "Unable to get all goals",
-            () => connection.QueryAsync<Goal>("SELECT * FROM goals LIMIT 10 OFFSET @PageOffset;",
+        ResponseHelper.RunSqlQuery(logger, "Unable to get all goals", async () => await connection.QueryAsync<Goal>("SELECT * FROM goals LIMIT 10 OFFSET @PageOffset;",
                 new DynamicParameters(pageData).MergeObject(cognito.Get())
             ));
 }

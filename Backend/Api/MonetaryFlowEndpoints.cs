@@ -24,8 +24,8 @@ public class MonetaryFlowEndpoints
         IDbConnection connection,
         ICognitoService cognito,
         PagingData pagingData) =>
-        ResponseHelper.RunSqlQuery(logger, "Unable to get all monetary flows",
-            () => connection.QueryAsync<MonetaryFlowItems>(
+        ResponseHelper.RunSqlQuery(logger, "Unable to get all monetary flows", async () =>
+            await connection.QueryAsync<MonetaryFlowItems>(
                 "SELECT * FROM retrieve_monetary_flows(@UserCognitoIdentifier, @PageOffset)",
                 new DynamicParameters(pagingData).MergeObject(cognito.Get())
             ));
@@ -35,7 +35,7 @@ public class MonetaryFlowEndpoints
         IDbConnection connection,
         ICognitoService cognito,
         MonetaryFlowAdd flow) =>
-        ResponseHelper.RunSqlQuery(logger, "Unable to add monetary flow", () =>
+        ResponseHelper.RunSqlQuery(logger, "Unable to add monetary flow", async () => await
             connection.QuerySingleAsync<int>(
                 "SELECT * FROM add_new_monetary_flow(@UserCognitoIdentifier, @GoalId, @CategoryId, CAST(@MonetaryValue AS MONEY))",
                 new DynamicParameters(flow).MergeObject(cognito.Get())
@@ -46,8 +46,8 @@ public class MonetaryFlowEndpoints
         IDbConnection connection,
         ICognitoService cognito,
         int id) =>
-        ResponseHelper.RunSqlQuery(logger, "Unable to delete monetary flow",
-            () => connection.QuerySingleAsync<int>(
+        ResponseHelper.RunSqlQuery(logger, "Unable to delete monetary flow", async () =>
+            await connection.QuerySingleAsync<int>(
                 "SELECT * FROM delete_monetary_flow(@UserCognitoIdentifier, @FlowId)",
                 new DynamicParameters(new { FlowId = id }).MergeObject(cognito.Get())
             ));

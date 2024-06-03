@@ -22,8 +22,7 @@ public class CategoryBudgetEndpoints
         IDbConnection connection,
         CategoryBudgetAdd budgetAdd,
         ICognitoService cognito) =>
-        ResponseHelper.RunSqlQuery(logger, "Unable to add budget category",
-            () => connection.QueryAsync<CategoryBudget>(
+        ResponseHelper.RunSqlQuery(logger, "Unable to add budget category", async () => await connection.QueryAsync<CategoryBudget>(
                 "INSERT INTO category_budgets(business_id, category_id, monthly_budget) VALUES (@BusinessId, @CategoryId, @MonthlyBudget);",
                 new DynamicParameters(budgetAdd).MergeObject(cognito.Get())
             ));
@@ -33,8 +32,7 @@ public class CategoryBudgetEndpoints
         IDbConnection connection,
         PagingData pageData,
         ICognitoService cognito) =>
-        ResponseHelper.RunSqlQuery(logger, "Unable to get paged category budgets",
-            () => connection.QueryAsync<CategoryBudget>("SELECT * FROM category_budgets Limit 10 OFFSET @PageOffset;",
+        ResponseHelper.RunSqlQuery(logger, "Unable to get paged category budgets", async () => await connection.QueryAsync<CategoryBudget>("SELECT * FROM category_budgets Limit 10 OFFSET @PageOffset;",
                 new DynamicParameters(pageData).MergeObject(cognito.Get())
             ));
 }

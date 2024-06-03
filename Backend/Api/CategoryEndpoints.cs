@@ -22,5 +22,5 @@ public class CategoryEndpoints
         ILogger<Program> logger,
         IDbConnection connection) =>
         ResponseHelper.RunSqlQuery(logger, "Unable to get all categories",
-            () => connection.QueryAsync<Category>("SELECT id, name FROM categories;"));
+            async () => await connection.QueryAsync<Category>("SELECT id, name FROM categories;"));
 }
