@@ -1,0 +1,59 @@
+<!-- carry on fixing -->
+
+<h2 mat-dialog-title>Add goal</h2>
+<mat-dialog-content>
+  <form [formGroup]="newGoalForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <mat-label>Goal name</mat-label>
+        <input matInput formControlName="goalName" placeholder="Enter goal name">
+    </mat-form-field>
+
+    <mat-form-field>
+    <mat-label>Goal description</mat-label>
+      <input matInput formControlName="goalDescription" placeholder="Enter goal description">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="cashFlowType">
+        <mat-option value="income" >Income</mat-option>
+        <mat-option value="expense">Expense</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Amount</mat-label>
+      <input matInput type="number" placeholder="00.00" formControlName="amount">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Category</mat-label>
+      <mat-select formControlName="category" (selectionChange)="checkGoalEligibility($event)">
+        @for (category of categories; track category) {
+          <mat-option [value]="category">{{category.name}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="canAddGoal">
+      <mat-label>Goal</mat-label>
+      <mat-select formControlName="goal">
+        @for (goal of goals; track goal) {
+          <mat-option [value]="goal">{{goal}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button color="primary" (click)="dialogRef.close(false)">Cancel</button>
+  <button mat-flat-button color="primary" type="submit" [disabled]="!newGoalForm.valid">Add</button>
+</mat-dialog-actions>

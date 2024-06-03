@@ -1,10 +1,16 @@
 <div class="header-bar">
   <p>In Progress</p>
-  <button class="goal-button">
+  <button
+    (click)="addNewGoal()"
+    mat-flat-button
+    color="primary"
+    aria-label="Add new goal"
+  >
+    <mat-icon fontIcon="add"></mat-icon>
     <!-- <mat-icon>
             +
         </mat-icon> -->
-    <p>(+) Add new goal</p>
+    <p>Add new goal</p>
   </button>
 </div>
 <div class="goals-container">

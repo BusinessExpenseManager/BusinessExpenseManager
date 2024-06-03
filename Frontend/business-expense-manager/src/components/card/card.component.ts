@@ -1,6 +1,6 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Card } from '../../entities/BEMEntities';
+import { Card } from '../../models/card.model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
@@ -25,4 +25,13 @@ export class CardComponent {
   get progressAmount() : number {
     return (this.card.balanceAmount / this.card.goalAmount) * 100;
   }
+
+  get progressAmountString() : string {
+    let temp = (this.card.balanceAmount / this.card.goalAmount) * 100;
+    if(temp === 100) {
+      return "100.0";
+    }
+    return temp.toFixed(2);
+  }
+
 }

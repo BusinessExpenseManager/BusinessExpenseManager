@@ -7,6 +7,8 @@
 
   > .coloured-top-padding {
     line-height: 2rem;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
   }
 
   > .main-black-body {
@@ -15,6 +17,9 @@
     flex-direction: column;
     align-items: left;
     padding: 1rem;
+    position: relative;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
 
     > h2 {
       color: white;
@@ -26,15 +31,35 @@
       color: #257d9a;
     }
 
-    .progress-ring {
-      background-color: #ffffff;
-      border-radius: 200rem;
-      align-self: center;
-      & > p {
-        justify-self: center;
-        color: #257d9a;
+    > .spinner-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      > .spinner-inner-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+
+        > .spinner-overlay-text {
+          color: #257d9a;
+          justify-self: center;
+          transform: translateX(-100%);
+          z-index: 2;
+        }
+
+        > .progress-ring {
+            background-color: #ffffff;
+            border-radius: 200rem;
+            align-self: center;
+            transform: translateX(25%);
+            z-index: 1;
+          }
       }
     }
+
+    
 
     .progress-title-wrapper {
       display: flex;

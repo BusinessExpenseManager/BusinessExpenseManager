@@ -5,24 +5,31 @@
     [class.blue-top]="card.colour === 'Blue'"
     [class.green-top]="card.colour === 'Green'"
     [class.red-top]="card.colour === 'Red'"
-  ><br></div>
+  >
+    <br />
+  </div>
   <div class="main-black-body">
     <h2>{{ card.title }}</h2>
-    <mat-spinner
-      class="progress-ring"
-      color="blue"
-      mode="determinate"
-      [value]="progressAmount"
-    >
-        <p>{{ progressAmount }}%</p>
-    </mat-spinner>
+    <div class="spinner-container">
+      <div class="spinner-inner-container">
+        <mat-spinner
+          class="progress-ring"
+          color="blue"
+          mode="determinate"
+          [value]="progressAmount"
+        >
+        </mat-spinner>
+        <div class="spinner-overlay-text">{{ progressAmountString }}%</div>
+      </div>
+    </div>
+
     <div class="progress-title-wrapper">
-        <p>Balance:</p>
-        <p>Goal:</p>
+      <p>Balance:</p>
+      <p>Goal:</p>
     </div>
     <div class="progress-amount-wrapper">
-        <p>R{{ card.balanceAmount }}</p>
-        <p>R{{ card.goalAmount }}</p>
+      <p>R{{ card.balanceAmount }}</p>
+      <p>R{{ card.goalAmount }}</p>
     </div>
   </div>
 </div>
