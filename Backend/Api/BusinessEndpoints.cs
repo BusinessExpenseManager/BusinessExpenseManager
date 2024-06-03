@@ -33,7 +33,7 @@ public class BusinessEndpoints
         BusinessAdd business,
         ICognitoService cognito) =>
         ResponseHelper.RunSqlQuery(logger, "Unable to add businesses", () =>
-            connection.QuerySingleAsync<int>(   
+            connection.QuerySingleAsync<int>(
                 "INSERT INTO businesses(name, user_cognito_identifier)  VALUES (@Name, @UserCognitoIdentifier);",
                 new DynamicParameters(business).MergeObject(cognito.Get())
             ));

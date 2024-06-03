@@ -4,6 +4,6 @@ public record Goal(
     int Id,
     string Name,
     string Description,
-    decimal GoalMonetaryValue,
-    DateTime GoalDueDatetime,
+    decimal MonetaryValue,
+    DateTime DueDatetime,
     DateTime CreatedDatetime);
