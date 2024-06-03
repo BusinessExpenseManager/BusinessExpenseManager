@@ -40,7 +40,7 @@ export class MonetaryFlowService {
   addCashFlow(cashFlow: CreateCashFlowDto): Observable<ApiResponse<number>> {
     return this
       .httpClient
-      .post<ApiResponse<MonetaryFlow[]>>(`${this.baseUrl}/monetary_flow/monetary_flow/add`, cashFlow)
+      .post<ApiResponse<MonetaryFlow[]>>(`${this.baseUrl}/monetary_flow/add`, cashFlow)
 
   }
 
