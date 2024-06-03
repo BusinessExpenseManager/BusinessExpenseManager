@@ -1,6 +1,6 @@
 import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {MatIconModule} from "@angular/material/icon";
-import {MatPaginator, MatPaginatorIntl, MatPaginatorModule} from "@angular/material/paginator";
+import {MatPaginator, MatPaginatorIntl, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {MatSortHeader, MatSortModule} from '@angular/material/sort';
 import {MatDialog,} from '@angular/material/dialog';
@@ -10,6 +10,7 @@ import {MonetaryFlowService} from "../../services/monetary-flow.service";
 import {DatePipe, NgIf} from "@angular/common";
 import {CashFlowDialogComponent} from "../../components/dialogs/cash-flow-dialog/cash-flow-dialog.component";
 import {MatButtonModule} from "@angular/material/button";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 
 @Component({
@@ -32,26 +33,48 @@ export class CashflowPageComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = ['Date Captured', 'Category', 'Goal', 'Amount', 'Delete'];
   dataSource = new MatTableDataSource<MonetaryFlow>([]);
-  error: boolean = false;
   @ViewChild(MatPaginator) paginator: MatPaginator = new MatPaginator(new MatPaginatorIntl(), ChangeDetectorRef.prototype);
 
   isMobile: boolean = false;
 
+  error: boolean = false;
+  loading: boolean = true;
+
+  page: number = 1
+
   constructor(
     public dialog: MatDialog,
-    private monetaryFlowService: MonetaryFlowService
+    private monetaryFlowService: MonetaryFlowService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
-    this.monetaryFlowService.getCashFlowsForBusiness()
+    this.getCashFlows();
+  }
+
+  onPageChange(event: PageEvent) {
+    this.page = event.pageIndex + 1;
+    this.getCashFlows()
+  }
+
+  getCashFlows() {
+    this.error = false;
+    this.monetaryFlowService.getCashFlowsForBusiness(this.page)
       .subscribe({
-        next: value => {
-          this.dataSource = new MatTableDataSource<MonetaryFlow>(value);
-          this.error = false;
+        next: response => {
+
+          if (response.success) {
+            this.dataSource = new MatTableDataSource<MonetaryFlow>(response.data);
+            this.loading = false;
+          } else {
+            const errorMessage = response.message ?? 'An error has occurred fetching the cash flow'
+            this.snackBar.open(errorMessage, 'X', {"duration": 4000});
+            this.error = true;
+          }
         },
         error: err => {
           this.error = true;
-          console.error(err)
+          this.snackBar.open('An error has occurred fetching the cash flow.', 'X', {"duration": 4000});
         },
       })
   }
@@ -60,7 +83,7 @@ export class CashflowPageComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  deleteCashFlow(id: number) {
+  deleteCashFlow(CashFlowId: number) {
     // Confirm Deletion
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       enterAnimationDuration: '200ms',
@@ -69,14 +92,24 @@ export class CashflowPageComponent implements OnInit, AfterViewInit {
 
     dialogRef.componentInstance.confirmMessage = 'Are you sure you delete the cash flow record?';
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === true) {
-        // Delete Record
+    dialogRef.afterClosed().subscribe(confirmation => {
+      if (confirmation === true) {
+        // Delete
         this.monetaryFlowService
-          .deleteCashFlow(id)
-          .subscribe((response: any) => {
-            console.log(response);
-            // TODO: Refresh Cash Flow Table if successfully deleted
+          .deleteCashFlow(CashFlowId)
+          .subscribe({
+            next: response => {
+              if (response.success) {
+                this.snackBar.open('Successfully deleted record.', 'X', {"duration": 4000});
+                this.getCashFlows();
+              } else {
+                const errorMessage = response.message ?? 'An error has occurred deleting the cash flow record.'
+                this.snackBar.open(errorMessage, 'X', {"duration": 4000});
+              }
+            },
+            error: () => {
+              this.snackBar.open('An error has occurred deleting the Cash Flow.', 'X', {"duration": 4000});
+            },
           })
       }
     });
@@ -88,5 +121,11 @@ export class CashflowPageComponent implements OnInit, AfterViewInit {
       enterAnimationDuration: '200ms',
       exitAnimationDuration: '200ms'
     });
+
+    dialogRef.afterClosed().subscribe(saved => {
+      if (saved) {
+        this.getCashFlows()
+      }
+    })
   }
 }
