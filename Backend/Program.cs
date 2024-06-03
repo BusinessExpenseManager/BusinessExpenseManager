@@ -23,8 +23,8 @@ DefaultTypeMap.MatchNamesWithUnderscores = true;
 // var connection = dataSource.OpenConnection();
 // builder.Services.AddSingleton<IDbConnection>(_ => connection);
 
-var dataSource = NpgsqlDataSource.Create(connectionString);
-builder.Services.AddSingleton<IDbConnection>(_ => dataSource.OpenConnection());
+// var dataSource = NpgsqlDataSource.Create(connectionString);
+builder.Services.AddSingleton<IDbConnection>(_ => NpgsqlDataSource.Create(connectionString).OpenConnection());
 
 builder.Services.AddScoped<ICognitoService, CognitoService>();
 builder.Services.AddScoped<IValidator<GoalAdd>, GoalValidator>();
