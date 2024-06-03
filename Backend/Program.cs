@@ -19,12 +19,10 @@ var connectionString = new NpgsqlConnectionStringBuilder
     Database = builder.Configuration["DB_DATABASE"] ?? "bem"
 };
 
+await using var dataSource = NpgsqlDataSource.Create(connectionString);
 DefaultTypeMap.MatchNamesWithUnderscores = true;
-// var connection = dataSource.OpenConnection();
-// builder.Services.AddSingleton<IDbConnection>(_ => connection);
-
-// var dataSource = NpgsqlDataSource.Create(connectionString);
-builder.Services.AddSingleton<IDbConnection>(_ => NpgsqlDataSource.Create(connectionString).OpenConnection());
+var connection = dataSource.CreateConnection();
+builder.Services.AddSingleton<IDbConnection>(_ => connection);
 
 builder.Services.AddScoped<ICognitoService, CognitoService>();
 builder.Services.AddScoped<IValidator<GoalAdd>, GoalValidator>();
