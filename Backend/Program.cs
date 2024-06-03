@@ -22,8 +22,6 @@ var connectionString = new NpgsqlConnectionStringBuilder
 
 var dataSource = NpgsqlDataSource.Create(connectionString);
 DefaultTypeMap.MatchNamesWithUnderscores = true;
-var connection = dataSource.CreateConnection();
-builder.Services.AddSingleton<IDbConnection>(_ => connection);
 builder.Services.AddSingleton<DbDataSource>(_ => dataSource);
 
 builder.Services.AddScoped<ICognitoService, CognitoService>();
