@@ -62,12 +62,12 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         const currentRoute = this.router.url;
-        localStorage.setItem('lastVisitedRoute', currentRoute);
+        sessionStorage.setItem('lastVisitedRoute', currentRoute);
       }
     });
 
     // navigate to last path visited.
-    const lastVisitedRoute = localStorage.getItem('lastVisitedRoute');
+    const lastVisitedRoute = sessionStorage.getItem('lastVisitedRoute');
     if (lastVisitedRoute) {
       this.router.navigateByUrl(lastVisitedRoute);
     } else {
@@ -81,5 +81,10 @@ export class NavbarComponent implements OnInit, AfterViewInit {
       .subscribe((screenSize) => {
         this.isMobile = screenSize.matches;
       });
+  }
+
+  logout() {
+    sessionStorage.clear();
+    this.router.navigateByUrl('/login');
   }
 }
