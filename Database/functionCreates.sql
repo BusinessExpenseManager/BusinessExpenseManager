@@ -85,3 +85,84 @@ EXCEPTION
 END;
 $$ LANGUAGE plpgsql;
 --rollback DROP FUNCTION "retrieve_monetary_flows";
+
+
+--changeset ryan:ddl:createFunction:get_or_create_business
+CREATE OR REPLACE FUNCTION get_or_create_business(cognito_identifier varchar(50), business_name varchar(50))
+    RETURNS int AS
+$$
+DECLARE
+    business_id int;
+BEGIN
+    SELECT id INTO business_id FROM businesses WHERE user_cognito_identifier = cognito_identifier;
+    IF NOT FOUND THEN
+        INSERT INTO businesses (user_cognito_identifier, name)
+        VALUES (cognito_identifier, business_name)
+        RETURNING id INTO business_id;
+    END IF;
+    RETURN business_id;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'An error occurred while getting or creating the business: %', SQLERRM;
+END;
+$$ LANGUAGE plpgsql;
+--rollback DROP FUNCTION "get_or_create_business";
+
+--changeset ryan:ddl:createFunction:get_monetary_categories
+CREATE OR REPLACE FUNCTION get_monetary_categories(cognito_identifier varchar(50), page_offset int)
+    RETURNS TABLE
+            (
+                name           varchar(50),
+                balance        money,
+                monthly_budget money
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY
+        SELECT c.name, SUM(m.monetary_value) AS balance, b.monthly_budget
+        FROM monetary_flows as m
+                 INNER JOIN businesses b on b.id = m.business_id
+                 INNER JOIN categories c on c.id = m.category_id
+                 INNER JOIN category_budgets b on c.id = b.category_id
+        WHERE b.user_cognito_identifier = cognito_identifier
+          AND m.created_datetime >= NOW() - interval '1 month'
+          AND m.created_datetime < NOW()
+        GROUP BY m.goal_id, c.name, b.monthly_budget
+        OFFSET page_offset LIMIT 10;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'An error occurred while getting goal monetary flows: %', SQLERRM;
+END;
+$$ LANGUAGE plpgsql;
+--rollback DROP FUNCTION "get_monetary_categories";
+
+--changeset ryan:ddl:createFunction:get_monetary_goals
+CREATE OR REPLACE FUNCTION get_monetary_goals(cognito_identifier varchar(50), page_offset int)
+    RETURNS TABLE
+            (
+                goal_id        integer,
+                name           varchar(50),
+                monetary_value money,
+                goal_value     money
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY
+        SELECT g.id, g.name, SUM(m.monetary_value), g.monetary_value
+        FROM monetary_flows as m
+                 INNER JOIN public.goals g on g.id = m.goal_id
+                 INNER JOIN businesses b on b.id = m.business_id
+        WHERE b.user_cognito_identifier = cognito_identifier
+        GROUP BY m.goal_id, g.name, g.monetary_value, g.id
+        OFFSET page_offset LIMIT 10;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'An error occurred while getting goal monetary flows: %', SQLERRM;
+END;
+$$ LANGUAGE plpgsql;
+
+--rollback DROP FUNCTION "get_monetary_goals";
+
+

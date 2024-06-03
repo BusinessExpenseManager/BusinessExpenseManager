@@ -68,10 +68,10 @@ app.MapGet("/", () => "Health GOOD");
 
 app.UseMiddleware<CognitoMiddleware>();
 app.UseCors(corsPolicyBuilder =>
-    //TODO: !!!!!!! MAKE SURE TO FIX THIS !!!!!!!!!!
-    corsPolicyBuilder.WithOrigins(["*" /*, "https://web.karle.co.za"*/])
+        corsPolicyBuilder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()
+    /*corsPolicyBuilder.WithOrigins(["*" , "https://web.karle.co.za"])
         .WithHeaders(["Content-Type", "Authorization"])
-        .WithMethods([HttpMethods.Get, HttpMethods.Post, HttpMethods.Delete, HttpMethods.Options]));
+        .WithMethods([HttpMethods.Get, HttpMethods.Post, HttpMethods.Delete, HttpMethods.Options])*/);
 
 
 var apiRoute = app.MapGroup("/").RequireAuthorization();

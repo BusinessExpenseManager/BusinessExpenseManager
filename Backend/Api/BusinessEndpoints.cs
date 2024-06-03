@@ -1,5 +1,4 @@
-﻿using System.Data;
-using System.Data.Common;
+﻿using System.Data.Common;
 using Backend.Helpers;
 using Backend.Helpers.Cognito;
 using Backend.Types;
@@ -14,27 +13,17 @@ public static class BusinessEndpoints
     public static void ResisterEndpoints(IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/business");
-        group.MapGet("/", GetBusinesses);
-        group.MapPost("/add", AddBusiness);
+        group.MapPost("/", GetOrCreateBusiness);
     }
 
-    private static Task<JsonHttpResult<ApiMessage<IEnumerable<Business>>>> GetBusinesses(
-        ILogger<Program> logger,
-        DbDataSource source,
-        ICognitoService cognito
-    ) =>
-        source.RunSqlQuery(logger, "Unable to get business", con => con.QueryAsync<Business>(
-            "SELECT id, name, created_datetime  FROM businesses where user_cognito_identifier = @UserCognitoIdentifier LIMIT 1;",
-            cognito.Get()));
-
-    private static Task<JsonHttpResult<ApiMessage<int>>> AddBusiness(
+    private static Task<JsonHttpResult<ApiMessage<int>>> GetOrCreateBusiness(
         ILogger<Program> logger,
         DbDataSource source,
         BusinessAdd business,
         ICognitoService cognito) =>
-        source.RunSqlQuery(logger, "Unable to add businesses", async con => await
+        source.RunSqlQuery(logger, "Unable to get or add businesses", con =>
             con.QuerySingleAsync<int>(
-                "INSERT INTO businesses(name, user_cognito_identifier)  VALUES (@Name, @UserCognitoIdentifier);",
+                "SELECT * FROM get_or_create_business(@CategoryId, @Name)",
                 new DynamicParameters(business).MergeObject(cognito.Get())
             ));
 }
