@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Backend.Api;
 
-public class BusinessEndpoints
+public static class BusinessEndpoints
 {
     public static void ResisterEndpoints(IEndpointRouteBuilder app)
     {

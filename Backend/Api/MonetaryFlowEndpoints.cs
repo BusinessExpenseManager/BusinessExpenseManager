@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Backend.Api;
 
-public class MonetaryFlowEndpoints
+public static class MonetaryFlowEndpoints
 {
     public static void ResisterEndpoints(IEndpointRouteBuilder app)
     {

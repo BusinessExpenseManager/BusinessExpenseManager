@@ -43,6 +43,7 @@ app.UseCors(corsPolicyBuilder =>
         .WithHeaders(["Content-Type", "Authorization"])
         .WithMethods([HttpMethods.Get, HttpMethods.Post]));
 
+// Wanted to create these with reflection but that could have broke on AWS due to how it is built so these stay for now.
 BusinessEndpoints.ResisterEndpoints(app);
 CategoryBudgetEndpoints.ResisterEndpoints(app);
 CategoryEndpoints.ResisterEndpoints(app);
