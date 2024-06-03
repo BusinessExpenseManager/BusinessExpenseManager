@@ -27,3 +27,21 @@
     flex-flow: row wrap;
     padding: 0 1rem;
 }
+
+.fullscreen-overlay-side-panel {
+    background-color: #FFFFFF;
+    height: 100%;
+    position: fixed !important;
+    top: 0;
+    right: 0;
+
+    @media only screen and (min-width: 915px){
+        left: auto;
+        width: 50%;
+    }
+
+    @media (max-width: 914px){
+        width: 100%;
+        left: auto;
+    }
+}

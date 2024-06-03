@@ -7,6 +7,7 @@ import { NgFor } from '@angular/common';
 import { NewGoalDialogComponent } from '../../components/dialogs/new-goal-dialog/new-goal-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GoalsService } from '../../services/goals.service';
+import { GoalPanelComponent } from '../../components/goal-panel/goal-panel.component';
 
 @Component({
   selector: 'app-view-goals-page',
@@ -97,5 +98,17 @@ export class ViewGoalsPageComponent implements OnInit {
       enterAnimationDuration: '200ms',
       exitAnimationDuration: '200ms',
     });
+  }
+
+  public showGoalClicked(card: Card): void {
+
+    this.dialog.open(GoalPanelComponent, {
+      panelClass: 'fullscreen-overlay-side-panel',
+      disableClose: true,
+      width: '50%',
+      minWidth: '380px'
+    });
+    console.log("goal clicked");
+    console.log(card);
   }
 }

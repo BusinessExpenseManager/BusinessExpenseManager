@@ -1,0 +1,23 @@
+@import '../../pages/view-goals-page/view-goals-page.component.css';
+
+.panel-wrapper {
+    /* height: 100vh; */
+    background-color: white;
+    height: 100%;
+    position: fixed !important;
+    top: 0;
+    right: 0;
+    padding: 2rem;
+    border-top-left-radius: 2rem;
+    border-bottom-left-radius: 2rem;
+
+    @media only screen and (min-width: 915px){
+        left: auto;
+        width: 50%;
+    }
+
+    @media (max-width: 914px){
+        width: 100%;
+        left: auto;
+    }
+}

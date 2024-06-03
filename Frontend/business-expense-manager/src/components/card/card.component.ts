@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Card } from '../../models/card.model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
@@ -20,6 +20,8 @@ export class CardComponent {
     colour: 'Yellow'
   };
 
+  @Output() goalClicked = new EventEmitter<Card>();
+
   constructor() {}
 
   get progressAmount() : number {
@@ -32,6 +34,10 @@ export class CardComponent {
       return "100.0";
     }
     return temp.toFixed(2);
+  }
+
+  public emitCardClickedEvent(){
+    this.goalClicked.emit(this.card);
   }
 
 }

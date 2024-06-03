@@ -13,8 +13,8 @@
     <p>Add new goal</p>
   </button>
 </div>
-<div class="goals-container">
-  <app-card *ngFor="let card of inProgressCards" [card]="card"> </app-card>
+<div class="goals-container" >
+  <app-card *ngFor="let card of inProgressCards" [card]="card" (goalClicked)="showGoalClicked(card)"> </app-card>
 </div>
 <div class="header-bar">
   <p>Completed</p>

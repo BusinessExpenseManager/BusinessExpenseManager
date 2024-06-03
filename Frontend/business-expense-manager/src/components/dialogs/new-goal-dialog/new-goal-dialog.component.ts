@@ -70,11 +70,11 @@ export class NewGoalDialogComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.categoryService.getAllCategories().subscribe({
-      next: (response) => {
-        this.categories = response;
-      },
-    });
+    // this.categoryService.getAllCategories().subscribe({
+    //   next: (response) => {
+    //     this.categories = response;
+    //   },
+    // });
   }
 
   onSubmit() {
