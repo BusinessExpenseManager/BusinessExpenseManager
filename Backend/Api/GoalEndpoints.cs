@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Data.Common;
 using Backend.Helpers;
 using Backend.Helpers.Cognito;
 using Backend.Types;
@@ -29,22 +30,23 @@ public class GoalEndpoints
 
     private static Task<JsonHttpResult<ApiMessage<int>>> AddGoal(
         ILogger<Program> logger,
-        IDbConnection connection,
+        DbDataSource source,
         GoalAdd goal,
         ICognitoService cognito
     ) =>
-        ResponseHelper.RunSqlQuery(logger, "Unable to add goal", async () => await connection.QuerySingleAsync<int>(
+        source.RunSqlQuery(logger, "Unable to add goal", con => con.QuerySingleAsync<int>(
             "INSERT INTO goals (name, description, goal_monetary_value, goal_due_datetime) values (@Name, @Description, @GoalMonetaryValue, @GoalDueDatetime) RETURNING id;",
             new DynamicParameters(goal).MergeObject(cognito.Get())
         ));
 
     private static Task<JsonHttpResult<ApiMessage<IEnumerable<Goal>>>> GetAllGoals(
         ILogger<Program> logger,
-        IDbConnection connection,
+        DbDataSource source,
         PagingData pageData,
         ICognitoService cognito
     ) =>
-        ResponseHelper.RunSqlQuery(logger, "Unable to get all goals", async () => await connection.QueryAsync<Goal>("SELECT * FROM goals LIMIT 10 OFFSET @PageOffset;",
-                new DynamicParameters(pageData).MergeObject(cognito.Get())
-            ));
+        source.RunSqlQuery(logger, "Unable to get all goals", con => con.QueryAsync<Goal>(
+            "SELECT * FROM goals LIMIT 10 OFFSET @PageOffset;",
+            new DynamicParameters(pageData).MergeObject(cognito.Get())
+        ));
 }
