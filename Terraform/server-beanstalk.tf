@@ -196,10 +196,4 @@ resource "aws_elastic_beanstalk_environment" "backend_beanstalk" {
     value     = module.rds.db_instance_address
     resource  = ""
   }
-  setting {
-    namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "AUTH_SECRET_KEY"
-    value     = data.aws_secretsmanager_secret_version.auth_secret_key.secret_string
-    resource  = ""
-  }
 }
