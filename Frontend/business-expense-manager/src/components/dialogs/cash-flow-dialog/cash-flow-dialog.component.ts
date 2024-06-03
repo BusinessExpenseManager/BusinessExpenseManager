@@ -16,6 +16,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {GoalService} from "../../../services/goal.service";
 import {Goal} from "../../../models/goal.model";
 import {CreateCashFlowDto} from "../../../dtos/create-cash-flow.dto";
+import {finalize} from "rxjs";
 
 
 @Component({
@@ -54,14 +55,12 @@ export class CashFlowDialogComponent implements OnInit {
   cashFlow = {
     type: 'income',
     amount: undefined,
-    category: {
-      name: '',
-      id: 0,
-    },
+    category: undefined as any,
     goal: null,
   }
 
   GoalCategories : string[] = ['savings'];
+  disableSubmit: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<CashFlowDialogComponent>,
@@ -117,6 +116,7 @@ export class CashFlowDialogComponent implements OnInit {
   }
 
   onSubmit(cashFlowForm: NgForm) {
+    this.disableSubmit = true;
     if (cashFlowForm.valid && !this.typeError) {
       const request: CreateCashFlowDto = {
         goalId: cashFlowForm.value?.goal?.id ?? null,
@@ -125,6 +125,11 @@ export class CashFlowDialogComponent implements OnInit {
       }
 
       this.monetaryFlowService.addCashFlow(request)
+        .pipe(
+          finalize(() => {
+            this.disableSubmit = false;
+          })
+        )
         .subscribe({
           next: response => {
             if (response.success) {
@@ -136,6 +141,7 @@ export class CashFlowDialogComponent implements OnInit {
           },
           error: () => {
             this.snackBar.open('An error has occurred saving the cash flow.', 'X', {"duration": 4000});
+            this.disableSubmit = false;
           },
         })
       return;
