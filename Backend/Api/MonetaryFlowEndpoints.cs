@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Data.Common;
 using Backend.Helpers;
 using Backend.Helpers.Cognito;
 using Backend.Types;
@@ -21,33 +22,33 @@ public class MonetaryFlowEndpoints
 
     private static Task<JsonHttpResult<ApiMessage<IEnumerable<MonetaryFlowItems>>>> GetAllMonetaryFlow(
         ILogger<Program> logger,
-        IDbConnection connection,
+        DbDataSource source,
         ICognitoService cognito,
         PagingData pagingData) =>
-        ResponseHelper.RunSqlQuery(logger, "Unable to get all monetary flows", async () =>
-            await connection.QueryAsync<MonetaryFlowItems>(
+        source.RunSqlQuery(logger, "Unable to get all monetary flows", con =>
+            con.QueryAsync<MonetaryFlowItems>(
                 "SELECT * FROM retrieve_monetary_flows(@UserCognitoIdentifier, @PageOffset)",
                 new DynamicParameters(pagingData).MergeObject(cognito.Get())
             ));
 
     private static Task<JsonHttpResult<ApiMessage<int>>> AddMonetaryFlow(
         ILogger<Program> logger,
-        IDbConnection connection,
+        DbDataSource source,
         ICognitoService cognito,
         MonetaryFlowAdd flow) =>
-        ResponseHelper.RunSqlQuery(logger, "Unable to add monetary flow", async () => await
-            connection.QuerySingleAsync<int>(
+        source.RunSqlQuery(logger, "Unable to add monetary flow", con =>
+            con.QuerySingleAsync<int>(
                 "SELECT * FROM add_new_monetary_flow(@UserCognitoIdentifier, @GoalId, @CategoryId, CAST(@MonetaryValue AS MONEY))",
                 new DynamicParameters(flow).MergeObject(cognito.Get())
             ));
 
     private static Task<JsonHttpResult<ApiMessage<int>>> DeleteMonetaryFlow(
         ILogger<Program> logger,
-        IDbConnection connection,
+        DbDataSource source,
         ICognitoService cognito,
         int id) =>
-        ResponseHelper.RunSqlQuery(logger, "Unable to delete monetary flow", async () =>
-            await connection.QuerySingleAsync<int>(
+        source.RunSqlQuery(logger, "Unable to delete monetary flow", con =>
+            con.QuerySingleAsync<int>(
                 "SELECT * FROM delete_monetary_flow(@UserCognitoIdentifier, @FlowId)",
                 new DynamicParameters(new { FlowId = id }).MergeObject(cognito.Get())
             ));

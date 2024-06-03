@@ -1,4 +1,5 @@
 using System.Data;
+using System.Data.Common;
 using Backend.Api;
 using Backend.Helpers.Cognito;
 using Backend.Types;
@@ -19,10 +20,9 @@ var connectionString = new NpgsqlConnectionStringBuilder
     Database = builder.Configuration["DB_DATABASE"] ?? "bem"
 };
 
-await using var dataSource = NpgsqlDataSource.Create(connectionString);
+var dataSource = NpgsqlDataSource.Create(connectionString);
 DefaultTypeMap.MatchNamesWithUnderscores = true;
-var connection = dataSource.CreateConnection();
-builder.Services.AddSingleton<IDbConnection>(_ => connection);
+builder.Services.AddSingleton<DbDataSource>(_ => dataSource);
 
 builder.Services.AddScoped<ICognitoService, CognitoService>();
 builder.Services.AddScoped<IValidator<GoalAdd>, GoalValidator>();
