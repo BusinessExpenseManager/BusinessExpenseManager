@@ -25,7 +25,6 @@ public class CognitoMiddleware(RequestDelegate next)
             await context.Response.WriteAsync("Unauthorized: Email not found");
             return;
         }
-
         await next(context);
     }
 }
