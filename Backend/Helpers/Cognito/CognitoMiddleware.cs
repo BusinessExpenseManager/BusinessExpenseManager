@@ -23,7 +23,6 @@ public class CognitoMiddleware(RequestDelegate next)
             // Return unauthorized error
             context.Response.StatusCode = 401; // Unauthorized
             await context.Response.WriteAsync("Unauthorized: Email not found");
-            return;
         }
 
         await next(context);
