@@ -35,26 +35,3 @@ class PermissionsService {
 export const AuthGuard: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean => {
   return inject(PermissionsService).canActivate(next, state);
 }
-
-
-
-
-// export class AuthGuardService implements CanActivate, CanActivateChild {
-//   constructor(private router: Router) {}
-//
-//   canActivate(
-//     next: ActivatedRouteSnapshot,
-//     state: RouterStateSnapshot): boolean {
-//     const loggedIn = true; // or false get you logged in status from state
-//     if (loggedIn) {
-//       return true;
-//     }
-//     this.router.navigate(["login"]);
-//     return false;
-//   }
-//   canActivateChild(
-//     next: ActivatedRouteSnapshot,
-//     state: RouterStateSnapshot): boolean {
-//     return this.canActivate(next, state);
-//   }
-// }
