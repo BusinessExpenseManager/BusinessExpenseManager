@@ -24,7 +24,7 @@ public static class BusinessEndpoints
     {
         return source.RunSqlQuery(logger, "Unable to add businesses", con =>
             con.QuerySingleAsync<int>(
-                "INSERT INTO businesses(name, user_cognito_identifier) VALUES(@Name, @UserCognitoIdentifier) RETURNING id",
+                "SELECT * FROM get_or_create_business(@Name, @UserCognitoIdentifier)",
                 new DynamicParameters(business).MergeObject(cognito.Get())
             ));
     }
