@@ -8,6 +8,7 @@ public class CognitoMiddleware(RequestDelegate next)
 {
     public async Task InvokeAsync(HttpContext context, ICognitoService cognitoService)
     {
+        // Do not run our middleware on Anonymous routes
         if (context.GetEndpoint()?.Metadata.GetMetadata<IAllowAnonymous>() != null)
         {
             await next(context);
@@ -24,5 +25,6 @@ public class CognitoMiddleware(RequestDelegate next)
             await context.Response.WriteAsync("Unauthorized: Email not found");
             return;
         }
+        await next(context);
     }
 }

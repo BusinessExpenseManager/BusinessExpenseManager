@@ -6,7 +6,7 @@ import {Injectable} from "@angular/core";
 export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const userToken = sessionStorage.getItem('access_token')
+    const userToken = sessionStorage.getItem('id_token')
 
     const modifiedReq = req.clone({
       headers: req.headers.set('Authorization', `Bearer ${userToken}`),

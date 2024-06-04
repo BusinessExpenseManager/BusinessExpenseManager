@@ -54,6 +54,6 @@ resource "aws_cognito_user_pool_client" "prd_pool" {
   supported_identity_providers = ["Google"]
   allowed_oauth_flows          = ["implicit"]
   allowed_oauth_scopes         = ["email", "openid"]
-  callback_urls                = ["https://web.karle.co.za"]
+  callback_urls                = ["https://web.karle.co.za", "http://localhost:4200"]
   generate_secret              = true
 }

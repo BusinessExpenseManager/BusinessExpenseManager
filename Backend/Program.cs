@@ -39,7 +39,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            IssuerSigningKeyResolver = (s, securityToken, identifier, parameters) =>
+            IssuerSigningKeyResolver = (_, _, _, parameters) =>
             {
                 var json = new HttpClient().GetStringAsync(parameters.ValidIssuer + "/.well-known/jwks.json").Result;
                 var keys = JsonSerializer.Deserialize<JsonWebKeySet>(json)?.Keys;
@@ -70,13 +70,13 @@ builder.Services.AddLogging();
 var app = builder.Build();
 app.UseCors("AllowAll");
 // Post this here to prevent cors errors.
-app.MapGet("/", () => "Health GOOD");
 app.UseMiddleware<CognitoMiddleware>();
 
 /*app.UseCors(corsPolicyBuilder =>
     corsPolicyBuilder.WithOrigins(["http://127.0.0.1:8080/","http://localhost:4200", "https://web.karle.co.za"])
         .WithHeaders(["Content-Type", "Authorization"])
         .WithMethods([HttpMethods.Get, HttpMethods.Post, HttpMethods.Delete, HttpMethods.Options]).Build());#1#
+app.MapGet("/", () => "Health GOOD").AllowAnonymous();
 
 var group = app.MapGroup("/").RequireAuthorization();
 
