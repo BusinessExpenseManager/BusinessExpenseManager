@@ -37,11 +37,6 @@ export class CashflowPageComponent implements OnInit, AfterViewInit {
 
   isMobile: boolean = false;
 
-  error: boolean = false;
-  loading: boolean = true;
-
-  page: number = 1
-
   constructor(
     public dialog: MatDialog,
     private monetaryFlowService: MonetaryFlowService,
@@ -52,29 +47,28 @@ export class CashflowPageComponent implements OnInit, AfterViewInit {
     this.getCashFlows();
   }
 
+  page: number = 1
   onPageChange(event: PageEvent) {
     this.page = event.pageIndex + 1;
     this.getCashFlows()
   }
 
+  error: boolean = false;
+  loading: boolean = true;
   getCashFlows() {
     this.error = false;
     this.monetaryFlowService.getCashFlowsForBusiness(this.page)
       .subscribe({
         next: response => {
-
           if (response.success) {
             this.dataSource = new MatTableDataSource<MonetaryFlow>(response.data);
             this.loading = false;
           } else {
-            const errorMessage = response.message ?? 'An error has occurred fetching the cash flow'
-            this.snackBar.open(errorMessage, 'X', {"duration": 4000});
             this.error = true;
           }
         },
-        error: err => {
+        error: () => {
           this.error = true;
-          this.snackBar.open('An error has occurred fetching the cash flow.', 'X', {"duration": 4000});
         },
       })
   }
@@ -100,15 +94,9 @@ export class CashflowPageComponent implements OnInit, AfterViewInit {
           .subscribe({
             next: response => {
               if (response.success) {
-                this.snackBar.open('Successfully deleted record.', 'X', {"duration": 4000});
+                this.snackBar.open('Successfully deleted record.', 'Ok', {"duration": 4000});
                 this.getCashFlows();
-              } else {
-                const errorMessage = response.message ?? 'An error has occurred deleting the cash flow record.'
-                this.snackBar.open(errorMessage, 'X', {"duration": 4000});
               }
-            },
-            error: () => {
-              this.snackBar.open('An error has occurred deleting the Cash Flow.', 'X', {"duration": 4000});
             },
           })
       }

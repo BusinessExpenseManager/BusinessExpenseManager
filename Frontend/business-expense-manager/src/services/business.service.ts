@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../environment";
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {ApiResponse} from "../models/api-response.model";
 import {Business} from "../models/business.model";
 
@@ -18,5 +18,11 @@ export class BusinessService {
     return this
       .httpClient
       .post<ApiResponse<number>>(`${this.baseUrl}/business`, business);
+  }
+
+  getBusiness(): Observable<ApiResponse<Business>> {
+    return this
+      .httpClient
+      .get<ApiResponse<number>>(`${this.baseUrl}/business`);
   }
 }
