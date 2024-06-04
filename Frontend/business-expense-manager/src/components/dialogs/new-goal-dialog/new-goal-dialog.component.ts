@@ -19,7 +19,7 @@ import { MonetaryFlowService } from '../../../services/monetary-flow.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MonetaryFlow } from '../../../models/monetary-flow.model';
 import { MatButtonModule } from '@angular/material/button';
-import { GoalsService } from '../../../services/goals.service';
+import { GoalService } from '../../../services/goal.service';
 import { Goal } from '../../../models/goal.model';
 
 @Component({
@@ -54,18 +54,23 @@ export class NewGoalDialogComponent implements OnInit {
     businessId: [1, Validators.required],
     goalName: ['', [Validators.required, Validators.maxLength(15)]],
     goalDescription: ['', [Validators.required, Validators.maxLength(150)]],
-    date: [new Date(), Validators.required],
-    amount: [0, [Validators.required, Validators.min(0.01), Validators.pattern(this.numRegex)]],
+    dueDate: [new Date(), Validators.required],
+    amount: [
+      0,
+      [
+        Validators.required,
+        Validators.min(0.01),
+        Validators.pattern(this.numRegex),
+      ],
+    ],
   });
 
-  GoalCategories: string[] = ['savings'];
+  // GoalCategories: string[] = ['savings'];
 
   constructor(
     public dialogRef: MatDialogRef<NewGoalDialogComponent>,
     private fb: FormBuilder,
-    private categoryService: CategoryService,
-    private monetaryFlowService: MonetaryFlowService,
-    private goalService: GoalsService,
+    private goalService: GoalService,
     private snackBar: MatSnackBar
   ) {}
 
@@ -77,7 +82,7 @@ export class NewGoalDialogComponent implements OnInit {
     // });
   }
 
-  onSubmit() {
+  public onSubmit(): void {
     if (this.newGoalForm.valid) {
       // create request
       const form = this.newGoalForm.getRawValue();
@@ -86,8 +91,8 @@ export class NewGoalDialogComponent implements OnInit {
         id: form.id as number,
         name: form.goalName as string,
         description: form.goalDescription as string,
-        goalDueDatetime: form.date as Date,
-        createdDatetime: form.date as Date,
+        goalDueDatetime: form.dueDate as Date,
+        createdDatetime: new Date(),
         goalMonetaryValue: form.amount as number,
       };
 
@@ -97,12 +102,5 @@ export class NewGoalDialogComponent implements OnInit {
     }
 
     this.snackBar.open('Form still has errors', 'X', { duration: 4000 });
-  }
-
-  checkGoalEligibility(event: any) {
-    const category = event?.value?.name;
-    if (category) {
-      this.canAddGoal = this.GoalCategories.includes(category.toLowerCase());
-    }
   }
 }

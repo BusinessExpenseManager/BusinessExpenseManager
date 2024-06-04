@@ -14,41 +14,15 @@
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>Date</mat-label>
-      <input matInput [matDatepicker]="picker" formControlName="date">
+      <mat-label>Due Date of goal</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="dueDate">
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>Type</mat-label>
-      <mat-select formControlName="cashFlowType">
-        <mat-option value="income" >Income</mat-option>
-        <mat-option value="expense">Expense</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field>
       <mat-label>Amount</mat-label>
       <input matInput type="number" placeholder="00.00" formControlName="amount">
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Category</mat-label>
-      <mat-select formControlName="category" (selectionChange)="checkGoalEligibility($event)">
-        @for (category of categories; track category) {
-          <mat-option [value]="category">{{category.name}}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field *ngIf="canAddGoal">
-      <mat-label>Goal</mat-label>
-      <mat-select formControlName="goal">
-        @for (goal of goals; track goal) {
-          <mat-option [value]="goal">{{goal}}</mat-option>
-        }
-      </mat-select>
     </mat-form-field>
 
   </form>

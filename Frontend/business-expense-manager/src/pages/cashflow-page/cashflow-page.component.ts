@@ -54,7 +54,7 @@ export class CashflowPageComponent implements OnInit, AfterViewInit {
 
   onPageChange(event: PageEvent) {
     this.page = event.pageIndex + 1;
-    this.getCashFlows()
+    this.getCashFlows();
   }
 
   getCashFlows() {

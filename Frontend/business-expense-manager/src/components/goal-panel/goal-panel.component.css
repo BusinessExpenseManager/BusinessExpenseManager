@@ -21,3 +21,12 @@
         left: auto;
     }
 }
+
+.close-button {
+    background-color: white;
+    border-width: 0;
+}
+
+.delete-button {
+    background-color: palevioletred;
+}
