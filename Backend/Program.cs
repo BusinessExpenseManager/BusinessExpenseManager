@@ -69,7 +69,8 @@ app.MapGet("/", () => "Health GOOD");
 app.UseMiddleware<CognitoMiddleware>();
 app.UseCors(corsPolicyBuilder =>
     //TODO: !!!!!!! MAKE SURE TO FIX THIS !!!!!!!!!!
-    corsPolicyBuilder.WithOrigins(["*" /*, "https://web.karle.co.za"*/])
+    corsPolicyBuilder
+        .AllowAnyOrigin()
         .WithHeaders(["Content-Type", "Authorization"])
         .WithMethods([HttpMethods.Get, HttpMethods.Post, HttpMethods.Delete, HttpMethods.Options]));
 
