@@ -59,19 +59,31 @@ builder.Services.AddScoped<IValidator<BusinessAdd>, BusinessValidator>();
 builder.Services.AddScoped<IValidator<PagingData>, PagingDataValidator>();
 
 builder.Services.AddLogging();
-builder.Services.AddCors();
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "MyPolicy",
+        policy =>
+        {
+            policy.WithOrigins("http://example.com",
+                    "http://www.contoso.com",
+                    "https://cors1.azurewebsites.net",
+                    "https://cors3.azurewebsites.net",
+                    "https://localhost:44398",
+                    "https://localhost:5001")
+                .WithMethods("PUT", "DELETE", "GET");
+        });
+});
 var app = builder.Build();
 
 // Post this here to prevent cors errors.
 app.MapGet("/", () => "Health GOOD");
 
 app.UseMiddleware<CognitoMiddleware>();
-app.UseCors(corsPolicyBuilder =>
+/*app.UseCors(corsPolicyBuilder =>
         corsPolicyBuilder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()
     /*corsPolicyBuilder.WithOrigins(["*" , "https://web.karle.co.za"])
         .WithHeaders(["Content-Type", "Authorization"])
-        .WithMethods([HttpMethods.Get, HttpMethods.Post, HttpMethods.Delete, HttpMethods.Options])*/);
+        .WithMethods([HttpMethods.Get, HttpMethods.Post, HttpMethods.Delete, HttpMethods.Options])#1#);*/
 
 
 var apiRoute = app.MapGroup("/").RequireAuthorization();
@@ -81,5 +93,7 @@ CategoryBudgetEndpoints.ResisterEndpoints(apiRoute);
 CategoryEndpoints.ResisterEndpoints(apiRoute);
 GoalEndpoints.ResisterEndpoints(apiRoute);
 MonetaryFlowEndpoints.ResisterEndpoints(apiRoute);
+
+app.UseCors();
 
 app.Run();
