@@ -79,12 +79,6 @@ var app = builder.Build();
 app.MapGet("/", () => "Health GOOD");
 
 app.UseMiddleware<CognitoMiddleware>();
-/*app.UseCors(corsPolicyBuilder =>
-        corsPolicyBuilder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()
-    /*corsPolicyBuilder.WithOrigins(["*" , "https://web.karle.co.za"])
-        .WithHeaders(["Content-Type", "Authorization"])
-        .WithMethods([HttpMethods.Get, HttpMethods.Post, HttpMethods.Delete, HttpMethods.Options])#1#);*/
-
 
 var apiRoute = app.MapGroup("/").RequireAuthorization();
 // Wanted to create these with reflection but that could have broke on AWS due to how it is built so these stay for now.

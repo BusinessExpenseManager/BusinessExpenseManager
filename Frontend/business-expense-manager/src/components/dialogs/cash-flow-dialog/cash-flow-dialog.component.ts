@@ -6,7 +6,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import {MatSelectModule} from "@angular/material/select";
 import {DecimalPipe, NgIf} from "@angular/common";
-import {FormBuilder, FormsModule, NgForm} from "@angular/forms";
+import {FormsModule, NgForm} from "@angular/forms";
 import {MatIcon} from "@angular/material/icon";
 import {CategoryService} from "../../../services/category.service";
 import {Category} from "../../../models/category.model";
@@ -16,8 +16,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {GoalService} from "../../../services/goal.service";
 import {Goal} from "../../../models/goal.model";
 import {CreateCashFlowDto} from "../../../dtos/create-cash-flow.dto";
-import {MatTableDataSource} from "@angular/material/table";
-import {MonetaryFlow} from "../../../models/monetary-flow.model";
+import {finalize} from "rxjs";
 
 
 @Component({
@@ -43,6 +42,10 @@ import {MonetaryFlow} from "../../../models/monetary-flow.model";
 })
 export class CashFlowDialogComponent implements OnInit {
 
+  expense_types = ['transport', 'interest', 'savings', 'investments', 'stock', 'salaries', 'food', 'insurance', 'utilities', 'training', 'sundry'];
+  income_types = ['interest', 'savings', 'investments', 'sales', 'sundry']
+  typeError: boolean = false;
+
   categories: Category[] = []
   goals: Goal[] = []
   canAddGoal: boolean = false;
@@ -52,15 +55,15 @@ export class CashFlowDialogComponent implements OnInit {
   cashFlow = {
     type: 'income',
     amount: undefined,
-    category: undefined,
+    category: undefined as any,
     goal: null,
   }
 
   GoalCategories : string[] = ['savings'];
+  disableSubmit: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<CashFlowDialogComponent>,
-    private fb: FormBuilder,
     private categoryService: CategoryService,
     private goalService: GoalService,
     private monetaryFlowService: MonetaryFlowService,
@@ -113,7 +116,8 @@ export class CashFlowDialogComponent implements OnInit {
   }
 
   onSubmit(cashFlowForm: NgForm) {
-    if (cashFlowForm.valid) {
+    this.disableSubmit = true;
+    if (cashFlowForm.valid && !this.typeError) {
       const request: CreateCashFlowDto = {
         goalId: cashFlowForm.value?.goal?.id ?? null,
         categoryId: cashFlowForm.value?.category?.id,
@@ -121,6 +125,11 @@ export class CashFlowDialogComponent implements OnInit {
       }
 
       this.monetaryFlowService.addCashFlow(request)
+        .pipe(
+          finalize(() => {
+            this.disableSubmit = false;
+          })
+        )
         .subscribe({
           next: response => {
             if (response.success) {
@@ -132,6 +141,7 @@ export class CashFlowDialogComponent implements OnInit {
           },
           error: () => {
             this.snackBar.open('An error has occurred saving the cash flow.', 'X', {"duration": 4000});
+            this.disableSubmit = false;
           },
         })
       return;
@@ -144,6 +154,26 @@ export class CashFlowDialogComponent implements OnInit {
     const category = event?.value?.name;
     if (category) {
       this.canAddGoal = this.GoalCategories.includes(category.toLowerCase());
+    }
+  }
+
+  checkCategoryCashFlowType(cashFlowForm: NgForm) {
+    const category = cashFlowForm.value?.category?.name;
+    const cashFlowType = cashFlowForm.value?.type;
+
+    if (!category || !cashFlowType) {
+      // haven't picked yet
+      return;
+    }
+
+    const normalizedCategory = category.toLowerCase();
+
+    if (cashFlowType === 'income') {
+      const isIncome = this.income_types.includes(normalizedCategory);
+      this.typeError = !isIncome;
+    } else {
+      const isExpense = this.expense_types.includes(normalizedCategory);
+      this.typeError = !isExpense;
     }
   }
 }

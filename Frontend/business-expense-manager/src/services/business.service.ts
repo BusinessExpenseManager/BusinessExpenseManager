@@ -1,23 +1,22 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../environment";
 import {HttpClient} from "@angular/common/http";
-import {Category} from "../models/category.model";
 import {Observable} from "rxjs";
 import {ApiResponse} from "../models/api-response.model";
+import {Business} from "../models/business.model";
 
 @Injectable({
   providedIn: 'root'
 })
-export class CategoryService {
+export class BusinessService {
 
   private baseUrl = environment.apiUrl;
 
   constructor(private httpClient: HttpClient) { }
 
-  getAllCategories() : Observable<ApiResponse<Category[]>> {
+  registerBusiness(business: Business) : Observable<ApiResponse<number>> {
     return this
       .httpClient
-      .get<ApiResponse<Category[]>>(`${this.baseUrl}/category`);
+      .post<ApiResponse<number>>(`${this.baseUrl}/business`, business);
   }
-
 }
