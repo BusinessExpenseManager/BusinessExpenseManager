@@ -42,12 +42,7 @@ import {finalize} from "rxjs";
 })
 export class CashFlowDialogComponent implements OnInit {
 
-  expense_types = ['transport', 'interest', 'savings', 'investments', 'stock', 'salaries', 'food', 'insurance', 'utilities', 'training', 'sundry'];
-  income_types = ['interest', 'savings', 'investments', 'sales', 'sundry']
-  typeError: boolean = false;
-
-  categories: Category[] = []
-  goals: Goal[] = []
+  categories: Category[] | undefined = undefined
   canAddGoal: boolean = false;
 
   numRegex = /^-?\d*[.,]?\d{0,2}$/;
@@ -58,9 +53,6 @@ export class CashFlowDialogComponent implements OnInit {
     category: undefined as any,
     goal: null,
   }
-
-  GoalCategories : string[] = ['savings'];
-  disableSubmit: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<CashFlowDialogComponent>,
@@ -82,17 +74,12 @@ export class CashFlowDialogComponent implements OnInit {
         next: response => {
           if (response.success) {
             this.categories = response.data;
-          } else {
-            const errorMessage = response.message ?? 'An error has occurred fetching the Categories'
-            this.snackBar.open(errorMessage, 'X', {"duration": 4000});
           }
-        },
-        error: err => {
-          this.snackBar.open('An error has occurred fetching the Categories.', 'X', {"duration": 4000});
-        },
+        }
       });
   }
 
+  goals: Goal[] = []
   private getGoals() {
     this.goalService
       .getAllGoals()
@@ -100,24 +87,18 @@ export class CashFlowDialogComponent implements OnInit {
         next: response => {
           if (response.success) {
             this.goals = response.data;
-
-            if (this.goals.length === 0) {
-              this.snackBar.open('An error has occurred fetching the Goals.', 'X', {"duration": 4000});
-            }
-          } else {
-            const errorMessage = response.message ?? 'There are no goals associated with your business. Please create a goal first.'
-            this.snackBar.open(errorMessage, 'X', {"duration": 4000});
           }
-        },
-        error: () => {
-          this.snackBar.open('An error has occurred fetching the Goals.', 'X', {"duration": 4000});
         },
       });
   }
 
+  disableSubmit: boolean = false;
   onSubmit(cashFlowForm: NgForm) {
+
     this.disableSubmit = true;
+
     if (cashFlowForm.valid && !this.typeError) {
+
       const request: CreateCashFlowDto = {
         goalId: cashFlowForm.value?.goal?.id ?? null,
         categoryId: cashFlowForm.value?.category?.id,
@@ -134,22 +115,16 @@ export class CashFlowDialogComponent implements OnInit {
           next: response => {
             if (response.success) {
               this.dialogRef.close(true);
-            } else {
-              const errorMessage = response.message ?? 'An error has occurred saving the cash flow.'
-              this.snackBar.open(errorMessage, 'X', {"duration": 4000});
             }
-          },
-          error: () => {
-            this.snackBar.open('An error has occurred saving the cash flow.', 'X', {"duration": 4000});
-            this.disableSubmit = false;
           },
         })
       return;
     }
 
-    this.snackBar.open('Form still has errors', 'X', {"duration": 4000});
+    this.snackBar.open('Form still has errors', 'Ok', {"duration": 4000});
   }
 
+  GoalCategories : string[] = ['savings'];
   checkGoalEligibility(event: any) {
     const category = event?.value?.name;
     if (category) {
@@ -157,6 +132,9 @@ export class CashFlowDialogComponent implements OnInit {
     }
   }
 
+  private expense_types = ['transport', 'interest', 'savings', 'investments', 'stock', 'salaries', 'food', 'insurance', 'utilities', 'training', 'sundry'];
+  private income_types = ['interest', 'savings', 'investments', 'sales', 'sundry']
+  typeError: boolean = false;
   checkCategoryCashFlowType(cashFlowForm: NgForm) {
     const category = cashFlowForm.value?.category?.name;
     const cashFlowType = cashFlowForm.value?.type;

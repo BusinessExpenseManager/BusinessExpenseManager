@@ -8,7 +8,7 @@
   <mat-sidenav [mode]="isMobile ? 'over' : 'side'" [opened]="isMobile ? 'false' : 'true'" disableClose>
     <div class="nav-bar">
       <app-logo [routerLink]="[{ outlets: { navBar: ['dashboard-page'] } }]"></app-logo>
-      <h1>{{StoreName}}</h1>
+      <h1>{{StoreName | slice:0:35 }}<span *ngIf="StoreName.length > 35">...</span></h1>
       <mat-nav-list class="links" (click)="toggleMenu()">
         <a mat-list-item routerLinkActive="active" [routerLink]="[{ outlets: { navBar: ['dashboard-page'] } }]">
           <span class="link">

@@ -6,7 +6,7 @@ import {NavigationEnd, Router, RouterLink, RouterModule, RouterOutlet} from "@an
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {MatToolbarModule} from "@angular/material/toolbar";
-import {NgClass, NgIf, NgStyle} from "@angular/common";
+import {NgClass, NgIf, NgStyle, SlicePipe} from "@angular/common";
 import {BreakpointObserver} from "@angular/cdk/layout";
 
 @Component({
@@ -25,13 +25,14 @@ import {BreakpointObserver} from "@angular/cdk/layout";
     RouterLink,
     RouterModule,
     NgStyle,
+    SlicePipe,
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent implements OnInit, AfterViewInit {
 
-  StoreName: string = 'Mom and Pop Store Name';
+  StoreName: string = sessionStorage.getItem('businessName') ?? '';
 
   @ViewChild(MatSidenav) sidenav!: MatSidenav;
   isMobile: boolean = false;

@@ -36,3 +36,6 @@ body {
   --mdc-dialog-container-shape: 0.1em;
 }
 
+.mat-drawer-inner-container::-webkit-scrollbar {
+  display: none;
+}
