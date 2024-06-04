@@ -20,7 +20,7 @@ export class CardComponent {
     colour: 'Yellow'
   };
 
-  @Output() goalClicked = new EventEmitter<Card>();
+  @Output() cardClicked = new EventEmitter<Card>();
 
   constructor() {}
 
@@ -36,8 +36,23 @@ export class CardComponent {
     return temp.toFixed(2);
   }
 
+  get statusColour(): string {
+    let status = '';
+    if(this.card.colour === 'Red'){
+      status = 'expired';
+    }
+    else if(this.card.colour === 'Green'){
+      status = 'completed';
+    }
+    else if(this.card.colour === 'Blue'){
+      status = 'active';
+    }
+
+    return status;
+  }
+
   public emitCardClickedEvent(){
-    this.goalClicked.emit(this.card);
+    this.cardClicked.emit(this.card);
   }
 
 }

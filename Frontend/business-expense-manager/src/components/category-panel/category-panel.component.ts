@@ -27,7 +27,7 @@ import { MatSortHeader, MatSortModule } from '@angular/material/sort';
 import { Card } from '../../models/card.model';
 
 @Component({
-  selector: 'app-goal-panel',
+  selector: 'app-category-panel',
   standalone: true,
   imports: [
     MatIconModule,
@@ -40,15 +40,15 @@ import { Card } from '../../models/card.model';
     MatSortHeader,
     MatSortModule,
   ],
-  templateUrl: './goal-panel.component.html',
-  styleUrl: './goal-panel.component.css',
+  templateUrl: './category-panel.component.html',
+  styleUrl: './category-panel.component.css',
 })
-export class GoalPanelComponent implements OnInit, AfterViewInit {
+export class CategoryPanelComponent implements OnInit, AfterViewInit {
   public cashflows: MonetaryFlow[] = [];
   displayedColumns: string[] = ['Date Captured', 'Category', 'Amount'];
   dataSource = new MatTableDataSource<MonetaryFlow[]>();
 
-  public goalCard: Card;
+  public categoryCard: Card;
 
   @ViewChild(MatPaginator) paginator: MatPaginator = new MatPaginator(
     new MatPaginatorIntl(),
@@ -66,7 +66,7 @@ export class GoalPanelComponent implements OnInit, AfterViewInit {
     private goalService: GoalService,
     private snackBar: MatSnackBar
   ) {
-    this.goalCard = data;
+    this.categoryCard = data;
   }
 
   ngOnInit() {
@@ -86,8 +86,8 @@ export class GoalPanelComponent implements OnInit, AfterViewInit {
     this.dialog.close();
   }
 
-  public deleteGoal(): void {
-    console.log('Deleting goal!');
+  public editBudget(): void {
+    console.log('Editing budget goal!');
   }
 
   public getCashFlows() {

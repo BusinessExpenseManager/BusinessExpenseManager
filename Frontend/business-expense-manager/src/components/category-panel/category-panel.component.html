@@ -3,10 +3,11 @@
     <mat-icon fontIcon="close"></mat-icon>
   </button>
   <div class="header-bar">
-    <h2>Goal Cash flows for: {{ goalCard.title }} </h2>
-  </div>
-  <div class="header-bar">
-    <h3> Description: "{{ goalCard.description }}"</h3>
+    <h2>Category budget for: {{ categoryCard.title }} </h2>
+    <button (click)="editBudget()" aria-label="Edit category budget" class="add-button">
+      <mat-icon fontIcon="edit"></mat-icon>
+      <p>Edit budget</p>
+    </button>
   </div>
   <ng-container *ngIf="!error && dataSource?.data?.length; else noData">
     <div class="mat-elevation-z8">

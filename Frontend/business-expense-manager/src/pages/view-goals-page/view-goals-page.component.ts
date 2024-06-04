@@ -9,29 +9,37 @@ import { MatDialog } from '@angular/material/dialog';
 import { GoalService } from '../../services/goal.service';
 import { GoalPanelComponent } from '../../components/goal-panel/goal-panel.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-view-goals-page',
   standalone: true,
   templateUrl: './view-goals-page.component.html',
   styleUrl: './view-goals-page.component.css',
-  imports: [MatIconModule, CardComponent, NgFor],
+  imports: [MatIconModule, CardComponent, NgFor, MatPaginatorModule],
 })
 export class ViewGoalsPageComponent implements OnInit {
   public progressCard: Card = {
     title: 'Dishwasher',
+    description: 'I need a dishwasher, to wash dishes',
     balanceAmount: 5400,
     goalAmount: 7000,
     type: 'Goal',
-    colour: 'Yellow',
+    colour: 'Blue',
   };
   public completedCard: Card = {
     title: 'Generator',
     balanceAmount: 10000,
     goalAmount: 10000,
     type: 'Goal',
-    colour: 'Blue',
+    colour: 'Green',
+  };
+  public expiredCard: Card = {
+    title: 'Covid-19 vaccine',
+    balanceAmount: 180,
+    goalAmount: 100000,
+    type: 'Goal',
+    colour: 'Red',
   };
 
   public businessId: number = 0;
@@ -39,6 +47,7 @@ export class ViewGoalsPageComponent implements OnInit {
   public cards: Card[] = [];
   public inProgressCards: Card[] = [];
   public completedCards: Card[] = [];
+  public expiredCards: Card[] = [];
   public goalData: Goal[] = [];
 
   public currentBalance: number = 0;
@@ -54,32 +63,12 @@ export class ViewGoalsPageComponent implements OnInit {
   ngOnInit(): void {
 
     this.retrieveGoals();
+    this.setCards();
 
-    // this.goalService.getAllGoalsForBusiness(this.businessId).subscribe({
-    //   next: (value) => {
-    //     this.goalData = value as Goal[];
-    //     this.error = false;
-    //   },
-    //   error: (err) => {
-    //     this.error = true;
-    //     console.error(err);
-    //   },
-    // });
-
-    // this.goalService.getTotalOfCashflows(this.businessId).subscribe({
-    //   next: (value) => {
-    //     this.currentBalance = value;
-    //     this.error = false;
-    //   },
-    //   error: (err) => {
-    //     this.error = true;
-    //     console.error(err);
-    //   },
-    // });
-    // this.setCards(this.goalData);
   }
 
   retrieveGoals(){
+    return;
     this.goalService.getAllGoals(this.page).subscribe({
       next: (response) => {
         if (response.success) {
@@ -92,6 +81,8 @@ export class ViewGoalsPageComponent implements OnInit {
               { duration: 4000 }
             );
           }
+
+          this.setCards();
         } else {
           const errorMessage =
             response.message ??
@@ -112,7 +103,7 @@ export class ViewGoalsPageComponent implements OnInit {
     this.retrieveGoals();
   }
 
-  public setCards(goals: Goal[]): void {
+  public setCards(): void {
     // get goals or categories from DB
     // filter is that of 'Goal'
 
@@ -120,13 +111,35 @@ export class ViewGoalsPageComponent implements OnInit {
 
     // })
 
+    // this.cards = this.goalData.map(goal => {
+    //   const balanceAmount = goal.currentMonetaryValue; // change to proper val
+    //   const goalAmount = goal.completedAmount;
+    //   return {
+    //     title: goal.name,
+    //     balanceAmount: 0,
+    //     goalAmount: goal.goalMonetaryValue,
+    //     type: 'Goal',
+    //     colour: balanceAmount >= goalAmount ? 'Yellow' : 'Green',
+    //   };
+    // });
+
+    // temporary, until API working
+
     this.cards.push(this.progressCard);
     this.cards.push(this.progressCard);
     this.cards.push(this.progressCard);
     this.cards.push(this.completedCard);
+    this.cards.push(this.expiredCard);
+    this.cards.push(this.expiredCard);
+    this.cards.push(this.expiredCard);
+    this.cards.push(this.expiredCard);
+    this.cards.push(this.expiredCard);
+    this.cards.push(this.expiredCard);
+    this.cards.push(this.expiredCard);
 
     this.inProgressCards = this.cards.slice(0, 3);
     this.completedCards = this.cards.slice(3, 4);
+    this.expiredCards = this.cards.slice(4,11);
   }
 
   public addNewGoal(): void {
@@ -143,8 +156,7 @@ export class ViewGoalsPageComponent implements OnInit {
       disableClose: true,
       width: '50%',
       minWidth: '380px',
+      data: card,
     });
-    console.log('goal clicked');
-    console.log(card);
   }
 }

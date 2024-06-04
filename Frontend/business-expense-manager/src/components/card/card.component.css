@@ -6,9 +6,15 @@
   padding: 0 1rem;
 
   > .coloured-top-padding {
+    display: grid;
     line-height: 2rem;
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
+    > p {
+        font-weight: 500;
+        align-self: center;
+        justify-self: center;
+    }
   }
 
   > .main-black-body {

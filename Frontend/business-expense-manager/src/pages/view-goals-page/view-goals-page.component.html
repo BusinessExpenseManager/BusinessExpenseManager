@@ -1,20 +1,45 @@
 <div class="header-bar">
-  <p>In Progress</p>
-  <button
-    (click)="addNewGoal()"
-    aria-label="Add new goal"
-    class="add-button"
-  >
+  <h2>Your goals</h2>
+  <button (click)="addNewGoal()" aria-label="Add new goal" class="add-button">
     <mat-icon fontIcon="add"></mat-icon>
     <p>Add new goal</p>
   </button>
 </div>
-<div class="goals-container" >
-  <app-card *ngFor="let card of inProgressCards" [card]="card" (goalClicked)="showGoalClicked(card)"> </app-card>
+<div class="goals-container">
+  <app-card
+    *ngFor="let card of inProgressCards"
+    [card]="card"
+    (goalClicked)="showGoalClicked(card)"
+  >
+  </app-card>
+  <app-card 
+    *ngFor="let card of completedCards" 
+    [card]="card"
+    (goalClicked)="showGoalClicked(card)">
+  </app-card>
+  <app-card 
+    *ngFor="let card of expiredCards" 
+    [card]="card"
+    (goalClicked)="showGoalClicked(card)">
+  </app-card>
 </div>
-<div class="header-bar">
+<mat-paginator
+  [pageSizeOptions]="[10]"
+  (page)="onPageChange($event)"
+  class="pagination-style"
+>
+  aria-label="Select page of periodic elements">
+</mat-paginator>
+<!-- <div class="header-bar">
   <p>Completed</p>
 </div>
 <div class="goals-container">
-  <app-card *ngFor="let card of completedCards" [card]="card"> </app-card>
-</div>
+  
+  <mat-paginator
+    [pageSizeOptions]="[10]"
+    (page)="onPageChange($event)"
+    class="pagination-style"
+  >
+    aria-label="Select page of periodic elements">
+  </mat-paginator>
+</div> -->

@@ -22,9 +22,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { GoalService } from '../../../services/goal.service';
 import { Goal } from '../../../models/goal.model';
 import { CreateGoalDto } from '../../../dtos/create-goal.dto';
+import { CreateCategoryBudgetDto } from '../../../dtos/create-category-budget.dto';
 
 @Component({
-  selector: 'app-new-goal-dialog',
+  selector: 'app-new-category-budget-dialog',
   standalone: true,
   imports: [
     MatDialogActions,
@@ -41,23 +42,21 @@ import { CreateGoalDto } from '../../../dtos/create-goal.dto';
     MatButtonModule,
   ],
   providers: [provideNativeDateAdapter()],
-  templateUrl: './new-goal-dialog.component.html',
-  styleUrl: './new-goal-dialog.component.css',
+  templateUrl: './new-category-budget-dialog.component.html',
+  styleUrl: './new-category-budget-dialog.component.css',
 })
-export class NewGoalDialogComponent implements OnInit {
+export class NewCategoryBudgetDialogComponent implements OnInit {
   categories: Category[] = [];
   goals: string[] = [];
   canAddGoal: boolean = false;
 
   numRegex = /^-?\d*[.,]?\d{0,2}$/;
-  newGoalForm = this.fb.group({
+  newCategoryBudgetForm = this.fb.group({
     id: [1, Validators.required],
     businessId: [1, Validators.required],
-    goalName: ['', [Validators.required, Validators.maxLength(15)]],
-    goalDescription: ['', [Validators.required, Validators.maxLength(150)]],
-    dueDate: [new Date(), Validators.required],
-    amount: [
-      0,
+    categoryName: ['', [Validators.required, Validators.maxLength(15)]],
+    budgetAmount: [
+      1,
       [
         Validators.required,
         Validators.min(0.01),
@@ -69,9 +68,9 @@ export class NewGoalDialogComponent implements OnInit {
   // GoalCategories: string[] = ['savings'];
 
   constructor(
-    public dialogRef: MatDialogRef<NewGoalDialogComponent>,
+    public dialogRef: MatDialogRef<NewCategoryBudgetDialogComponent>,
     private fb: FormBuilder,
-    private goalService: GoalService,
+    private categoryService: CategoryService,
     private snackBar: MatSnackBar
   ) {}
 
@@ -84,18 +83,16 @@ export class NewGoalDialogComponent implements OnInit {
   }
 
   public onSubmit(): void {
-    if (this.newGoalForm.valid) {
+    if (this.newCategoryBudgetForm.valid) {
       // create request
-      const form = this.newGoalForm.getRawValue();
+      const form = this.newCategoryBudgetForm.getRawValue();
 
-      const request: CreateGoalDto = {
-        name: form.goalName as string,
-        description: form.goalDescription as string,
-        due_datetime: form.dueDate as Date,
-        monetary_value: form.amount as number,
+      const request: CreateCategoryBudgetDto = {
+        categoryName: form.categoryName as string,
+        budgetAmount: form.budgetAmount as number,
       };
 
-      this.goalService.addGoal(request);
+      this.categoryService.addCategoryBudget(request);
 
       return;
     }

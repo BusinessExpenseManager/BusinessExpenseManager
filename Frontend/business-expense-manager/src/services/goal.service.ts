@@ -6,6 +6,7 @@ import { ApiResponse } from '../models/api-response.model';
 import { Category } from '../models/category.model';
 import { Goal } from '../models/goal.model';
 import { mapGoals } from '../mappers/mapper';
+import { CreateGoalDto } from '../dtos/create-goal.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -54,7 +55,9 @@ export class GoalService {
     return of(5643);
   }
 
-  addGoal(goal: Goal): Observable<string> {
-    return of('');
+  addGoal(goal: CreateGoalDto): Observable<ApiResponse<number>> {
+      return this
+        .httpClient
+        .post<ApiResponse<Goal>>(`${this.baseUrl}/goal/add`, goal)
   }
 }

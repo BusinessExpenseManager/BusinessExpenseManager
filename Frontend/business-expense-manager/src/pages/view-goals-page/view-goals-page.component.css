@@ -18,6 +18,12 @@
     & p {
         padding-left: 0.5rem;
     }
+    
+    & h2 {
+        padding-left: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 0.2rem solid black;
+    }
 }
 
 .goals-container {
@@ -44,4 +50,8 @@
         width: 100%;
         left: auto;
     }
+}
+
+.pagination-style {
+    justify-content: right;
 }

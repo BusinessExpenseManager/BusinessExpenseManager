@@ -1,0 +1,20 @@
+<!-- carry on fixing -->
+
+<h2 mat-dialog-title>Add category budget</h2>
+<mat-dialog-content>
+  <form [formGroup]="newCategoryBudgetForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <mat-label>Category</mat-label>
+        <input matInput formControlName="categoryName" placeholder="Select category">
+    </mat-form-field>
+    
+    <mat-form-field>
+      <mat-label>Budget amount</mat-label>
+      <input matInput type="number" placeholder="00.00" formControlName="budgetAmount">
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button color="primary" (click)="dialogRef.close(false)">Cancel</button>
+  <button mat-flat-button color="primary" type="submit" [disabled]="!newCategoryBudgetForm.valid">Add</button>
+</mat-dialog-actions>
