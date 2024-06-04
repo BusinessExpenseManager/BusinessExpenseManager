@@ -44,7 +44,7 @@ export class LoginInformationInputContainerComponent implements OnInit {
 
   ngOnInit() {
     // logged In
-    if (sessionStorage.getItem('access_token')) {
+    if (sessionStorage.getItem('id_token')) {
       this.router.navigate(['/home', {outlets: {'navBar': ['dashboard-page']}}]);
     }
 
@@ -54,14 +54,14 @@ export class LoginInformationInputContainerComponent implements OnInit {
         return;
       }
 
-      const fragment = fragments.split('&')[0]?.split('=');
-      if (fragment[0] !== 'access_token') {
+      const fragment = fragments.split('&')[1]?.split('=');
+      if (fragment[0] !== 'id_token') {
         return;
       }
 
       const token = fragment[1];
       if (token) {
-        sessionStorage.setItem('access_token', token);
+        sessionStorage.setItem('id_token', token);
 
         let businessName = sessionStorage.getItem('businessName')
         if (businessName) {
