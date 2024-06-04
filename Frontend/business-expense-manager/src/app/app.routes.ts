@@ -5,6 +5,7 @@ import {ViewGoalsPageComponent} from "../pages/view-goals-page/view-goals-page.c
 import {ViewCategoriesPageComponent} from "../pages/view-categories-page/view-categories-page.component";
 import {CashflowPageComponent} from "../pages/cashflow-page/cashflow-page.component";
 import {NavbarComponent} from "../components/navbar/navbar.component";
+import {AuthGuard} from "../services/auth-guard.service";
 
 export const routes: Routes = [
   {
@@ -19,6 +20,7 @@ export const routes: Routes = [
   {
     path: 'home',
     component: NavbarComponent,
+    canActivateChild: [AuthGuard],
     children: [
       {
         path: 'dashboard-page',
@@ -39,7 +41,11 @@ export const routes: Routes = [
         path: 'categories',
         component: ViewCategoriesPageComponent,
         outlet: 'navBar'
-      }
+      },
     ]
+  },
+  {
+    path: '**',
+    redirectTo: 'login'
   }
 ];
