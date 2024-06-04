@@ -1,8 +1,5 @@
-using System.Data;
 using System.Data.Common;
-using System.Net;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Backend.Api;
 using Backend.Helpers.Cognito;
 using Backend.Types;
@@ -44,7 +41,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = true,
             ValidateLifetime = true,
             ValidAudience = "7g2q9pb8e9ro0bb1hpp8vc0i4n",
-            ValidateAudience = true
+            ValidateAudience = false
         };
     });
 
@@ -59,35 +56,24 @@ builder.Services.AddScoped<IValidator<BusinessAdd>, BusinessValidator>();
 builder.Services.AddScoped<IValidator<PagingData>, PagingDataValidator>();
 
 builder.Services.AddLogging();
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: "MyPolicy",
-        policy =>
-        {
-            policy.WithOrigins("http://example.com",
-                    "http://www.contoso.com",
-                    "https://cors1.azurewebsites.net",
-                    "https://cors3.azurewebsites.net",
-                    "https://localhost:44398",
-                    "https://localhost:5001")
-                .WithMethods("PUT", "DELETE", "GET");
-        });
-});
+builder.Services.AddCors();
 var app = builder.Build();
 
 // Post this here to prevent cors errors.
 app.MapGet("/", () => "Health GOOD");
-
 app.UseMiddleware<CognitoMiddleware>();
+var group = app.MapGroup("/").RequireAuthorization();
 
-var apiRoute = app.MapGroup("/").RequireAuthorization();
 // Wanted to create these with reflection but that could have broke on AWS due to how it is built so these stay for now.
-BusinessEndpoints.ResisterEndpoints(apiRoute);
-CategoryBudgetEndpoints.ResisterEndpoints(apiRoute);
-CategoryEndpoints.ResisterEndpoints(apiRoute);
-GoalEndpoints.ResisterEndpoints(apiRoute);
-MonetaryFlowEndpoints.ResisterEndpoints(apiRoute);
+BusinessEndpoints.ResisterEndpoints(group);
+CategoryBudgetEndpoints.ResisterEndpoints(group);
+CategoryEndpoints.ResisterEndpoints(group);
+GoalEndpoints.ResisterEndpoints(group);
+MonetaryFlowEndpoints.ResisterEndpoints(group);
 
-app.UseCors();
+app.UseCors(corsPolicyBuilder =>
+    corsPolicyBuilder.WithOrigins(["http://localhost:4200", "https://web.karle.co.za"])
+        .WithHeaders(["Content-Type", "Authorization"])
+        .WithMethods([HttpMethods.Get, HttpMethods.Post, HttpMethods.Delete, HttpMethods.Options]));
 
 app.Run();
