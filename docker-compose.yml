@@ -11,11 +11,11 @@ services:
     env_file:
       - ./.env
   
-#  backend:
-#    image: backend
-#    build:
-#      context: .
-#      dockerfile: Backend/Dockerfile
+  backend:
+    image: backend
+    build:
+      context: .
+      dockerfile: Backend/Dockerfile
 
 volumes:
   progresDB:
