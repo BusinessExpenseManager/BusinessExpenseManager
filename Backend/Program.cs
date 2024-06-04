@@ -29,7 +29,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            IssuerSigningKeyResolver = (s, securityToken, identifier, parameters) =>
+            IssuerSigningKeyResolver = (_, _, _, parameters) =>
             {
                 var json = new HttpClient().GetStringAsync(parameters.ValidIssuer + "/.well-known/jwks.json").Result;
                 var keys = JsonSerializer.Deserialize<JsonWebKeySet>(json)?.Keys;
@@ -58,10 +58,10 @@ builder.Services.AddScoped<IValidator<PagingData>, PagingDataValidator>();
 builder.Services.AddLogging();
 builder.Services.AddCors();
 var app = builder.Build();
-
 // Post this here to prevent cors errors.
-app.MapGet("/", () => "Health GOOD");
 app.UseMiddleware<CognitoMiddleware>();
+app.MapGet("/", () => "Health GOOD").AllowAnonymous();
+
 var group = app.MapGroup("/").RequireAuthorization();
 
 // Wanted to create these with reflection but that could have broke on AWS due to how it is built so these stay for now.
@@ -75,5 +75,6 @@ app.UseCors(corsPolicyBuilder =>
     corsPolicyBuilder.WithOrigins(["http://localhost:4200", "https://web.karle.co.za"])
         .WithHeaders(["Content-Type", "Authorization"])
         .WithMethods([HttpMethods.Get, HttpMethods.Post, HttpMethods.Delete, HttpMethods.Options]));
+
 
 app.Run();
