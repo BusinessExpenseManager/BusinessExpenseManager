@@ -3,10 +3,13 @@
   <form #cashFlowForm="ngForm" (ngSubmit)="onSubmit(cashFlowForm)">
     <mat-form-field>
       <mat-label>Type</mat-label>
-      <mat-select required [(ngModel)]="cashFlow.type" name="type">
+      <mat-select required [(ngModel)]="cashFlow.type" name="type" (selectionChange)="checkCategoryCashFlowType(cashFlowForm)">
         <mat-option value="income" >Income</mat-option>
         <mat-option value="expense">Expense</mat-option>
       </mat-select>
+      <mat-error *ngIf="(cashFlowForm.form.controls['type']?.errors)">
+        <span *ngIf="cashFlowForm.form.controls['type']?.hasError('required')">Required field.</span>
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
@@ -20,15 +23,26 @@
              [(ngModel)]="cashFlow.amount"
              [pattern]="numRegex"
       >
+      <mat-error *ngIf="cashFlowForm.form.controls['amount']?.errors">
+        <span *ngIf="cashFlowForm.form.controls['amount']?.hasError('required')">Required field.</span>
+        <span *ngIf="cashFlowForm.form.controls['amount']?.hasError('pattern')">Format must be '00.00';.</span>
+        <span *ngIf="cashFlowForm.form.controls['amount']?.hasError('min')">Minimum is 0.01.</span>
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Category</mat-label>
-      <mat-select (selectionChange)="checkGoalEligibility($event)" required [(ngModel)]="cashFlow.category" name="category">
+      <mat-select (selectionChange)="checkGoalEligibility($event); checkCategoryCashFlowType(cashFlowForm)" required [(ngModel)]="cashFlow.category" name="category">
         @for (category of categories; track category) {
           <mat-option [value]="category">{{category.name}}</mat-option>
         }
       </mat-select>
+      <mat-hint *ngIf="categories?.length === 0">
+        No Categories Found.
+      </mat-hint>
+      <mat-error *ngIf="cashFlowForm.form.controls['category']?.errors">
+        <span *ngIf="cashFlowForm.form.controls['category']?.hasError('required')">Required field.</span>
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field *ngIf="canAddGoal">
@@ -38,11 +52,22 @@
           <mat-option [value]="goal">{{goal.name}}</mat-option>
         }
       </mat-select>
+      <mat-hint *ngIf="goals?.length === 0">
+        No Goals Found.
+      </mat-hint>
+      <mat-error *ngIf="cashFlowForm.form.controls['goal']?.errors">
+        <span *ngIf="cashFlowForm.form.controls['goal']?.hasError('required')">Required field.</span>
+      </mat-error>
     </mat-form-field>
+
+    <p *ngIf="typeError" class="error">
+        {{cashFlow.category?.name}} does not fall under {{cashFlow.type}}
+    </p>
 
     <mat-dialog-actions>
       <button mat-flat-button color="primary" type="button" (click)="dialogRef.close(false)">Cancel</button>
-      <button mat-flat-button color="primary" type="submit" [disabled]="!cashFlowForm.form.valid">Add</button>
+      <button mat-flat-button color="primary" type="submit" [disabled]="!cashFlowForm.form.valid || typeError || disableSubmit">Add</button>
     </mat-dialog-actions>
+
   </form>
 </mat-dialog-content>

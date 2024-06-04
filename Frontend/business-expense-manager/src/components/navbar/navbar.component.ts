@@ -1,8 +1,8 @@
-import {AfterViewInit, ChangeDetectorRef, Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {LogoComponent} from "../logo/logo.component";
 import {MatListModule} from "@angular/material/list";
 import {MatSidenav, MatSidenavModule} from "@angular/material/sidenav";
-import {Router, RouterLink, RouterModule, RouterOutlet} from "@angular/router";
+import {NavigationEnd, Router, RouterLink, RouterModule, RouterOutlet} from "@angular/router";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {MatToolbarModule} from "@angular/material/toolbar";
@@ -47,13 +47,8 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.router.navigate(['/home', { outlets: { 'navBar': ['dashboard-page'] } }]);
-
-    this.observer
-      .observe(['(max-width: 800px)'])
-      .subscribe((screenSize) => {
-        this.isMobile = screenSize.matches;
-    });
+    this.refreshSetup();
+    this.mobileSetup();
   }
 
   toggleMenu() {
@@ -62,4 +57,34 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     }
   }
 
+  private refreshSetup() {
+    // save path to localstorage
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        const currentRoute = this.router.url;
+        sessionStorage.setItem('lastVisitedRoute', currentRoute);
+      }
+    });
+
+    // navigate to last path visited.
+    const lastVisitedRoute = sessionStorage.getItem('lastVisitedRoute');
+    if (lastVisitedRoute) {
+      this.router.navigateByUrl(lastVisitedRoute);
+    } else {
+      this.router.navigate(['/home', { outlets: { 'navBar': ['dashboard-page'] } }]);
+    }
+  }
+
+  private mobileSetup() {
+    this.observer
+      .observe(['(max-width: 800px)'])
+      .subscribe((screenSize) => {
+        this.isMobile = screenSize.matches;
+      });
+  }
+
+  logout() {
+    sessionStorage.clear();
+    this.router.navigateByUrl('/login');
+  }
 }
