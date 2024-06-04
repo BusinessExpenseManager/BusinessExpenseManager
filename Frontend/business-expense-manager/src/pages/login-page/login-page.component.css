@@ -4,6 +4,8 @@ article {
 
 section {
   flex: 1 1 0;
+  width: 100vw;
+  height: 100vh;
 }
 
 article > section:first-child {
