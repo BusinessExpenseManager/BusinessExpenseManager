@@ -3,7 +3,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CardComponent } from '../../components/card/card.component';
 import { Card } from '../../models/card.model';
 import { Goal } from '../../models/goal.model';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { NewGoalDialogComponent } from '../../components/dialogs/new-goal-dialog/new-goal-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GoalService } from '../../services/goal.service';
@@ -17,7 +17,7 @@ import {MatButton} from "@angular/material/button";
   standalone: true,
   templateUrl: './view-goals-page.component.html',
   styleUrl: './view-goals-page.component.css',
-    imports: [MatIconModule, CardComponent, NgFor, MatPaginatorModule, MatButton],
+    imports: [MatIconModule, CardComponent, NgFor, MatPaginatorModule, MatButton, NgIf],
 })
 export class ViewGoalsPageComponent implements OnInit {
   public progressCard: Card = {
