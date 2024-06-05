@@ -10,13 +10,14 @@ import { GoalService } from '../../services/goal.service';
 import { GoalPanelComponent } from '../../components/goal-panel/goal-panel.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import {MatButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-view-goals-page',
   standalone: true,
   templateUrl: './view-goals-page.component.html',
   styleUrl: './view-goals-page.component.css',
-  imports: [MatIconModule, CardComponent, NgFor, MatPaginatorModule],
+    imports: [MatIconModule, CardComponent, NgFor, MatPaginatorModule, MatButton],
 })
 export class ViewGoalsPageComponent implements OnInit {
   public progressCard: Card = {

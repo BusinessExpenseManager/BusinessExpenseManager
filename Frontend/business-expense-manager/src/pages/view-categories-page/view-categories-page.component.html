@@ -1,23 +1,24 @@
-<div class="header-bar">
-    <h2>Categories</h2>
-    <button (click)="addCategoryBudget()" aria-label="Add new category budget" class="add-button">
-      <mat-icon fontIcon="add"></mat-icon>
-      <p>Add new budget</p>
-    </button>
-  </div>
-  <div class="categories-container">
-    <app-card
-      *ngFor="let card of categoryCards"
-      [card]="card"
-      (cardClicked)="showCategoryClicked(card)"
-    >
-    </app-card>
-  </div>
+<section class="header-bar">
+  <h2>Categories</h2>
+  <button (click)="addCategoryBudget()" aria-label="Add new category budget" mat-flat-button color="primary">
+    <mat-icon fontIcon="add"></mat-icon>
+    Add
+  </button>
+</section>
+
+<section class="categories-container">
+  <app-card
+    *ngFor="let card of categoryCards"
+    [card]="card"
+    (cardClicked)="showCategoryClicked(card)"
+  >
+  </app-card>
+</section>
   <!-- <div class="header-bar">
     <p>Completed</p>
   </div>
   <div class="goals-container">
-    
+
     <mat-paginator
       [pageSizeOptions]="[10]"
       (page)="onPageChange($event)"
@@ -26,4 +27,3 @@
       aria-label="Select page of periodic elements">
     </mat-paginator>
   </div> -->
-  

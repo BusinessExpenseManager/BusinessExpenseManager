@@ -1,15 +1,14 @@
 .card {
-  width: 20rem;
-  height: 20rem;
+  width: 18rem;
+
   display: flex;
   flex-direction: column;
-  padding: 0 1rem;
 
   > .coloured-top-padding {
     display: grid;
     line-height: 2rem;
-    border-top-left-radius: 1rem;
-    border-top-right-radius: 1rem;
+    border-top-left-radius: 0.1rem;
+    border-top-right-radius: 0.1rem;
     > p {
         font-weight: 500;
         align-self: center;
@@ -21,16 +20,16 @@
     background-color: #1e1f1f;
     display: flex;
     flex-direction: column;
-    align-items: left;
     padding: 1rem;
     position: relative;
-    border-bottom-left-radius: 1rem;
-    border-bottom-right-radius: 1rem;
+    border-bottom-left-radius: 0.1rem;
+    border-bottom-right-radius: 0.1rem;
 
     > h2 {
       color: white;
       font-weight: 600;
       padding-bottom: 1rem;
+      text-align: center;
     }
 
     > p {
@@ -65,26 +64,18 @@
       }
     }
 
-    
-
-    .progress-title-wrapper {
+    .progress {
+      padding: 0.5rem;
       display: flex;
-      padding: 1rem 2rem 0 0.5rem;
+      gap: 1rem;
       justify-content: space-between;
-      & > p {
-        font-size: 1.125rem;
-        color: #ffffff;
-      }
     }
 
-    .progress-amount-wrapper {
-      display: flex;
-      padding: 0.5rem 2rem 0 1rem;
-      justify-content: space-between;
-
+    .progress-amounts {
+      text-align: center;
       & > p {
-        font-size: 1.5rem;
-        color: #ffffff;
+        font-size: 1.125rem;
+        color: var(--tertiary);
       }
     }
   }

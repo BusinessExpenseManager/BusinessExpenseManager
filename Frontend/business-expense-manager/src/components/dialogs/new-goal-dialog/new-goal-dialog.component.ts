@@ -1,27 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  MatDialogActions,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle,
-} from '@angular/material/dialog';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { provideNativeDateAdapter } from '@angular/material/core';
-import { MatSelectModule } from '@angular/material/select';
-import { DecimalPipe, NgIf } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatIcon } from '@angular/material/icon';
-import { CategoryService } from '../../../services/category.service';
-import { Category } from '../../../models/category.model';
-import { MonetaryFlowService } from '../../../services/monetary-flow.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MonetaryFlow } from '../../../models/monetary-flow.model';
-import { MatButtonModule } from '@angular/material/button';
-import { GoalService } from '../../../services/goal.service';
-import { Goal } from '../../../models/goal.model';
-import { CreateGoalDto } from '../../../dtos/create-goal.dto';
+import {Component, OnInit} from '@angular/core';
+import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle,} from '@angular/material/dialog';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {provideNativeDateAdapter} from '@angular/material/core';
+import {MatSelectModule} from '@angular/material/select';
+import {DecimalPipe, NgIf} from '@angular/common';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatIcon} from '@angular/material/icon';
+import {Category} from '../../../models/category.model';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatButtonModule} from '@angular/material/button';
+import {GoalService} from '../../../services/goal.service';
+import {CreateGoalDto} from '../../../dtos/create-goal.dto';
 
 @Component({
   selector: 'app-new-goal-dialog',
