@@ -24,7 +24,8 @@ public static class CategoryBudgetEndpoints
         CategoryBudgetAdd budgetAdd,
         ICognitoService cognito) =>
         source.RunSqlQuery(logger, "Unable to add budget category", con => con.QuerySingleAsync<int>(
-            "SELECT * FROM  (@CognitoIdentifier, @CategoryId, @MonthlyBudget);",
+            
+            "SELECT * FROM add_budget_category(@UserCognitoIdentifier, @CategoryId, @MonthlyBudget);",
             new DynamicParameters(budgetAdd).MergeObject(cognito.Get())
         ));
 
@@ -35,7 +36,7 @@ public static class CategoryBudgetEndpoints
         ICognitoService cognito) =>
         source.RunSqlQuery(logger, "Unable to get paged category budgets", con =>
             con.QueryAsync<CategoryBudget>(
-                "SELECT c.id, category_id, monthly_budget FROM category_budgets as c LEFT JOIN businesses b on c.business_id = b.id WHERE b.user_cognito_identifier = @CognitoIdentifier Limit 10 OFFSET @PageOffset;",
+                "SELECT c.id, category_id, monthly_budget FROM category_budgets as c LEFT JOIN businesses b on c.business_id = b.id WHERE b.user_cognito_identifier = @UserCognitoIdentifier Limit 10 OFFSET @PageOffset;",
                 new DynamicParameters(pageData).MergeObject(cognito.Get())
             ));
 }

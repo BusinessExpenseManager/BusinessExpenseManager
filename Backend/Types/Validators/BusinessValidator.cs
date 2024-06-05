@@ -7,6 +7,6 @@ public class BusinessValidator : AbstractValidator<BusinessAdd>
 {
     public BusinessValidator()
     {
-        RuleFor(p => p.Name).NotEmpty().MaximumLength(15);
+        RuleFor(p => p.Name).NotEmpty().MaximumLength(50);
     }
 }
