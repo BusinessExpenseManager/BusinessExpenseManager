@@ -41,13 +41,13 @@
 
 <ng-template #noData>
   <p *ngIf="error">
-    Cash flow history failed to load...
+    Goal retrieval failed to load...
   </p>
   <p *ngIf="!error && loading">
     Loading...
   </p>
   <p *ngIf="!error && !loading">
-    There are no cash flows yet, please add some transactions.
+    There are no goals, please add some goals.
   </p>
 </ng-template>
 
