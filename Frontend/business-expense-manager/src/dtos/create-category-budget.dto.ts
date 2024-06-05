@@ -1,4 +1,4 @@
 export interface CreateCategoryBudgetDto {
-  categoryName: string;
-  budgetAmount: number;
+  categoryId: number;
+  monthlyBudget: number;
 }
