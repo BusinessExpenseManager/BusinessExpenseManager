@@ -1,3 +1,3 @@
 ﻿namespace Backend.Types.Endpoint;
 
-public record BusinessGet(int Id, string Name);
+public record BusinessGet(string Name);

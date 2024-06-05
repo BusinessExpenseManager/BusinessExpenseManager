@@ -18,12 +18,12 @@ public static class CategoryBudgetEndpoints
         group.MapPost("/add", AddCategoryBudget);
     }
 
-    private static Task<JsonHttpResult<ApiMessage<IEnumerable<CategoryBudget>>>> AddCategoryBudget(
+    private static Task<JsonHttpResult<ApiMessage<int>>> AddCategoryBudget(
         ILogger<Program> logger,
         DbDataSource source,
         CategoryBudgetAdd budgetAdd,
         ICognitoService cognito) =>
-        source.RunSqlQuery(logger, "Unable to add budget category", con => con.QueryAsync<CategoryBudget>(
+        source.RunSqlQuery(logger, "Unable to add budget category", con => con.QuerySingleAsync<int>(
             "INSERT INTO category_budgets(business_id, category_id, monthly_budget) VALUES (@BusinessId, @CategoryId, @MonthlyBudget);",
             new DynamicParameters(budgetAdd).MergeObject(cognito.Get())
         ));
@@ -34,7 +34,8 @@ public static class CategoryBudgetEndpoints
         PagingData pageData,
         ICognitoService cognito) =>
         source.RunSqlQuery(logger, "Unable to get paged category budgets", con =>
-            con.QueryAsync<CategoryBudget>("SELECT * FROM category_budgets Limit 10 OFFSET @PageOffset;",
+            con.QueryAsync<CategoryBudget>(
+                "SELECT c.id, category_id, monthly_budget FROM category_budgets as c LEFT JOIN businesses b on c.business_id = b.id WHERE b.user_cognito_identifier = @CognitoIdentifier Limit 10 OFFSET @PageOffset;",
                 new DynamicParameters(pageData).MergeObject(cognito.Get())
             ));
 }

@@ -16,7 +16,8 @@ public static class CategoryEndpoints
         group.MapGet("/", GetAllCategories);
     }
 
-    // Assuming that we won't need pagination for categories.
+    // Categories are used just for a lookup table so no need to pass in user id
+    // It will be in a dropdown so no need for pagination.
     private static Task<JsonHttpResult<ApiMessage<IEnumerable<Category>>>> GetAllCategories(
         ILogger<Program> logger,
         DbDataSource source) =>
