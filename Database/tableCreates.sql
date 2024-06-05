@@ -19,8 +19,7 @@ CREATE TABLE goals
     description      VARCHAR(150) NOT NULL,
     monetary_value   MONEY        NOT NULL,
     due_datetime     TIMESTAMP    NOT NULL,
-    created_datetime TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    is_deleted       BOOL         NOT NULL DEFAULT false
+    created_datetime TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 --rollback DROP TABLE "goals";
 

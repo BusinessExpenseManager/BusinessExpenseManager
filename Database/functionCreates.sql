@@ -257,11 +257,11 @@ END;
 $$ LANGUAGE plpgsql;
 --rollback DROP FUNCTION "delete_monetary_flow";
 
-
 --changeset ryan:ddl:createFunction:add_budget_category
 CREATE OR REPLACE FUNCTION add_budget_category(
     cognito_identifier varchar(50),
-    new_budget_category_id integer
+    _category_id int,
+    _monetary_value money
 )
     RETURNS int AS
 $$
@@ -270,13 +270,89 @@ DECLARE
     new_budget_category_id int;
 BEGIN
     SELECT id INTO user_business_id FROM businesses WHERE user_cognito_identifier = cognito_identifier;
-    INSERT INTO monetary_flows (business_id, goal_id, category_id, monetary_value)
-    VALUES (business_id, goal_id, category_id, monetary_value)
+    INSERT INTO category_budgets(business_id, category_id, monthly_budget)
+    VALUES (user_business_id, _category_id, _monetary_value)
     RETURNING id INTO new_budget_category_id;
     RETURN new_budget_category_id;
 EXCEPTION
     WHEN OTHERS THEN
-        RAISE EXCEPTION 'An error occurred while removing monetary flow: %', SQLERRM;
+        RAISE EXCEPTION 'An error occurred while add budget category flow: %', SQLERRM;
 END;
 $$ LANGUAGE plpgsql;
 --rollback DROP FUNCTION "add_budget_category";
+
+--changeset ryan:ddl:createFunction:retrieve_monetary_flows_for_goal
+CREATE OR REPLACE FUNCTION retrieve_monetary_flows_for_goal(
+    cognito_identifier varchar(50),
+    page_offset integer,
+    _goal_id integer
+)
+    RETURNS TABLE
+            (
+                flow_id          int,
+                goal_name        varchar,
+                category_name    varchar,
+                monetary_value   money,
+                created_datetime timestamp
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY
+        SELECT monetary_flows.id,
+               goals.name      AS goal_name,
+               categories.name AS category_name,
+               monetary_flows.monetary_value,
+               monetary_flows.created_datetime
+        FROM monetary_flows
+                 LEFT JOIN goals ON monetary_flows.goal_id = goals.id
+                 LEFT JOIN categories ON monetary_flows.category_id = categories.id
+                 LEFT JOIN public.businesses b on b.id = monetary_flows.business_id
+        WHERE b.user_cognito_identifier = cognito_identifier
+          AND goals.id = _goal_id
+          AND monetary_flows.is_deleted = false
+        OFFSET page_offset LIMIT 10;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'An error occurred while retrieving the monetary flows with goals: %', SQLERRM;
+END;
+$$ LANGUAGE plpgsql;
+--rollback DROP FUNCTION "retrieve_monetary_flows_for_goal";
+
+
+
+--changeset ryan:ddl:createFunction:retrieve_monetary_flows_for_cat
+CREATE OR REPLACE FUNCTION retrieve_monetary_flows_for_cat(
+    cognito_identifier varchar(50),
+    page_offset integer,
+    _cat_id integer
+)
+    RETURNS TABLE
+            (
+                flow_id          int,
+                goal_name        varchar,
+                category_name    varchar,
+                monetary_value   money,
+                created_datetime timestamp
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY
+        SELECT monetary_flows.id,
+               categories.name AS category_name,
+               monetary_flows.monetary_value,
+               monetary_flows.created_datetime
+        FROM monetary_flows
+                 LEFT JOIN categories ON monetary_flows.category_id = categories.id
+                 LEFT JOIN public.businesses b ON b.id = monetary_flows.business_id
+        WHERE b.user_cognito_identifier = cognito_identifier
+          AND category_id = _cat_id
+          AND monetary_flows.is_deleted = false
+        OFFSET page_offset LIMIT 10;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'An error occurred while retrieving the monetary flows with goals: %', SQLERRM;
+END;
+$$ LANGUAGE plpgsql;
+--rollback DROP FUNCTION "retrieve_monetary_flows_for_cat";
