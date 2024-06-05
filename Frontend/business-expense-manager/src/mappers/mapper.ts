@@ -14,12 +14,13 @@ export function mapMonetaryFlow(apiResponse: any[]): MonetaryFlow[] {
 
 export function mapGoals(apiResponse: any[]): Goal[] {
   return apiResponse.map(item => ({
-    id: item.goalId,
-    name: item.goalName,
-    description: item.goalDescription,
-    goalMonetaryValue: item.goalMonetaryValue,
-    goalDueDatetime: item.goalDueDatetime,
-    createdDatetime: item.createdDatetime,
+    id: item.goal_id,
+    name: item.goal_name,
+    description: item.goal_description,
+    goalCurrentValue: item.goal_current_value,
+    goalTargetValue: item.goal_monetary_value,
+    goalDueDatetime: new Date(item.goal_due_datetime),
+    createdDatetime: new Date(item.created_datetime),
     
   }));
 }

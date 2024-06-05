@@ -21,6 +21,7 @@ import {MatButton} from "@angular/material/button";
 })
 export class ViewGoalsPageComponent implements OnInit {
   public progressCard: Card = {
+    id: 1,
     title: 'Dishwasher',
     description: 'I need a dishwasher, to wash dishes',
     balanceAmount: 5400,
@@ -29,6 +30,7 @@ export class ViewGoalsPageComponent implements OnInit {
     colour: 'Blue',
   };
   public completedCard: Card = {
+    id: 2,
     title: 'Generator',
     balanceAmount: 10000,
     goalAmount: 10000,
@@ -36,6 +38,7 @@ export class ViewGoalsPageComponent implements OnInit {
     colour: 'Green',
   };
   public expiredCard: Card = {
+    id: 3,
     title: 'Covid-19 vaccine',
     balanceAmount: 180,
     goalAmount: 100000,
@@ -52,7 +55,8 @@ export class ViewGoalsPageComponent implements OnInit {
   public goalData: Goal[] = [];
 
   public currentBalance: number = 0;
-  public error: boolean = false;
+  public error = false;
+  public loading = true;
   public page: number = 1;
 
   constructor(
@@ -69,32 +73,21 @@ export class ViewGoalsPageComponent implements OnInit {
   }
 
   retrieveGoals(){
-    return;
+
+    console.log("attempting to retrieve goals:", this.page);
+
     this.goalService.getAllGoals(this.page).subscribe({
       next: (response) => {
         if (response.success) {
           this.goalData = response.data;
-
-          if (this.goalData.length === 0) {
-            this.snackBar.open(
-              'An error has occurred fetching the Goals.',
-              'X',
-              { duration: 4000 }
-            );
-          }
-
-          this.setCards();
-        } else {
-          const errorMessage =
-            response.message ??
-            'There are no goals associated with your business. Please create a goal first.';
-          this.snackBar.open(errorMessage, 'X', { duration: 4000 });
+          console.log("response returned:", this.goalData);
+          this.loading = false;
+          this.error = false;
+          this.setCards(); // TODO: set setCards with goalData properly + should work now
         }
       },
       error: () => {
-        this.snackBar.open('An error has occurred fetching the Goals.', 'X', {
-          duration: 4000,
-        });
+        this.error = true;
       },
     });
   }
@@ -112,35 +105,40 @@ export class ViewGoalsPageComponent implements OnInit {
 
     // })
 
-    // this.cards = this.goalData.map(goal => {
-    //   const balanceAmount = goal.currentMonetaryValue; // change to proper val
-    //   const goalAmount = goal.completedAmount;
-    //   return {
-    //     title: goal.name,
-    //     balanceAmount: 0,
-    //     goalAmount: goal.goalMonetaryValue,
-    //     type: 'Goal',
-    //     colour: balanceAmount >= goalAmount ? 'Yellow' : 'Green',
-    //   };
-    // });
+    this.cards = this.goalData.map((goal) => {
+      const balanceAmount = goal.goalCurrentValue; // change to proper val
+      const goalAmount = goal.goalTargetValue;
+
+      const colour = goal.goalDueDatetime < new Date() 
+                                              ? 'Red' : 
+                                              (balanceAmount >= goalAmount ? 'Yellow' : 'Green');
+      return {
+        id: goal.id,
+        title: goal.name,
+        balanceAmount: 0,
+        goalAmount: goal.goalTargetValue,
+        type: 'Goal',
+        colour: colour,
+      };
+    });
 
     // temporary, until API working
 
     this.cards.push(this.progressCard);
-    this.cards.push(this.progressCard);
-    this.cards.push(this.progressCard);
+    // this.cards.push(this.progressCard);
+    // this.cards.push(this.progressCard);
     this.cards.push(this.completedCard);
-    this.cards.push(this.expiredCard);
-    this.cards.push(this.expiredCard);
-    this.cards.push(this.expiredCard);
-    this.cards.push(this.expiredCard);
-    this.cards.push(this.expiredCard);
-    this.cards.push(this.expiredCard);
+    // this.cards.push(this.expiredCard);
+    // this.cards.push(this.expiredCard);
+    // this.cards.push(this.expiredCard);
+    // this.cards.push(this.expiredCard);
+    // this.cards.push(this.expiredCard);
+    // this.cards.push(this.expiredCard);
     this.cards.push(this.expiredCard);
 
-    this.inProgressCards = this.cards.slice(0, 3);
-    this.completedCards = this.cards.slice(3, 4);
-    this.expiredCards = this.cards.slice(4,11);
+    this.inProgressCards = this.cards.filter((card) => card.colour === 'Yellow');
+    this.completedCards = this.cards.filter((card) => card.colour === 'Green');
+    this.expiredCards = this.cards.filter((card) => card.colour === 'Red');
   }
 
   public addNewGoal(): void {

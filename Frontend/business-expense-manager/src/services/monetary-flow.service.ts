@@ -18,17 +18,6 @@ export class MonetaryFlowService {
   getCashFlowsForBusiness(
     page: number
   ): Observable<ApiResponse<MonetaryFlow[]>> {
-    return of({
-      success: true,
-      data: [{
-        id: 1,
-        goal: 'Dishwasher',
-        category: 'Savings',
-        monetaryValue: '10000',
-        createdDatetime: new Date(),
-      },]
-    });
-
     return this.httpClient
       .get<ApiResponse<MonetaryFlow[]>>(
         `${this.baseUrl}/monetary_flow?page=${page}`
@@ -44,13 +33,13 @@ export class MonetaryFlowService {
   }
 
   deleteCashFlow(cashFlowId: number): Observable<ApiResponse<number>> {
-    return this.httpClient.delete<ApiResponse<MonetaryFlow[]>>(
+    return this.httpClient.delete<ApiResponse<number>>(
       `${this.baseUrl}/monetary_flow/delete/${cashFlowId}`
     );
   }
 
   addCashFlow(cashFlow: CreateCashFlowDto): Observable<ApiResponse<number>> {
-    return this.httpClient.post<ApiResponse<MonetaryFlow[]>>(
+    return this.httpClient.post<ApiResponse<number>>(
       `${this.baseUrl}/monetary_flow/add`,
       cashFlow
     );

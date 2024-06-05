@@ -11,7 +11,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { DecimalPipe, NgIf } from '@angular/common';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { CategoryService } from '../../../services/category.service';
 import { Category } from '../../../models/category.model';
@@ -54,6 +59,7 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
   selectedCategory: Category | undefined;
   goals: string[] = [];
   canAddGoal: boolean = false;
+  error = false;
 
   numRegex = /^-?\d*[.,]?\d{0,2}$/;
   newCategoryBudgetForm = this.fb.group({
@@ -69,8 +75,6 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
       ],
     ],
   });
-
-  // GoalCategories: string[] = ['savings'];
 
   constructor(
     public dialogRef: MatDialogRef<NewCategoryBudgetDialogComponent>,
@@ -97,9 +101,10 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
         categoryName: form.categoryName as string,
         budgetAmount: form.budgetAmount as number,
       };
-
+      console.log('Attempting to add to CategoryBudget:', request);
       this.categoryService.addCategoryBudget(request);
 
+      console.log('Added to catBudg');
       return;
     }
 
@@ -110,35 +115,25 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
     this.categoryService.getAllCategories().subscribe({
       next: (response) => {
         if (response.success) {
+          this.error = false;
           this.categories = response.data;
-        } else {
-          const errorMessage =
-            response.message ?? 'An error has occurred fetching the Categories';
-          this.snackBar.open(errorMessage, 'X', { duration: 4000 });
         }
       },
       error: (err) => {
-        this.snackBar.open(
-          'An error has occurred fetching the Categories.',
-          'X',
-          { duration: 4000 }
-        );
+        this.error = true;
       },
     });
   }
 
   private getCategoryBudgets() {
-    this.categoryService.getAllCategoryBudgets().subscribe({
+    this.categoryService.getAllCategoryBudgets(1).subscribe({
       next: (response) => {
         if (response.success) {
           this.categoryBudgets = response.data;
-        } else {
-          const errorMessage =
-            response.message ?? 'An error has occurred fetching the Categories';
-          this.snackBar.open(errorMessage, 'X', { duration: 4000 });
         }
       },
       error: (err) => {
+        this.error = true;
         this.snackBar.open(
           'An error has occurred fetching the Categories.',
           'X',
@@ -151,15 +146,24 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
   public checkAvailableCategories() {
     this.getCategories();
     this.getCategoryBudgets();
-    let categoriesFromCategoryBudgets: Category[] = []; 
-    console.log("Budgets:", this.categoryBudgets);
-    this.categoryBudgets.forEach((categoryBudget) => {
-      categoriesFromCategoryBudgets.push(categoryBudget.category as Category);
-    })
+    let categoriesFromCategoryBudgets: Category[] = [];
 
-    console.log(this.categories);
-    console.log(categoriesFromCategoryBudgets);
+    console.log('Categories:', this.categories);
+    console.log('Budgets:', this.categoryBudgets);
+    // need to replace categoryBudget.category with string name
+    // this.categoryBudgets.forEach((categoryBudget) => {
+    //   categoriesFromCategoryBudgets.push(categoryBudget.category);
+    // });
 
-    this.availableCategories = this.categories.filter((category) => !categoriesFromCategoryBudgets.includes(category));
+    // console.log(this.categories);
+    // console.log(categoriesFromCategoryBudgets);
+
+    this.availableCategories.push({
+      id: 1,
+      name: 'Not savings',
+    });
+    // this.categories.filter(
+    //   (category) => !categoriesFromCategoryBudgets.includes(category)
+    // );
   }
 }

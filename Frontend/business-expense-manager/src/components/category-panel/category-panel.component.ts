@@ -1,17 +1,31 @@
-import {DatePipe, NgFor, NgIf} from '@angular/common';
-import {AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit, Optional, ViewChild,} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {MatIconModule} from '@angular/material/icon';
-import {CardComponent} from '../card/card.component';
-import {MonetaryFlow} from '../../models/monetary-flow.model';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
-import {MonetaryFlowService} from '../../services/monetary-flow.service';
-import {GoalService} from '../../services/goal.service';
-import {MatPaginator, MatPaginatorIntl, MatPaginatorModule, PageEvent,} from '@angular/material/paginator';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {MatSortHeader, MatSortModule} from '@angular/material/sort';
-import {Card} from '../../models/card.model';
-import {MatButtonModule} from "@angular/material/button";
+import { DatePipe, NgFor, NgIf } from '@angular/common';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  Optional,
+  ViewChild,
+} from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { CardComponent } from '../card/card.component';
+import { MonetaryFlow } from '../../models/monetary-flow.model';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MonetaryFlowService } from '../../services/monetary-flow.service';
+import { GoalService } from '../../services/goal.service';
+import {
+  MatPaginator,
+  MatPaginatorIntl,
+  MatPaginatorModule,
+  PageEvent,
+} from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSortHeader, MatSortModule } from '@angular/material/sort';
+import { Card } from '../../models/card.model';
+import { MatButtonModule } from '@angular/material/button';
+import { CategoryService } from '../../services/category.service';
 
 @Component({
   selector: 'app-category-panel',
@@ -37,6 +51,8 @@ export class CategoryPanelComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<MonetaryFlow[]>();
 
   public categoryCard: Card;
+  public categoryBudgetId: number = -1;
+  public deleteError = false;
 
   @ViewChild(MatPaginator) paginator: MatPaginator = new MatPaginator(
     new MatPaginatorIntl(),
@@ -51,6 +67,7 @@ export class CategoryPanelComponent implements OnInit, AfterViewInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     @Optional() private dialog: MatDialogRef<any>,
     private monetaryFlowService: MonetaryFlowService,
+    private categoryService: CategoryService,
     private goalService: GoalService,
     private snackBar: MatSnackBar
   ) {
@@ -74,8 +91,28 @@ export class CategoryPanelComponent implements OnInit, AfterViewInit {
     this.dialog.close();
   }
 
-  public editBudget(): void {
-    console.log('Editing budget goal!');
+  public deleteBudget(): void {
+    this.categoryBudgetId = this.categoryCard.id;
+    console.log('Deleting budget goal!');
+
+    console.log('deleting category budget:', this.categoryBudgetId);
+
+    this.categoryService
+      .deleteCategoryBudget(this.categoryBudgetId)
+      .subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.deleteError = false;
+            this.snackBar.open('Goal deleted', 'Ok', {
+              duration: 4000,
+            });
+            this.dialog.close;
+          }
+        },
+        error: (err) => {
+          this.deleteError = true;
+        },
+      });
   }
 
   public getCashFlows() {
@@ -87,20 +124,12 @@ export class CategoryPanelComponent implements OnInit, AfterViewInit {
             response.data
           );
           this.loading = false;
-        } else {
-          const errorMessage =
-            response.message ?? 'An error has occurred fetching the cash flow';
-          this.snackBar.open(errorMessage, 'X', { duration: 4000 });
-          this.error = true;
+          console.log("Cashflows retrieved:", this.dataSource);
         }
       },
       error: (err) => {
         this.error = true;
-        this.snackBar.open(
-          'An error has occurred fetching the cash flow.',
-          'X',
-          { duration: 4000 }
-        );
+        
       },
     });
   }

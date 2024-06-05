@@ -82,8 +82,8 @@ export class NewGoalDialogComponent implements OnInit {
       const request: CreateGoalDto = {
         name: form.goalName as string,
         description: form.goalDescription as string,
-        due_datetime: form.dueDate as Date,
         monetary_value: form.amount as number,
+        due_datetime: form.dueDate as Date,
       };
 
       this.goalService.addGoal(request);

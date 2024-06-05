@@ -14,6 +14,7 @@ import {
   NewCategoryBudgetDialogComponent
 } from '../../components/dialogs/new-category-budget-dialog copy/new-category-budget-dialog.component';
 import {MatButton} from "@angular/material/button";
+import { CategoryBudget } from '../../models/category-budget.model';
 
 @Component({
   selector: 'app-view-categories-page',
@@ -24,6 +25,7 @@ import {MatButton} from "@angular/material/button";
 })
 export class ViewCategoriesPageComponent implements OnInit {
   public categoryCard: Card = {
+    id: 1,
     title: 'Savings',
     balanceAmount: 90000,
     goalAmount: 100000,
@@ -32,6 +34,7 @@ export class ViewCategoriesPageComponent implements OnInit {
   };
 
   public completedCard: Card = {
+    id: 2,
     title: 'Generator',
     balanceAmount: 10000,
     goalAmount: 10000,
@@ -39,6 +42,7 @@ export class ViewCategoriesPageComponent implements OnInit {
     colour: 'Green',
   };
   public expiredCard: Card = {
+    id: 3,
     title: 'Covid-19 vaccine',
     balanceAmount: 180,
     goalAmount: 100000,
@@ -49,6 +53,8 @@ export class ViewCategoriesPageComponent implements OnInit {
   public businessId: number = 0;
 
   public numCategories: number = 20;
+  public categoryBudgetData: CategoryBudget[] = [];
+  public loading = true;
 
   public categoryCards: Card[] = [];
 
@@ -65,40 +71,29 @@ export class ViewCategoriesPageComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.retrieveCategories();
+    this.retrieveCategoryBudgets();
     this.setCards();
 
   }
 
-  retrieveCategories(){
-    return;
-    // this.goalService.getAllGoals(this.page).subscribe({
-    //   next: (response) => {
-    //     if (response.success) {
-    //       this.goalData = response.data;
+  retrieveCategoryBudgets(){
 
-    //       if (this.goalData.length === 0) {
-    //         this.snackBar.open(
-    //           'An error has occurred fetching the Goals.',
-    //           'X',
-    //           { duration: 4000 }
-    //         );
-    //       }
+    console.log("Attempting to retrieve catBudgs" );
 
-    //       this.setCards();
-    //     } else {
-    //       const errorMessage =
-    //         response.message ??
-    //         'There are no goals associated with your business. Please create a goal first.';
-    //       this.snackBar.open(errorMessage, 'X', { duration: 4000 });
-    //     }
-    //   },
-    //   error: () => {
-    //     this.snackBar.open('An error has occurred fetching the Goals.', 'X', {
-    //       duration: 4000,
-    //     });
-    //   },
-    // });
+    this.categoryService.getAllCategoryBudgets(1).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.categoryBudgetData = response.data;
+          console.log("retrieved", this.categoryBudgetData );
+          this.loading = false;
+          this.error = false;
+          this.setCards(); // TODO: set setCards with categoryBudget data properly
+        }
+      },
+      error: () => {
+        this.error = true;
+      },
+    });
   }
 
   // onPageChange(event: PageEvent) {
@@ -114,22 +109,24 @@ export class ViewCategoriesPageComponent implements OnInit {
 
     // })
 
-    // this.cards = this.goalData.map(goal => {
-    //   const balanceAmount = goal.currentMonetaryValue; // change to proper val
-    //   const goalAmount = goal.completedAmount;
-    //   return {
-    //     title: goal.name,
-    //     balanceAmount: 0,
-    //     goalAmount: goal.goalMonetaryValue,
-    //     type: 'Goal',
-    //     colour: balanceAmount >= goalAmount ? 'Yellow' : 'Green',
-    //   };
-    // });
+    this.categoryCards = this.categoryBudgetData.map(catBudget => {
+      const balanceAmount = catBudget.balance; // change to proper val
+      const goalAmount = catBudget.monthlyBudget;
+      return {
+        id: catBudget.id,
+        title: catBudget.category,
+        balanceAmount: catBudget.balance,
+        goalAmount: catBudget.monthlyBudget,
+        type: 'Category',
+        colour: balanceAmount >= goalAmount ? 'Green' : 'Red',
+      };
+    });
+
+    this.categoryCards = this.categoryCards.slice(0, this.numCategories);
 
     // temporary, until API working
 
-    this.categoryCards.push(this.categoryCard);
-    this.categoryCards = this.categoryCards.slice(0, this.numCategories);
+    // this.categoryCards.push(this.categoryCard);
   }
 
   public addCategoryBudget(): void {

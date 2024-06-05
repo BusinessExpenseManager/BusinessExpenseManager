@@ -7,8 +7,8 @@
 
   <section class="header-bar">
     <h2>Goal Cash flows for: {{ goalCard.title }} </h2>
-    <button aria-label="Edit category budget" mat-flat-button color="primary">
-      <mat-icon fontIcon="add"></mat-icon>
+    <button aria-label="Delete goal" mat-flat-button color="primary" (click)="deleteGoal()">
+      <mat-icon fontIcon="close"></mat-icon>
       Delete Goal
     </button>
   </section>
@@ -16,7 +16,7 @@
     <p> Description: "{{ goalCard.description }}"</p>
   </section>
 
-  <ng-container *ngIf="!error && dataSource?.data?.length; else noData">
+  <ng-container *ngIf="!error && !deleteError && dataSource?.data?.length; else noData">
     <div class="mat-elevation-z8">
       <table mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="Date Captured">
@@ -47,7 +47,7 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
 
-      <mat-paginator [pageSizeOptions]="[10]" (page)="onPageChange($event)">
+      <mat-paginator [pageSizeOptions]="[10]" (page)="onPageChange($event)"
         aria-label="Select page of periodic elements">
       </mat-paginator>
     </div>
@@ -63,5 +63,8 @@
   </p>
   <p *ngIf="!error && !loading">
     There are no cash flows yet, please add some transactions.
+  </p>
+  <p *ngIf="deleteError">
+    Unable to delete goal due to error...
   </p>
 </ng-template>

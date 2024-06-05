@@ -48,20 +48,20 @@ import { MatButton, MatIconButton } from '@angular/material/button';
   styleUrl: './goal-panel.component.css',
 })
 export class GoalPanelComponent implements OnInit, AfterViewInit {
-  public cashflows: MonetaryFlow[] = [];
-  displayedColumns: string[] = ['Date Captured', 'Category', 'Amount'];
-  dataSource = new MatTableDataSource<MonetaryFlow[]>();
-
-  public goalCard: Card;
-
   @ViewChild(MatPaginator) paginator: MatPaginator = new MatPaginator(
     new MatPaginatorIntl(),
     ChangeDetectorRef.prototype
   );
 
+  public cashflows: MonetaryFlow[] = [];
+  public displayedColumns: string[] = ['Date Captured', 'Category', 'Amount'];
+  public dataSource = new MatTableDataSource<MonetaryFlow[]>();
   public error = false;
+  public deleteError = false;
   public loading = true;
   public page = 1;
+  public goalCard: Card;
+  private goalId: number = -1;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -91,29 +91,22 @@ export class GoalPanelComponent implements OnInit, AfterViewInit {
   }
 
   public deleteGoal(): void {
-    const goal: DeleteGoalDto = {
-      name: this.goalCard.title,
-      monetary_value: this.goalCard.goalAmount,
-    };
-    this.goalService.deleteGoal(goal).subscribe({
+
+    this.goalId = this.goalCard.id;
+
+    console.log("Attemping to delete goal:", this.goalId);
+    this.goalService.deleteGoal(this.goalId).subscribe({
       next: (response) => {
         if (response.success) {
-          this.dialog.close;
-        } else {
-          const errorMessage = response.message ?? 'Unable to delete goal';
-          this.snackBar.open(errorMessage + ':' + response.message, 'X', {
+          this.deleteError = false;
+          this.snackBar.open('Goal deleted', 'X', {
             duration: 4000,
           });
-          this.error = true;
+          this.dialog.close;
         }
       },
       error: (err) => {
-        this.error = true;
-        this.snackBar.open(
-          'An error has occurred fetching the cash flow.' + err,
-          'X',
-          { duration: 4000 }
-        );
+        this.deleteError = true;
       },
     });
   }
@@ -127,20 +120,11 @@ export class GoalPanelComponent implements OnInit, AfterViewInit {
             response.data
           );
           this.loading = false;
-        } else {
-          const errorMessage =
-            response.message ?? 'An error has occurred fetching the cash flow';
-          this.snackBar.open(errorMessage, 'X', { duration: 4000 });
-          this.error = true;
+          this.error = false;
         }
       },
       error: (err) => {
         this.error = true;
-        this.snackBar.open(
-          'An error has occurred fetching the cash flow.',
-          'X',
-          { duration: 4000 }
-        );
       },
     });
   }

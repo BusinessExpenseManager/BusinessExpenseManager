@@ -31,30 +31,32 @@ export class GoalService {
       );
   }
 
-  getAllGoalsForBusiness(businessId: number): Observable<Goal[]> {
-    return of([
-      {
-        id: 1,
-        name: 'Washing machine',
-        description: 'I want to afford a washing machine by Christmas',
-        goalMonetaryValue: 10999,
-        goalDueDatetime: new Date(),
-        createdDatetime: new Date(),
-      },
-      {
-        id: 1,
-        name: 'New staff member',
-        description: 'I want to afford a new admin staff member by Christmas',
-        goalMonetaryValue: 6000,
-        goalDueDatetime: new Date(),
-        createdDatetime: new Date(),
-      },
-    ]);
-  }
+  // getAllGoalsForBusiness(businessId: number): Observable<Goal[]> {
+  //   return of([
+  //     {
+  //       id: 1,
+  //       name: 'Washing machine',
+  //       description: 'I want to afford a washing machine by Christmas',
+  //       goalCurrentValue: 1000,
+  //       goalTargetValue: 1200,
+  //       goalDueDatetime: new Date(),
+  //       createdDatetime: new Date(),
+  //     },
+  //     {
+  //       id: 1,
+  //       name: 'New staff member',
+  //       description: 'I want to afford a new admin staff member by Christmas',
+  //       goalCurrentValue: 6000,
+  //       goalTargetValue: 1200,
+  //       goalDueDatetime: new Date(),
+  //       createdDatetime: new Date(),
+  //     },
+  //   ]);
+  // }
 
-  getTotalOfCashflows(businessId: number): Observable<number> {
-    return of(5643);
-  }
+  // getTotalOfCashflows(businessId: number): Observable<number> {
+  //   return of(5643);
+  // }
 
   addGoal(goal: CreateGoalDto): Observable<ApiResponse<number>> {
       return this
@@ -62,16 +64,9 @@ export class GoalService {
         .post<ApiResponse<Goal>>(`${this.baseUrl}/goal/add`, goal)
   }
 
-  deleteGoal(goal: DeleteGoalDto): Observable<ApiResponse<Goal>> {
-    const options = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
-      body: goal,
-    };
-
-    return this
-      .httpClient
-      .delete<ApiResponse<Goal>>(`${this.baseUrl}/goal/delete`, options)
+  deleteGoal(goalId: number): Observable<ApiResponse<number>> {
+    return this.httpClient.delete<ApiResponse<number>>(
+      `${this.baseUrl}/goal/delete/${goalId}`
+    );
   }
 }

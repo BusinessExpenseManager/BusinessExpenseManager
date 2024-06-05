@@ -13,6 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 export class CardComponent {
 
   @Input() card: Card = {
+    id: 1,
     title: 'Default',
     balanceAmount: 5400,
     goalAmount: 7700,

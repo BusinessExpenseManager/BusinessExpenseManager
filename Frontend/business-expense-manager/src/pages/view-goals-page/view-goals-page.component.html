@@ -1,12 +1,17 @@
 <section class="header-bar">
   <h2>Your goals</h2>
-  <button (click)="addNewGoal()" aria-label="Add new goal" mat-flat-button color="primary">
+  <button
+    (click)="addNewGoal()"
+    aria-label="Add new goal"
+    mat-flat-button
+    color="primary"
+  >
     <mat-icon fontIcon="add"></mat-icon>
     Add
   </button>
 </section>
 
-<section class="goals-container">
+<section class="goals-container" *ngIf="!cards.length; else noData">
   <app-card
     *ngFor="let card of inProgressCards"
     [card]="card"
@@ -16,31 +21,33 @@
   <app-card
     *ngFor="let card of completedCards"
     [card]="card"
-    (cardClicked)="showGoalClicked(card)">
+    (cardClicked)="showGoalClicked(card)"
+  >
   </app-card>
   <app-card
     *ngFor="let card of expiredCards"
     [card]="card"
-    (cardClicked)="showGoalClicked(card)">
+    (cardClicked)="showGoalClicked(card)"
+  >
   </app-card>
 </section>
 <mat-paginator
   [pageSizeOptions]="[10]"
   (page)="onPageChange($event)"
   class="pagination-style"
+  aria-label="Select page of periodic elements"
 >
-  aria-label="Select page of periodic elements">
 </mat-paginator>
-<!-- <div class="header-bar">
-  <p>Completed</p>
-</div>
-<div class="goals-container">
 
-  <mat-paginator
-    [pageSizeOptions]="[10]"
-    (page)="onPageChange($event)"
-    class="pagination-style"
-  >
-    aria-label="Select page of periodic elements">
-  </mat-paginator>
-</div> -->
+<ng-template #noData>
+  <p *ngIf="error">
+    Cash flow history failed to load...
+  </p>
+  <p *ngIf="!error && loading">
+    Loading...
+  </p>
+  <p *ngIf="!error && !loading">
+    There are no cash flows yet, please add some transactions.
+  </p>
+</ng-template>
+
