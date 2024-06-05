@@ -61,6 +61,7 @@ export class GoalPanelComponent implements OnInit, AfterViewInit {
   public loading = true;
   public page = 1;
   public goalCard: Card;
+  public cashflowsForBusiness: MonetaryFlow[] = [];
   private goalId: number = -1;
 
   constructor(
@@ -75,6 +76,8 @@ export class GoalPanelComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    
+    this.goalId = this.goalCard.id;
     this.getCashFlows();
   }
 
@@ -114,9 +117,10 @@ export class GoalPanelComponent implements OnInit, AfterViewInit {
 
   public getCashFlows() {
     this.error = false;
-    this.monetaryFlowService.getCashFlowsForBusiness(this.page).subscribe({
+    this.monetaryFlowService.getCashFlowsForGoal(this.page, this.goalId).subscribe({
       next: (response) => {
         if (response.success) {
+
           this.dataSource = new MatTableDataSource<MonetaryFlow[]>(
             response.data
           );

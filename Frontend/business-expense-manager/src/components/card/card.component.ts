@@ -31,7 +31,7 @@ export class CardComponent {
 
   get progressAmountString() : string {
     let temp = (this.card.balanceAmount / this.card.goalAmount) * 100;
-    if(temp === 100) {
+    if(temp >= 100) {
       return "100.0";
     }
     return temp.toFixed(2);

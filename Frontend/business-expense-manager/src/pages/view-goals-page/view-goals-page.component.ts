@@ -88,7 +88,7 @@ export class ViewGoalsPageComponent implements OnInit {
       next: (response) => {
         if (response.success) {
           this.goalData = response.data;
-          console.log("response returned:", this.goalData);
+          console.log("goal response returned:", this.goalData);
           this.loading = false;
           this.error = false;
           this.setCards(); // TODO: set setCards with goalData properly + should work now
