@@ -1,19 +1,12 @@
-<div class="panel-wrapper">
+<article class="panel-wrapper">
   <button (click)="close()" mat-flat-button class="close-button primary-text-color">
     <mat-icon fontIcon="close"></mat-icon>
   </button>
-  <div class="header-bar panel-spacing">
-    <h2>Category budget for: {{ categoryCard.title }} </h2>
-    <button (click)="editBudget()" mat-flat-button class="edit-button">
-      <mat-icon fontIcon="edit"></mat-icon>
-      <p>Edit</p>
-    </button>
-  </section>
 
   <section class="header-bar">
     <h2>Category budget for: {{ categoryCard.title }} </h2>
     <button (click)="editBudget()" aria-label="Edit category budget" mat-flat-button color="primary">
-      <mat-icon fontIcon="add"></mat-icon>
+      <mat-icon fontIcon="edit"></mat-icon>
       Edit Budget
     </button>
   </section>
