@@ -17,14 +17,14 @@ public static class BusinessEndpoints
         group.MapPost("/add", AddBusiness);
     }
 
-    private static Task<JsonHttpResult<ApiMessage<BusinessGet>>> AddBusiness(ILogger<Program> logger,
+    private static Task<JsonHttpResult<ApiMessage<string>>> AddBusiness(ILogger<Program> logger,
         DbDataSource source,
         BusinessAdd business,
         ICognitoService cognito)
     {
         return source.RunSqlQuery(logger, "Unable to add businesses", con =>
-            con.QuerySingleAsync<BusinessGet>(
-                "SELECT * FROM get_business(@Name, @UserCognitoIdentifier)",
+            con.QuerySingleAsync<string>(
+                "SELECT * FROM get_business(@UserCognitoIdentifier, @Name)",
                 new DynamicParameters(business).MergeObject(cognito.Get())
             ));
     }
