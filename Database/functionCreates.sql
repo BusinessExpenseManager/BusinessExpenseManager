@@ -85,26 +85,27 @@ $$ LANGUAGE plpgsql;
 --rollback DROP FUNCTION "retrieve_monetary_flows";
 
 
---changeset ryan:ddl:createFunction:get_or_create_business
-CREATE OR REPLACE FUNCTION get_or_create_business(cognito_identifier varchar(50), business_name varchar(50))
-    RETURNS int AS
+--changeset ryan:ddl:createFunction:get_business
+CREATE OR REPLACE FUNCTION get_business(cognito_identifier varchar(50), business_name varchar(50))
+    RETURNS varchar AS
 $$
 DECLARE
-    business_id int;
+    business_id   int;
+    business_name varchar;
 BEGIN
-    SELECT id INTO business_id FROM businesses WHERE user_cognito_identifier = cognito_identifier;
+    SELECT id, name INTO business_id, business_name FROM businesses WHERE user_cognito_identifier = cognito_identifier;
     IF NOT FOUND THEN
         INSERT INTO businesses (user_cognito_identifier, name)
         VALUES (cognito_identifier, business_name)
-        RETURNING id INTO business_id;
+        RETURNING id, name INTO business_id, business_name;
     END IF;
-    RETURN business_id;
+    RETURN business_name;
 EXCEPTION
     WHEN OTHERS THEN
-        RAISE EXCEPTION 'An error occurred while getting or creating the business: %', SQLERRM;
+        RAISE EXCEPTION 'An error occurred while getting business: %', SQLERRM;
 END;
 $$ LANGUAGE plpgsql;
---rollback DROP FUNCTION "get_or_create_business";
+--rollback DROP FUNCTION "get_business";
 
 --changeset ryan:ddl:createFunction:get_monetary_categories
 CREATE OR REPLACE FUNCTION get_monetary_categories(cognito_identifier varchar(50), page_offset int)
