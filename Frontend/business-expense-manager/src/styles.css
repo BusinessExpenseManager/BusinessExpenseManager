@@ -36,6 +36,45 @@ body {
   --mdc-dialog-container-shape: 0.1em;
 }
 
+/* Global Styles */
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+
+  & button {
+    border-radius: 0.1em;
+    box-shadow: 0 0.2em 0.2em rgba(0, 0, 0, 0.3);;
+    color: black!important;
+  }
+
+  & h2 {
+    display: inline-block;
+    border-bottom: 0.3rem solid var(--secondary);
+  }
+}
+
+.panel-wrapper {
+  background-color: white;
+  height: 100%;
+  position: fixed !important;
+  top: 0;
+  right: 0;
+  padding: 2rem;
+  border-top-left-radius: 0.1rem;
+  border-bottom-left-radius: 0.1rem;
+
+  @media only screen and (min-width: 915px){
+    left: auto;
+    width: 50%;
+  }
+
+  @media (max-width: 914px){
+    width: 100%;
+    left: auto;
+  }
+}
+
 .mat-drawer-inner-container::-webkit-scrollbar {
   display: none;
 }

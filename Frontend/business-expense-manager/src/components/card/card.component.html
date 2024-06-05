@@ -1,0 +1,38 @@
+<article class="card" (click)="emitCardClickedEvent()">
+  <section
+    class="coloured-top-padding"
+    [class.yellow-top]="card.colour === 'Yellow'"
+    [class.blue-top]="card.colour === 'Blue'"
+    [class.green-top]="card.colour === 'Green'"
+    [class.red-top]="card.colour === 'Red'"
+  >
+   <p> {{ statusColour }} </p>
+  </section>
+  <section class="main-black-body">
+    <h2>{{ card.title }}</h2>
+    <div class="spinner-container">
+      <div class="spinner-inner-container">
+        <mat-spinner
+          class="progress-ring"
+          color="blue"
+          mode="determinate"
+          [value]="progressAmount"
+        >
+        </mat-spinner>
+        <div class="spinner-overlay-text">{{ progressAmountString }}%</div>
+      </div>
+    </div>
+
+    <section class="progress">
+      <section class="progress-amounts">
+        <p>Balance:</p>
+        <p>R{{ card.balanceAmount }}</p>
+      </section>
+      <section class="progress-amounts">
+        <p>Goal:</p>
+        <p>R{{ card.goalAmount }}</p>
+      </section>
+    </section>
+
+  </section>
+</article>

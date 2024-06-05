@@ -11,17 +11,11 @@ section:first-child {
 
 h2 {
   display: inline-block;
-  border-bottom: 0.3rem solid var(--secondary);
+  border-bottom: 0.2rem solid var(--secondary);
 }
 
 h3 {
   margin-block: 1rem;
-}
-
-section > button {
-  border-radius: 0.1em;
-  box-shadow: 0 0.2em 0.2em rgba(0, 0, 0, 0.3);;
-  color: black;
 }
 
 td > button {

@@ -1,0 +1,27 @@
+article {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.description-bar {
+    padding: 1rem 0;
+}
+
+.close-button {
+  background-color: var(--primary);
+  color: black;
+}
+
+.delete-button {
+  background-color: palevioletred;
+}
+
+.mat-mdc-header-row {
+  background-color: rgba(30, 31, 31, 0.62);
+  color: var(--tertiary );
+}
+.mat-mdc-row {
+  background-color: var(--secondary);
+  color: var(--tertiary );
+}

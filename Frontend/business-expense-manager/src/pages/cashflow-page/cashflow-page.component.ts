@@ -50,7 +50,7 @@ export class CashflowPageComponent implements OnInit, AfterViewInit {
   page: number = 1
   onPageChange(event: PageEvent) {
     this.page = event.pageIndex + 1;
-    this.getCashFlows()
+    this.getCashFlows();
   }
 
   error: boolean = false;

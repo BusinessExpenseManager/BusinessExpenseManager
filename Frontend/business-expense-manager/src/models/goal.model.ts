@@ -2,7 +2,8 @@ export interface Goal {
   id: number;
   name: string;
   description: string;
-  goalMonetaryValue: number;
-  goalDueDatetime: Date;
+  goalCurrentValue: number;
+  goalTargetValue: number;
   createdDatetime: Date;
+  goalDueDatetime: Date;
 }
