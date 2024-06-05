@@ -2,23 +2,6 @@
   margin-block: 2em;
 }
 
-.header-bar {
-  display: flex;
-  justify-content: space-between;
-  gap: 1em;
-
-  & button {
-    border-radius: 0.1em;
-    box-shadow: 0 0.2em 0.2em rgba(0, 0, 0, 0.3);;
-    color: black;
-  }
-
-  & h2 {
-    display: inline-block;
-    border-bottom: 0.3rem solid var(--secondary);
-  }
-}
-
 .categories-container {
   display: flex;
   gap: 1rem;

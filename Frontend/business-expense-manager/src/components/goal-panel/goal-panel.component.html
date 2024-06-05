@@ -1,13 +1,21 @@
-<div class="panel-wrapper">
-  <button (click)="close()" mat-flat-button class="close-button">
-    <mat-icon fontIcon="close"></mat-icon>
-  </button>
-  <div class="header-bar">
+<article class="panel-wrapper">
+  <section>
+    <button (click)="close()" mat-icon-button color="primary" class="close-button primary-text-color">
+      <mat-icon fontIcon="close"></mat-icon>
+    </button>
+  </section>
+
+  <section class="header-bar">
     <h2>Goal Cash flows for: {{ goalCard.title }} </h2>
-  </div>
-  <div class="header-bar">
-    <h3> Description: "{{ goalCard.description }}"</h3>
-  </div>
+    <button aria-label="Edit category budget" mat-flat-button color="primary">
+      <mat-icon fontIcon="add"></mat-icon>
+      Delete Goal
+    </button>
+  </section>
+  <section>
+    <p> Description: "{{ goalCard.description }}"</p>
+  </section>
+
   <ng-container *ngIf="!error && dataSource?.data?.length; else noData">
     <div class="mat-elevation-z8">
       <table mat-table [dataSource]="dataSource">
@@ -44,14 +52,15 @@
       </mat-paginator>
     </div>
   </ng-container>
-</div>
+</article>
 
 <ng-template #noData>
   <p *ngIf="error">
-    An error has occurred fetching the cash flows. Please be patient while we
-    investigate the issue.
+    Cash flow history failed to load...
   </p>
-  <p *ngIf="!error && loading">Loading...</p>
+  <p *ngIf="!error && loading">
+    Loading...
+  </p>
   <p *ngIf="!error && !loading">
     There are no cash flows yet, please add some transactions.
   </p>

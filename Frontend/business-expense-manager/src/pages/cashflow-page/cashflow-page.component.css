@@ -2,26 +2,8 @@ section {
   margin-bottom: 2em;
 }
 
-section:first-child {
-  display: flex;
-  justify-content: space-between;
-  container-type: inline-size;
-  gap: 1em;
-}
-
-h2 {
-  display: inline-block;
-  border-bottom: 0.3rem solid var(--secondary);
-}
-
 h3 {
   margin-block: 1rem;
-}
-
-section > button {
-  border-radius: 0.1em;
-  box-shadow: 0 0.2em 0.2em rgba(0, 0, 0, 0.3);;
-  color: black;
 }
 
 td > button {

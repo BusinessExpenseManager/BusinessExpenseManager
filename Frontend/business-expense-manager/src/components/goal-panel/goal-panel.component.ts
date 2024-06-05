@@ -25,6 +25,7 @@ import {
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSortHeader, MatSortModule } from '@angular/material/sort';
 import { Card } from '../../models/card.model';
+import {MatButton, MatIconButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-goal-panel',
@@ -39,6 +40,8 @@ import { Card } from '../../models/card.model';
     MatPaginatorModule,
     MatSortHeader,
     MatSortModule,
+    MatIconButton,
+    MatButton,
   ],
   templateUrl: './goal-panel.component.html',
   styleUrl: './goal-panel.component.css',
@@ -56,7 +59,7 @@ export class GoalPanelComponent implements OnInit, AfterViewInit {
   );
 
   public error = false;
-  public loading = false;
+  public loading = true;
   public page = 1;
 
   constructor(

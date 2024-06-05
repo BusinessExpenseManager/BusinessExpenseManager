@@ -1,30 +1,17 @@
-import { DatePipe, NgFor, NgIf } from '@angular/common';
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  Inject,
-  OnInit,
-  Optional,
-  ViewChild,
-} from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { CardComponent } from '../card/card.component';
-import { MonetaryFlow } from '../../models/monetary-flow.model';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MonetaryFlowService } from '../../services/monetary-flow.service';
-import { Goal } from '../../models/goal.model';
-import { GoalService } from '../../services/goal.service';
-import {
-  MatPaginator,
-  MatPaginatorIntl,
-  MatPaginatorModule,
-  PageEvent,
-} from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSortHeader, MatSortModule } from '@angular/material/sort';
-import { Card } from '../../models/card.model';
+import {DatePipe, NgFor, NgIf} from '@angular/common';
+import {AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit, Optional, ViewChild,} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatIconModule} from '@angular/material/icon';
+import {CardComponent} from '../card/card.component';
+import {MonetaryFlow} from '../../models/monetary-flow.model';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import {MonetaryFlowService} from '../../services/monetary-flow.service';
+import {GoalService} from '../../services/goal.service';
+import {MatPaginator, MatPaginatorIntl, MatPaginatorModule, PageEvent,} from '@angular/material/paginator';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatSortHeader, MatSortModule} from '@angular/material/sort';
+import {Card} from '../../models/card.model';
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
   selector: 'app-category-panel',
@@ -39,6 +26,7 @@ import { Card } from '../../models/card.model';
     MatPaginatorModule,
     MatSortHeader,
     MatSortModule,
+    MatButtonModule,
   ],
   templateUrl: './category-panel.component.html',
   styleUrl: './category-panel.component.css',
@@ -56,7 +44,7 @@ export class CategoryPanelComponent implements OnInit, AfterViewInit {
   );
 
   public error = false;
-  public loading = false;
+  public loading = true;
   public page = 1;
 
   constructor(
