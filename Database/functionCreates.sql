@@ -63,10 +63,7 @@ CREATE OR REPLACE FUNCTION retrieve_monetary_flows(
             )
 AS
 $$
-DECLARE
-    user_business_id int;
 BEGIN
-    SELECT id INTO user_business_id FROM businesses WHERE user_cognito_identifier = cognito_identifier;
     RETURN QUERY
         SELECT monetary_flows.id,
                goals.name      AS goal_name,
@@ -74,9 +71,10 @@ BEGIN
                monetary_flows.monetary_value,
                monetary_flows.created_datetime
         FROM monetary_flows
-                 JOIN goals ON monetary_flows.goal_id = goals.id
-                 JOIN categories ON monetary_flows.category_id = categories.id
-        WHERE business_id = user_business_id
+                 LEFT JOIN goals ON monetary_flows.goal_id = goals.id
+                 LEFT JOIN categories ON monetary_flows.category_id = categories.id
+                 LEFT JOIN public.businesses b on b.id = monetary_flows.business_id
+        WHERE b.user_cognito_identifier = cognito_identifier
           AND is_deleted = false
         OFFSET page_offset LIMIT 10;
 EXCEPTION
@@ -87,26 +85,27 @@ $$ LANGUAGE plpgsql;
 --rollback DROP FUNCTION "retrieve_monetary_flows";
 
 
---changeset ryan:ddl:createFunction:get_or_create_business
-CREATE OR REPLACE FUNCTION get_or_create_business(cognito_identifier varchar(50), business_name varchar(50))
-    RETURNS int AS
+--changeset ryan:ddl:createFunction:get_business
+CREATE OR REPLACE FUNCTION get_business(cognito_identifier varchar(50), _business_name varchar(50))
+    RETURNS varchar AS
 $$
 DECLARE
-    business_id int;
+    business_id   int;
+    business_name varchar;
 BEGIN
-    SELECT id INTO business_id FROM businesses WHERE user_cognito_identifier = cognito_identifier;
+    SELECT id, name INTO business_id, business_name FROM businesses WHERE user_cognito_identifier = cognito_identifier;
     IF NOT FOUND THEN
         INSERT INTO businesses (user_cognito_identifier, name)
-        VALUES (cognito_identifier, business_name)
-        RETURNING id INTO business_id;
+        VALUES (cognito_identifier, _business_name)
+        RETURNING id, name INTO business_id, business_name;
     END IF;
-    RETURN business_id;
+    RETURN business_name;
 EXCEPTION
     WHEN OTHERS THEN
-        RAISE EXCEPTION 'An error occurred while getting or creating the business: %', SQLERRM;
+        RAISE EXCEPTION 'An error occurred while getting business: %', SQLERRM;
 END;
 $$ LANGUAGE plpgsql;
---rollback DROP FUNCTION "get_or_create_business";
+--rollback DROP FUNCTION "get_business";
 
 --changeset ryan:ddl:createFunction:get_monetary_categories
 CREATE OR REPLACE FUNCTION get_monetary_categories(cognito_identifier varchar(50), page_offset int)
@@ -122,17 +121,17 @@ BEGIN
     RETURN QUERY
         SELECT c.name, SUM(m.monetary_value) AS balance, b.monthly_budget
         FROM monetary_flows as m
-                 INNER JOIN businesses b on b.id = m.business_id
+                 INNER JOIN businesses bus on bus.id = m.business_id
                  INNER JOIN categories c on c.id = m.category_id
                  INNER JOIN category_budgets b on c.id = b.category_id
-        WHERE b.user_cognito_identifier = cognito_identifier
+        WHERE bus.user_cognito_identifier = cognito_identifier
           AND m.created_datetime >= NOW() - interval '1 month'
           AND m.created_datetime < NOW()
         GROUP BY m.goal_id, c.name, b.monthly_budget
         OFFSET page_offset LIMIT 10;
 EXCEPTION
     WHEN OTHERS THEN
-        RAISE EXCEPTION 'An error occurred while getting goal monetary flows: %', SQLERRM;
+        RAISE EXCEPTION 'An error occurred while getting categories monetary flows: %', SQLERRM;
 END;
 $$ LANGUAGE plpgsql;
 --rollback DROP FUNCTION "get_monetary_categories";
@@ -165,4 +164,32 @@ $$ LANGUAGE plpgsql;
 
 --rollback DROP FUNCTION "get_monetary_goals";
 
+--changeset ryan:ddl:createFunction:get_cats
+CREATE OR REPLACE FUNCTION get_flows_cats(cognito_identifier varchar(50), page_offset int)
+    RETURNS TABLE
+            (
+                goal_id        integer,
+                category_name  varchar,
+                monetary_value money,
+                goal_value     money
+            )
+AS
+$$
+BEGIN
 
+    RETURN QUERY
+        SELECT categories.id, categories.name AS category_name, cb.monthly_budget, sum(mf.monetary_value)
+        FROM categories
+                 LEFT JOIN category_budgets cb on categories.id = cb.category_id
+                 LEFT JOIN monetary_flows mf on categories.id = mf.category_id
+                 LEFT JOIN public.businesses b on b.id = cb.business_id
+        WHERE b.user_cognito_identifier = cognito_identifier
+        group by cb.monthly_budget, categories.name, categories.id
+        LIMIT 10 OFFSET page_offset;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'An error occurred while getting flows_cats flows: %', SQLERRM;
+END;
+$$ LANGUAGE plpgsql;
+--rollback DROP FUNCTION "get_flows_cats";

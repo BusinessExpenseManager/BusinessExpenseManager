@@ -8,9 +8,10 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatError, MatFormField, MatInput, MatLabel} from "@angular/material/input";
 import {MatOption} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
-import {DOCUMENT, NgIf} from "@angular/common";
+import {DOCUMENT, NgIf, Location} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
 import {environment} from "../../../environment";
+import {finalize} from "rxjs";
 
 @Component({
   selector: 'app-login-information-input-container',
@@ -32,18 +33,20 @@ import {environment} from "../../../environment";
   styleUrl: './login-information-input-container.component.css'
 })
 export class LoginInformationInputContainerComponent implements OnInit {
-  authenticationUrl = environment.authorizationUrl;
   businessName: string = '';
+  disableButtons = false;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private businessService: BusinessService,
               private snackBar: MatSnackBar,
-              @Inject(DOCUMENT) private document: Document
+              @Inject(DOCUMENT) private document: Document,
+              private location: Location,
+
   ) {}
 
   ngOnInit() {
-    // logged In
+    // already logged In
     if (sessionStorage.getItem('id_token')) {
       this.router.navigate(['/home', {outlets: {'navBar': ['dashboard-page']}}]);
     }
@@ -61,40 +64,102 @@ export class LoginInformationInputContainerComponent implements OnInit {
 
       const token = fragment[1];
       if (token) {
+        // set token - which means they either clicked login or register
         sessionStorage.setItem('id_token', token);
 
-        let businessName = sessionStorage.getItem('businessName')
-        if (businessName) {
-          // call API to register
-          const request: Business = {
-            name: businessName
-          }
-          this.businessService.registerBusiness(request).subscribe({
-            next: response => {
-              if (response.success) {
-                this.router.navigate(['/home', {outlets: {'navBar': ['dashboard-page']}}]);
-              }
-            },
-            error: err => {
-              this.snackBar.open('An error occurred registering business.', 'X', {"duration": 4000});
-            }
-          });
-       } else {
-          this.router.navigate(['/home', {outlets: {'navBar': ['dashboard-page']}}]);
+        const name = sessionStorage.getItem('registrationBusinessName')
+        if (name) {
+          // user clicked register
+          this.registerBusiness(name);
+        } else {
+          // user clicked login
+          this.verifyAndLoginBusiness();
         }
       }
     });
   }
 
-  register(registrationForm: NgForm) {
+  private authorizationUrl = environment.authorizationUrl;
+  registerOnSubmit(registrationForm: NgForm) {
     if (registrationForm.form.valid) {
-      sessionStorage.setItem('businessName', this.businessName);
-      this.document.location.href = this.authenticationUrl;
+      sessionStorage.setItem('registrationBusinessName', this.businessName);
+      this.document.location.href = this.authorizationUrl;
     }
-
   }
 
-  login() {
-    this.document.location.href = this.authenticationUrl;
+  loginOnSubmit() {
+    this.document.location.href = this.authorizationUrl;
+  }
+
+  private registerBusiness(name: string) {
+    if (!this.disableButtons) {
+
+      this.disableButtons = true;
+
+      const request: Business = {
+        name: name
+      }
+
+      this.businessService
+        .registerBusiness(request)
+        .pipe(
+          finalize(() => {
+            this.disableButtons = false;
+          })
+        )
+        .subscribe({
+          next: response => {
+            if (response.success) {
+              this.snackBar.open('Logging In...', 'Ok', {"duration": 2000});
+
+              setTimeout(() => {
+                sessionStorage.setItem('businessName', response.data)
+                this.router.navigate(['/home', {outlets: {'navBar': ['dashboard-page']}}]);
+              }, 2000);
+            }
+          },
+          error: () => {
+            this.clearToken();
+            // TODO: general failure || account exists
+            this.snackBar.open('Registration Failed. Account Already Exists.', 'Ok', {"duration": 4000});
+          },
+
+        });
+    }
+  }
+
+  private clearToken() {
+    const pathWithoutHash = this.location.path(false);
+    this.location.replaceState(pathWithoutHash);
+    sessionStorage.clear();
+  }
+
+  private verifyAndLoginBusiness() {
+    if (!this.disableButtons) {
+
+      this.disableButtons = true;
+
+      this.businessService
+        .getBusiness()
+        .pipe(
+          finalize(() => {
+            this.disableButtons = false;
+          })
+        )
+        .subscribe({
+          next: response => {
+            if (response.success) {
+              // business exists
+              sessionStorage.setItem('businessName', response.data?.name)
+              this.router.navigate(['/home', {outlets: {'navBar': ['dashboard-page']}}]);
+            }
+          },
+          error: () => {
+            // business does not exist
+            this.snackBar.open('Login Failed. Please Register First.', 'Ok', {"duration": 4000});
+            this.clearToken();
+          },
+        })
+    }
   }
 }
