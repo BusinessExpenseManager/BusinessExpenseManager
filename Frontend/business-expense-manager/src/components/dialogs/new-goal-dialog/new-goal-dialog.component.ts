@@ -82,8 +82,8 @@ export class NewGoalDialogComponent implements OnInit {
       const request: CreateGoalDto = {
         name: form.goalName as string,
         description: form.goalDescription as string,
-        monetary_value: form.amount as number,
-        due_datetime: form.dueDate as Date,
+        goalMonetaryValue: form.amount as number,
+        goalDueDatetime: form.dueDate as Date,
       };
 
       console.log("Attempting to add goal:", request);

@@ -65,7 +65,7 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
   newCategoryBudgetForm = this.fb.group({
     id: [1, Validators.required],
     businessId: [1, Validators.required],
-    categoryName: ['', [Validators.required, Validators.maxLength(15)]],
+    categoryName: [null, [Validators.required, Validators.maxLength(15)]],
     budgetAmount: [
       1,
       [
@@ -96,10 +96,10 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
     if (this.newCategoryBudgetForm.valid) {
       // create request
       const form = this.newCategoryBudgetForm.getRawValue();
-
+      const tempCategory = form.categoryName as any as Category;
       const request: CreateCategoryBudgetDto = {
-        categoryName: form.categoryName as string,
-        budgetAmount: form.budgetAmount as number,
+        categoryId: tempCategory?.id,
+        monthlyBudget: form.budgetAmount as number,
       };
       console.log('Attempting to add to CategoryBudget:', request);
       this.categoryService.addCategoryBudget(request);
