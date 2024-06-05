@@ -61,7 +61,7 @@ public static class GoalEndpoints
         ICognitoService cognito
     ) =>
         source.RunSqlQuery(logger, "Unable to get all goals", con => con.QueryAsync<Goal>(
-            "SELECT * FROM goals INNER JOIN businesses b on goals.business_id = b.id WHERE b.id = @UserCognitoIdentifier LIMIT 10 OFFSET @PageOffset;",
+            "SELECT goals.id, goals.name FROM goals INNER JOIN businesses b on goals.business_id = b.id WHERE b.id = @UserCognitoIdentifier LIMIT 10 OFFSET @PageOffset;",
             new DynamicParameters(pageData).MergeObject(cognito.Get())
         ));
 }
