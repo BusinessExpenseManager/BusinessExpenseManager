@@ -45,5 +45,5 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button color="primary" (click)="dialogRef.close(false)">Cancel</button>
-  <button mat-flat-button color="primary" type="submit" [disabled]="!newGoalForm.valid">Add</button>
+  <button mat-flat-button color="primary" type="submit" [disabled]="!newGoalForm.valid" (click)="onSubmit()">Add</button>
 </mat-dialog-actions>

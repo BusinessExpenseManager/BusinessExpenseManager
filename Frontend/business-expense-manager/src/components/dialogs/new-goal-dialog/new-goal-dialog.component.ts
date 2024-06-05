@@ -75,6 +75,7 @@ export class NewGoalDialogComponent implements OnInit {
   }
 
   public onSubmit(): void {
+    console.log("Calling onsubmit");
     if (this.newGoalForm.valid) {
       // create request
       const form = this.newGoalForm.getRawValue();
