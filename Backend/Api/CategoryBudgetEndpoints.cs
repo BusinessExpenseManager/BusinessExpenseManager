@@ -24,7 +24,7 @@ public static class CategoryBudgetEndpoints
         CategoryBudgetAdd budgetAdd,
         ICognitoService cognito) =>
         source.RunSqlQuery(logger, "Unable to add budget category", con => con.QuerySingleAsync<int>(
-            "INSERT INTO category_budgets(business_id, category_id, monthly_budget) VALUES (@BusinessId, @CategoryId, @MonthlyBudget);",
+            "SELECT * FROM  (@CognitoIdentifier, @CategoryId, @MonthlyBudget);",
             new DynamicParameters(budgetAdd).MergeObject(cognito.Get())
         ));
 

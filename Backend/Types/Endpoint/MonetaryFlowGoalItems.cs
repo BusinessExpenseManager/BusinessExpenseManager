@@ -2,7 +2,10 @@
 
 public record MonetaryFlowGoalItems(
     int GoalId,
-    string Name,
-    decimal MonetaryValue,
-    decimal GoalValue
+    string GoalName,
+    string GoalDescription,
+    decimal GoalCurrentValue,
+    decimal GoalMonetaryValue,
+    DateTime CreatedDatetime,
+    DateTime GoalDueDatetime
 );
