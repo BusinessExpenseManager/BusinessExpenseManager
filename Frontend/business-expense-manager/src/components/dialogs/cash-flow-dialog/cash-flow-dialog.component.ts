@@ -82,7 +82,7 @@ export class CashFlowDialogComponent implements OnInit {
   goals: Goal[] = []
   private getGoals() {
     this.goalService
-      .getAllGoals(1)
+      .getAllGoalNames(1)
       .subscribe({
         next: response => {
           if (response.success) {
