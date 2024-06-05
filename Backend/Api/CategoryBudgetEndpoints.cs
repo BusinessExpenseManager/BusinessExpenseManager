@@ -36,7 +36,7 @@ public static class CategoryBudgetEndpoints
         ICognitoService cognito) =>
         source.RunSqlQuery(logger, "Unable to get paged category budgets", con =>
             con.QueryAsync<CategoryBudget>(
-                "SELECT c.id, category_id, monthly_budget FROM category_budgets as c LEFT JOIN businesses b on c.business_id = b.id WHERE b.user_cognito_identifier = @UserCognitoIdentifier Limit 10 OFFSET @PageOffset;",
+                "SELECT c.id AS ID, category_id as CategoryId, monthly_budget as MonthlyBudget FROM category_budgets as c LEFT JOIN businesses b on c.business_id = b.id WHERE b.user_cognito_identifier = @UserCognitoIdentifier Limit 10 OFFSET @PageOffset;",
                 new DynamicParameters(pageData).MergeObject(cognito.Get())
             ));
 }

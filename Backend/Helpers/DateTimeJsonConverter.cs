@@ -17,7 +17,7 @@ public class DateTimeJsonConverter : JsonConverter<DateTime>
     {
         var dateTimeFromJson = reader.GetString()!;
 
-        return DateTime.ParseExact(dateTimeFromJson, "yyyy-MM-dd ddd HH:mm:ss", CultureInfo.InvariantCulture);
+        return DateTime.ParseExact(dateTimeFromJson, "yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture);
     }
 
     /// <summary>
