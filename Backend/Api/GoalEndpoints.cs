@@ -38,7 +38,7 @@ public static class GoalEndpoints
         ICognitoService cognito
     ) =>
         source.RunSqlQuery(logger, "Unable to add goal", con => con.QuerySingleAsync<int>(
-            "SELECT * FROM add_goal(@UserCognitoIdentifier, @Name, @Description, @GoalMonetaryValue, @GoalDueDatetime);",
+            "SELECT * FROM add_goal(@UserCognitoIdentifier, @Name, @Description, CAST(@GoalMonetaryValue AS MONEY), @GoalDueDatetime);",
             new DynamicParameters(goal).MergeObject(cognito.Get())
         ));
 
