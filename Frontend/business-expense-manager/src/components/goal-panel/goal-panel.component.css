@@ -1,25 +1,7 @@
-@import '../../pages/view-goals-page/view-goals-page.component.css';
-
-.panel-wrapper {
-    /* height: 100vh; */
-    background-color: white;
-    height: 100%;
-    position: fixed !important;
-    top: 0;
-    right: 0;
-    padding: 2rem;
-    border-top-left-radius: 2rem;
-    border-bottom-left-radius: 2rem;
-
-    @media only screen and (min-width: 915px){
-        left: auto;
-        width: 50%;
-    }
-
-    @media (max-width: 914px){
-        width: 100%;
-        left: auto;
-    }
+article {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .description-bar {
@@ -27,20 +9,19 @@
 }
 
 .close-button {
-    background-color: white;
-    border-width: 0;
+  background-color: var(--primary);
+  color: black;
 }
 
 .delete-button {
-    background-color: palevioletred;
+  background-color: palevioletred;
 }
 
 .mat-mdc-header-row {
-    background-color: rgba(30, 31, 31, 0.62);
-    color: var(--tertiary);
-  }
-  .mat-mdc-row {
-    background-color: var(--secondary);
-    color: var(--tertiary);
-  }
-  
+  background-color: rgba(30, 31, 31, 0.62);
+  color: var(--tertiary );
+}
+.mat-mdc-row {
+  background-color: var(--secondary);
+  color: var(--tertiary );
+}

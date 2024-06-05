@@ -1,4 +1,4 @@
-<section>
+<section class="header-bar">
   <h2>Cash Flow</h2>
   <button (click)="addCashFlow()" mat-flat-button color="primary" aria-label="Add Cash flow">
     <mat-icon [hidden]="isMobile" fontIcon="add"></mat-icon>
@@ -54,7 +54,7 @@
 
 <ng-template #noData>
   <p *ngIf="error">
-    An error has occurred fetching the cash flows. Please be patient while we investigate the issue.
+    Cash flow history failed to load...
   </p>
   <p *ngIf="!error && loading">
     Loading...

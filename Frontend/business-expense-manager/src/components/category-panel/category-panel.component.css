@@ -26,15 +26,6 @@
   }
 }
 
-.close-button {
-  background-color: white;
-  border-width: 0;
-}
-
-.delete-button {
-  background-color: palevioletred;
-}
-
 .edit-button {
   width: 5rem;
   background-color: var(--primary);
@@ -49,6 +40,21 @@
   }
 }
 
+article {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.close-button {
+  background-color: var(--primary);
+  color: black;
+}
+
+.delete-button {
+    background-color: palevioletred;
+}
+
 .mat-mdc-header-row {
   background-color: rgba(30, 31, 31, 0.62);
   color: var(--tertiary);
@@ -57,4 +63,3 @@
   background-color: var(--secondary);
   color: var(--tertiary);
 }
-
