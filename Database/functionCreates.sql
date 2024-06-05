@@ -202,25 +202,29 @@ $$ LANGUAGE plpgsql;
 --changeset ryan:ddl:createFunction:add_goal
 CREATE OR REPLACE FUNCTION add_goal(
     cognito_identifier varchar(50),
-    name varchar(15),
-    description varchar(150),
-    monetary_value money,
-    due_datetime timestamp
+    _name varchar(15),
+    _description varchar(150),
+    _monetary_value money,
+    _due_datetime timestamp
 )
     RETURNS int AS
 $$
 DECLARE
-    business_id          int;
-    new_monetary_flow_id int;
+    _business_id         int;
+    new_goal_id  int;
 BEGIN
-    SELECT id INTO business_id FROM businesses WHERE user_cognito_identifier = cognito_identifier;
-    INSERT INTO monetary_flows (business_id, goal_id, category_id, monetary_value)
-    VALUES (business_id, goal_id, category_id, monetary_value)
-    RETURNING id INTO new_monetary_flow_id;
-    RETURN new_monetary_flow_id;
+    SELECT id INTO _business_id FROM businesses WHERE user_cognito_identifier = cognito_identifier;
+    INSERT INTO goals(business_id, name, description, monetary_value, due_datetime)
+    VALUES (_business_id, _name, _description, _monetary_value, _due_datetime)
+    RETURNING id INTO new_goal_id;
+    RETURN new_goal_id;
+    /* INSERT INTO monetary_flows (business_id, goal_id, category_id, monetary_value)
+     VALUES (business_id, goal_id, category_id, monetary_value)
+     RETURNING id INTO new_monetary_flow_id;
+     RETURN new_monetary_flow_id;*/
 EXCEPTION
     WHEN OTHERS THEN
-        RAISE EXCEPTION 'An error occurred while adding the monetary flow: %', SQLERRM;
+        RAISE EXCEPTION 'An error occurred while adding the goal: %', SQLERRM;
 END;
 $$ LANGUAGE plpgsql;
 --rollback DROP FUNCTION "add_new_monetary_flow";
@@ -237,7 +241,7 @@ DECLARE
     user_business_id         int;
     removed_monetary_flow_id int;
 BEGIN
-    SELECT id INTO user_business_id FROM businesses WHERE user_business_id = cognito_identifier;
+    SELECT id INTO user_business_id FROM businesses WHERE user_cognito_identifier = cognito_identifier;
 
     UPDATE goals
     SET is_deleted = TRUE
@@ -252,3 +256,27 @@ EXCEPTION
 END;
 $$ LANGUAGE plpgsql;
 --rollback DROP FUNCTION "delete_monetary_flow";
+
+
+--changeset ryan:ddl:createFunction:add_budget_category
+CREATE OR REPLACE FUNCTION add_budget_category(
+    cognito_identifier varchar(50),
+    new_budget_category_id integer
+)
+    RETURNS int AS
+$$
+DECLARE
+    user_business_id       int;
+    new_budget_category_id int;
+BEGIN
+    SELECT id INTO user_business_id FROM businesses WHERE user_cognito_identifier = cognito_identifier;
+    INSERT INTO monetary_flows (business_id, goal_id, category_id, monetary_value)
+    VALUES (business_id, goal_id, category_id, monetary_value)
+    RETURNING id INTO new_budget_category_id;
+    RETURN new_budget_category_id;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'An error occurred while removing monetary flow: %', SQLERRM;
+END;
+$$ LANGUAGE plpgsql;
+--rollback DROP FUNCTION "add_budget_category";
