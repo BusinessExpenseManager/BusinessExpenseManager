@@ -157,7 +157,7 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
 
     // console.log(this.categories);
     // console.log(categoriesFromCategoryBudgets);
-
+    this.availableCategories = []
     this.availableCategories.push({
       id: 1,
       name: 'Not savings',

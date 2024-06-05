@@ -86,6 +86,8 @@ export class NewGoalDialogComponent implements OnInit {
         due_datetime: form.dueDate as Date,
       };
 
+      console.log("Attempting to add goal:", request);
+
       this.goalService.addGoal(request);
 
       return;

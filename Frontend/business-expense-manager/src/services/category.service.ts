@@ -16,19 +16,8 @@ export class CategoryService {
   constructor(private httpClient: HttpClient) {}
 
   getAllCategories(): Observable<ApiResponse<Category[]>> {
-    // const tempCategory: Category = {id: 1, name: 'Savings'}
-    // return of({
-    //   success: true,
-    //   data: [{
-    //     id: 2,
-    //     name: 'Investments'
-    //   },
-    //   { id: 3,
-    //     name: 'Expenses1'
-    //   }]
-    // })
     return this.httpClient.get<ApiResponse<Category[]>>(
-      `${this.baseUrl}/category/name`
+      `${this.baseUrl}/category`
     ); // with /name means not paginated
   }
 
