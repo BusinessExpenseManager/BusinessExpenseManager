@@ -86,12 +86,12 @@ $$ LANGUAGE plpgsql;
 
 
 --changeset ryan:ddl:createFunction:get_business
-CREATE OR REPLACE FUNCTION get_business(cognito_identifier varchar(50), business_name varchar(50))
+CREATE OR REPLACE FUNCTION get_business(cognito_identifier varchar(50), _business_name varchar(50))
     RETURNS varchar AS
 $$
 DECLARE
-    business_id    int;
-    _business_name varchar;
+    business_id   int;
+    business_name varchar;
 BEGIN
     SELECT id, name INTO business_id, business_name FROM businesses WHERE user_cognito_identifier = cognito_identifier;
     IF NOT FOUND THEN
