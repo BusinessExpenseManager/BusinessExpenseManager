@@ -18,8 +18,20 @@ public static class MonetaryFlowEndpoints
         group.MapPost("/add", AddMonetaryFlow);
         group.MapDelete("/delete/{id:int}", DeleteMonetaryFlow);
         group.MapGet("/category", GetMonetaryFlowsForCategories);
+        group.MapGet("/goal/{id:int}", GetAllMonetaryFlowForGoal);
     }
 
+    private static Task<JsonHttpResult<ApiMessage<IEnumerable<MonetaryFlowItems>>>> GetAllMonetaryFlowForGoal(
+        ILogger<Program> logger,
+        DbDataSource source,
+        ICognitoService cognito,
+        int id,
+        PagingData pagingData) =>
+        source.RunSqlQuery(logger, "Unable to get monetary flows for goal", con =>
+            con.QueryAsync<MonetaryFlowItems>(
+                "SELECT * FROM retrieve_monetary_flows_for_goal(@UserCognitoIdentifier, @PageOffset, @id)",
+                new DynamicParameters(pagingData).MergeObject(cognito.Get()).MergeObject(new { id })
+            ));
 
     private static Task<JsonHttpResult<ApiMessage<IEnumerable<MonetaryFlowItems>>>> GetAllMonetaryFlow(
         ILogger<Program> logger,
