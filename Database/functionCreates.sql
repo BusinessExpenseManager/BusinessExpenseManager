@@ -90,13 +90,13 @@ CREATE OR REPLACE FUNCTION get_business(cognito_identifier varchar(50), business
     RETURNS varchar AS
 $$
 DECLARE
-    business_id   int;
-    business_name varchar;
+    business_id    int;
+    _business_name varchar;
 BEGIN
     SELECT id, name INTO business_id, business_name FROM businesses WHERE user_cognito_identifier = cognito_identifier;
     IF NOT FOUND THEN
         INSERT INTO businesses (user_cognito_identifier, name)
-        VALUES (cognito_identifier, business_name)
+        VALUES (cognito_identifier, _business_name)
         RETURNING id, name INTO business_id, business_name;
     END IF;
     RETURN business_name;
