@@ -1,28 +1,29 @@
-<div class="header-bar">
+<section class="header-bar">
   <h2>Your goals</h2>
-  <button (click)="addNewGoal()" aria-label="Add new goal" class="add-button">
+  <button (click)="addNewGoal()" aria-label="Add new goal" mat-flat-button color="primary">
     <mat-icon fontIcon="add"></mat-icon>
-    <p>Add new goal</p>
+    Add
   </button>
-</div>
-<div class="goals-container">
+</section>
+
+<section class="goals-container">
   <app-card
     *ngFor="let card of inProgressCards"
     [card]="card"
     (cardClicked)="showGoalClicked(card)"
   >
   </app-card>
-  <app-card 
-    *ngFor="let card of completedCards" 
+  <app-card
+    *ngFor="let card of completedCards"
     [card]="card"
     (cardClicked)="showGoalClicked(card)">
   </app-card>
-  <app-card 
-    *ngFor="let card of expiredCards" 
+  <app-card
+    *ngFor="let card of expiredCards"
     [card]="card"
     (cardClicked)="showGoalClicked(card)">
   </app-card>
-</div>
+</section>
 <mat-paginator
   [pageSizeOptions]="[10]"
   (page)="onPageChange($event)"
@@ -34,7 +35,7 @@
   <p>Completed</p>
 </div>
 <div class="goals-container">
-  
+
   <mat-paginator
     [pageSizeOptions]="[10]"
     (page)="onPageChange($event)"

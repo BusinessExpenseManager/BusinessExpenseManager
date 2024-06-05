@@ -1,26 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-import { CardComponent } from '../../components/card/card.component';
-import { Card } from '../../models/card.model';
-import { Goal } from '../../models/goal.model';
-import { NgFor } from '@angular/common';
-import { NewGoalDialogComponent } from '../../components/dialogs/new-goal-dialog/new-goal-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
-import { GoalService } from '../../services/goal.service';
-import { GoalPanelComponent } from '../../components/goal-panel/goal-panel.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { Category } from '../../models/category.model';
-import { CategoryService } from '../../services/category.service';
-import { CategoryPanelComponent } from '../../components/category-panel/category-panel.component';
-import { NewCategoryBudgetDialogComponent } from '../../components/dialogs/new-category-budget-dialog copy/new-category-budget-dialog.component';
+import {Component, OnInit} from '@angular/core';
+import {MatIconModule} from '@angular/material/icon';
+import {CardComponent} from '../../components/card/card.component';
+import {Card} from '../../models/card.model';
+import {Goal} from '../../models/goal.model';
+import {NgFor} from '@angular/common';
+import {MatDialog} from '@angular/material/dialog';
+import {GoalService} from '../../services/goal.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {CategoryService} from '../../services/category.service';
+import {CategoryPanelComponent} from '../../components/category-panel/category-panel.component';
+import {
+  NewCategoryBudgetDialogComponent
+} from '../../components/dialogs/new-category-budget-dialog copy/new-category-budget-dialog.component';
+import {MatButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-view-categories-page',
   standalone: true,
   templateUrl: './view-categories-page.component.html',
   styleUrl: './view-categories-page.component.css',
-  imports: [MatIconModule, CardComponent, NgFor, MatPaginatorModule],
+    imports: [MatIconModule, CardComponent, NgFor, MatPaginatorModule, MatButton],
 })
 export class ViewCategoriesPageComponent implements OnInit {
   public categoryCard: Card = {

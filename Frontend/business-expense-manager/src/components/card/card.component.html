@@ -1,5 +1,5 @@
-<div class="card" (click)="emitCardClickedEvent()">
-  <div
+<article class="card" (click)="emitCardClickedEvent()">
+  <section
     class="coloured-top-padding"
     [class.yellow-top]="card.colour === 'Yellow'"
     [class.blue-top]="card.colour === 'Blue'"
@@ -7,8 +7,8 @@
     [class.red-top]="card.colour === 'Red'"
   >
    <p> {{ statusColour }} </p>
-  </div>
-  <div class="main-black-body">
+  </section>
+  <section class="main-black-body">
     <h2>{{ card.title }}</h2>
     <div class="spinner-container">
       <div class="spinner-inner-container">
@@ -23,16 +23,27 @@
       </div>
     </div>
 
-    <div class="progress-title-wrapper">
-      <p>Balance:</p>
-      <p>Goal:</p>
-    </div>
-    <div class="progress-amount-wrapper">
-      <p>R{{ card.balanceAmount }}</p>
-      <p>R{{ card.goalAmount }}</p>
-    </div>
-  </div>
-</div>
+    <section class="progress">
+      <section class="progress-amounts">
+        <p>Balance:</p>
+        <p>R{{ card.balanceAmount }}</p>
+      </section>
+      <section class="progress-amounts">
+        <p>Goal:</p>
+        <p>R{{ card.goalAmount }}</p>
+      </section>
+    </section>
+
+<!--    <section class="progress-title-wrapper">-->
+<!--      <p>Balance:</p>-->
+<!--      <p>Goal:</p>-->
+<!--    </section>-->
+<!--    <section class="progress-amount-wrapper">-->
+<!--      <p>R{{ card.balanceAmount }}</p>-->
+<!--      <p>R{{ card.goalAmount }}</p>-->
+<!--    </section>-->
+  </section>
+</article>
 
 <!-- coloured top-padding -->
 <!-- black rectangular background with some border-radius -->
