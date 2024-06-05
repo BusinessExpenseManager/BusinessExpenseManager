@@ -89,7 +89,13 @@ export class NewGoalDialogComponent implements OnInit {
 
       console.log("Attempting to add goal:", request);
 
-      this.goalService.addGoal(request);
+      this.goalService.addGoal(request).subscribe({
+        next: (response) => {
+          if (response.success) {
+             console.log(response, "Success!");
+          }
+        },
+      });
 
       return;
     }

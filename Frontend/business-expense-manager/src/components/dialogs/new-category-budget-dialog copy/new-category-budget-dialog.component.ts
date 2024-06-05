@@ -102,8 +102,13 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
         monthlyBudget: form.budgetAmount as number,
       };
       console.log('Attempting to add to CategoryBudget:', request);
-      this.categoryService.addCategoryBudget(request);
-
+      this.categoryService.addCategoryBudget(request).subscribe({
+        next: (response) => {
+          if (response.success) {
+             console.log(response, "Success!");
+          }
+        }
+      });
       console.log('Added to catBudg');
       return;
     }

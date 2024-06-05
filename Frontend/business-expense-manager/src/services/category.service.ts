@@ -22,14 +22,6 @@ export class CategoryService {
   }
 
   getAllCategoryBudgets(page: number): Observable<ApiResponse<CategoryBudget[]>> {
-    // const tempCategory: Category = {id: 1, name: 'Savings'}
-    // return of({
-    //   success: true,
-    //   data: [{
-    //     category: tempCategory,
-    //     budget: 10000,
-    //   }]
-    // })
     return this.httpClient.get<ApiResponse<CategoryBudget[]>>(
       `${this.baseUrl}/categorybudgets?page=${page}`
     );
