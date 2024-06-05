@@ -11,7 +11,7 @@
   </button>
 </section>
 
-<section class="goals-container" *ngIf="!cards.length; else noData">
+<section class="goals-container" *ngIf="!(cards.length === 0); else noData">
   <app-card
     *ngFor="let card of inProgressCards"
     [card]="card"
@@ -47,7 +47,7 @@
     Loading...
   </p>
   <p *ngIf="!error && !loading">
-    There are no goals, please add some goals.
+    There are no goals with logged monetary flows, please add some goals/monetary flows.
   </p>
 </ng-template>
 

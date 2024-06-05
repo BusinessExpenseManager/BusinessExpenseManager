@@ -58,6 +58,14 @@ export class ViewGoalsPageComponent implements OnInit {
   public error = false;
   public loading = true;
   public page: number = 1;
+  public newCard: Card = {
+    id: 3,
+    title: 'Covid-19 vaccine',
+    balanceAmount: 180,
+    goalAmount: 100000,
+    type: 'Goal',
+    colour: 'Red',
+  };
 
   constructor(
     public dialog: MatDialog,
@@ -98,47 +106,43 @@ export class ViewGoalsPageComponent implements OnInit {
   }
 
   public setCards(): void {
-    // get goals or categories from DB
-    // filter is that of 'Goal'
 
-    // this.goals.foreach( (goal) => {
-
-    // })
-
-    this.cards = this.goalData.map((goal) => {
+    console.log("Goal data:", this.goalData);
+    this.cards = [];
+    this.goalData.forEach((goal) => {
+      console.log(goal);
       const balanceAmount = goal.goalCurrentValue; // change to proper val
       const goalAmount = goal.goalTargetValue;
 
-      const colour = goal.goalDueDatetime < new Date() 
-                                              ? 'Red' : 
-                                              (balanceAmount >= goalAmount ? 'Yellow' : 'Green');
-      return {
+      console.log("balance > goal?:", balanceAmount >= goalAmount)
+
+      const colour = (balanceAmount >= goalAmount ? 'Green': 'Yellow');
+                                              
+      console.log(balanceAmount, goalAmount, colour);
+      this.newCard = {
         id: goal.id,
         title: goal.name,
-        balanceAmount: 0,
+        description: goal.description,
+        balanceAmount: goal.goalCurrentValue,
         goalAmount: goal.goalTargetValue,
         type: 'Goal',
         colour: colour,
-      };
+      }
+      console.log('new card here!', this.newCard);
+      this.cards.push(this.newCard);
+      console.log('cards', this.cards);
+      if(this.newCard.colour === 'Yellow'){
+        this.inProgressCards.push(this.newCard);
+        console.log(this.inProgressCards);
+      }
+      else if(this.newCard.colour === 'Green'){
+        this.completedCards.push(this.newCard);
+      }
+      if(this.newCard.colour === 'Red'){
+        this.expiredCards.push(this.newCard);
+      }
     });
 
-    // temporary, until API working
-
-    this.cards.push(this.progressCard);
-    // this.cards.push(this.progressCard);
-    // this.cards.push(this.progressCard);
-    this.cards.push(this.completedCard);
-    // this.cards.push(this.expiredCard);
-    // this.cards.push(this.expiredCard);
-    // this.cards.push(this.expiredCard);
-    // this.cards.push(this.expiredCard);
-    // this.cards.push(this.expiredCard);
-    // this.cards.push(this.expiredCard);
-    this.cards.push(this.expiredCard);
-
-    this.inProgressCards = this.cards.filter((card) => card.colour === 'Yellow');
-    this.completedCards = this.cards.filter((card) => card.colour === 'Green');
-    this.expiredCards = this.cards.filter((card) => card.colour === 'Red');
   }
 
   public addNewGoal(): void {
