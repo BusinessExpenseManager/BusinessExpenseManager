@@ -14,15 +14,16 @@ export class BusinessService {
 
   constructor(private httpClient: HttpClient) { }
 
-  registerBusiness(business: Business) : Observable<ApiResponse<number>> {
-    return this
-      .httpClient
-      .post<ApiResponse<number>>(`${this.baseUrl}/business`, business);
-  }
-
   getBusiness(): Observable<ApiResponse<Business>> {
     return this
       .httpClient
       .get<ApiResponse<number>>(`${this.baseUrl}/business`);
+
+  }
+
+  registerBusiness(business: Business) : Observable<ApiResponse<number>> {
+    return this
+      .httpClient
+      .post<ApiResponse<number>>(`${this.baseUrl}/business/add`, business);
   }
 }
