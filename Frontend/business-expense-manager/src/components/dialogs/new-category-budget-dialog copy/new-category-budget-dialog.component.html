@@ -5,7 +5,14 @@
   <form [formGroup]="newCategoryBudgetForm" (ngSubmit)="onSubmit()">
     <mat-form-field>
       <mat-label>Category</mat-label>
-        <input matInput formControlName="categoryName" placeholder="Select category">
+      <mat-select (click)="checkAvailableCategories()" (selectionChange)="checkAvailableCategories()" required formControlName="categoryName">
+        @for (category of availableCategories; track category) {
+          <mat-option [value]="category">{{category.name}}</mat-option>
+        }
+      </mat-select>
+      <mat-hint *ngIf="categories?.length === 0">
+        No Categories Found.
+      </mat-hint>
     </mat-form-field>
     
     <mat-form-field>

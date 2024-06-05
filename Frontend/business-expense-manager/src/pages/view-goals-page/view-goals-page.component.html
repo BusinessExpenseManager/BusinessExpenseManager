@@ -9,18 +9,18 @@
   <app-card
     *ngFor="let card of inProgressCards"
     [card]="card"
-    (goalClicked)="showGoalClicked(card)"
+    (cardClicked)="showGoalClicked(card)"
   >
   </app-card>
   <app-card 
     *ngFor="let card of completedCards" 
     [card]="card"
-    (goalClicked)="showGoalClicked(card)">
+    (cardClicked)="showGoalClicked(card)">
   </app-card>
   <app-card 
     *ngFor="let card of expiredCards" 
     [card]="card"
-    (goalClicked)="showGoalClicked(card)">
+    (cardClicked)="showGoalClicked(card)">
   </app-card>
 </div>
 <mat-paginator

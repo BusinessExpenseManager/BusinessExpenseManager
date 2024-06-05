@@ -11,7 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { DecimalPipe, NgIf } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { CategoryService } from '../../../services/category.service';
 import { Category } from '../../../models/category.model';
@@ -23,6 +23,7 @@ import { GoalService } from '../../../services/goal.service';
 import { Goal } from '../../../models/goal.model';
 import { CreateGoalDto } from '../../../dtos/create-goal.dto';
 import { CreateCategoryBudgetDto } from '../../../dtos/create-category-budget.dto';
+import { CategoryBudget } from '../../../models/category-budget.model';
 
 @Component({
   selector: 'app-new-category-budget-dialog',
@@ -40,6 +41,7 @@ import { CreateCategoryBudgetDto } from '../../../dtos/create-category-budget.dt
     MatIcon,
     DecimalPipe,
     MatButtonModule,
+    FormsModule,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './new-category-budget-dialog.component.html',
@@ -47,6 +49,9 @@ import { CreateCategoryBudgetDto } from '../../../dtos/create-category-budget.dt
 })
 export class NewCategoryBudgetDialogComponent implements OnInit {
   categories: Category[] = [];
+  categoryBudgets: CategoryBudget[] = [];
+  availableCategories: Category[] = [];
+  selectedCategory: Category | undefined;
   goals: string[] = [];
   canAddGoal: boolean = false;
 
@@ -75,6 +80,7 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.checkAvailableCategories();
     // this.categoryService.getAllCategories().subscribe({
     //   next: (response) => {
     //     this.categories = response;
@@ -98,5 +104,62 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
     }
 
     this.snackBar.open('Form still has errors', 'X', { duration: 4000 });
+  }
+
+  private getCategories() {
+    this.categoryService.getAllCategories().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.categories = response.data;
+        } else {
+          const errorMessage =
+            response.message ?? 'An error has occurred fetching the Categories';
+          this.snackBar.open(errorMessage, 'X', { duration: 4000 });
+        }
+      },
+      error: (err) => {
+        this.snackBar.open(
+          'An error has occurred fetching the Categories.',
+          'X',
+          { duration: 4000 }
+        );
+      },
+    });
+  }
+
+  private getCategoryBudgets() {
+    this.categoryService.getAllCategoryBudgets().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.categoryBudgets = response.data;
+        } else {
+          const errorMessage =
+            response.message ?? 'An error has occurred fetching the Categories';
+          this.snackBar.open(errorMessage, 'X', { duration: 4000 });
+        }
+      },
+      error: (err) => {
+        this.snackBar.open(
+          'An error has occurred fetching the Categories.',
+          'X',
+          { duration: 4000 }
+        );
+      },
+    });
+  }
+
+  public checkAvailableCategories() {
+    this.getCategories();
+    this.getCategoryBudgets();
+    let categoriesFromCategoryBudgets: Category[] = []; 
+    console.log("Budgets:", this.categoryBudgets);
+    this.categoryBudgets.forEach((categoryBudget) => {
+      categoriesFromCategoryBudgets.push(categoryBudget.category as Category);
+    })
+
+    console.log(this.categories);
+    console.log(categoriesFromCategoryBudgets);
+
+    this.availableCategories = this.categories.filter((category) => !categoriesFromCategoryBudgets.includes(category));
   }
 }

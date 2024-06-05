@@ -24,10 +24,10 @@ import { NewCategoryBudgetDialogComponent } from '../../components/dialogs/new-c
 })
 export class ViewCategoriesPageComponent implements OnInit {
   public categoryCard: Card = {
-    title: 'Dishwasher',
-    balanceAmount: 5400,
-    goalAmount: 7000,
-    type: 'Goal',
+    title: 'Savings',
+    balanceAmount: 90000,
+    goalAmount: 100000,
+    type: 'Category',
     colour: 'Blue',
   };
 
