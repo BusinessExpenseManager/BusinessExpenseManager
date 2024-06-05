@@ -1,0 +1,49 @@
+<!-- carry on fixing -->
+
+<h2 mat-dialog-title>Add goal</h2>
+<mat-dialog-content>
+  <form [formGroup]="newGoalForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <mat-label>Goal name</mat-label>
+        <input matInput formControlName="goalName" placeholder="Enter goal name">
+      <mat-error *ngIf="newGoalForm.controls['goalName']?.errors">
+        <span *ngIf="newGoalForm.controls['goalName']?.hasError('required')">Required field.</span>
+        <span *ngIf="newGoalForm.controls['goalName']?.hasError('maxlength')">Max length is 15 characters.</span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+    <mat-label>Goal description</mat-label>
+      <input matInput formControlName="goalDescription" placeholder="Enter goal description">
+      <mat-error *ngIf="newGoalForm.controls['goalDescription']?.errors">
+        <span *ngIf="newGoalForm.controls['goalDescription']?.hasError('required')">Required field.</span>
+        <span *ngIf="newGoalForm.controls['goalDescription']?.hasError('maxlength')">Max length is 150 characters.</span>
+      </mat-error>
+
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Due Date of goal</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="dueDate">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="newGoalForm.controls['dueDate']?.errors">
+        <span *ngIf="newGoalForm.controls['dueDate']?.hasError('required')">Required field.</span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Amount</mat-label>
+      <input matInput type="number" placeholder="00.00" formControlName="amount">
+      <mat-error *ngIf="newGoalForm.controls['amount']?.errors">
+        <span *ngIf="newGoalForm.controls['amount']?.hasError('required')">Required field.</span>
+        <span *ngIf="newGoalForm.controls['amount']?.hasError('min')">Required field.</span>
+        <span *ngIf="newGoalForm.controls['amount']?.hasError('pattern')">Format must be '00.00'.</span>
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button color="primary" (click)="dialogRef.close(false)">Cancel</button>
+  <button mat-flat-button color="primary" type="submit" [disabled]="!newGoalForm.valid">Add</button>
+</mat-dialog-actions>

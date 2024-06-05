@@ -25,7 +25,7 @@
       >
       <mat-error *ngIf="cashFlowForm.form.controls['amount']?.errors">
         <span *ngIf="cashFlowForm.form.controls['amount']?.hasError('required')">Required field.</span>
-        <span *ngIf="cashFlowForm.form.controls['amount']?.hasError('pattern')">Format must be '00.00';.</span>
+        <span *ngIf="cashFlowForm.form.controls['amount']?.hasError('pattern')">Format must be '00.00'.</span>
         <span *ngIf="cashFlowForm.form.controls['amount']?.hasError('min')">Minimum is 0.01.</span>
       </mat-error>
     </mat-form-field>

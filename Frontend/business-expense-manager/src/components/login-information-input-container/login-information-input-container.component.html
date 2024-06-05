@@ -16,7 +16,7 @@
        <mat-error *ngIf="(registrationForm.form.controls['businessName']?.errors)">
          <span *ngIf="registrationForm.form.controls['businessName']?.hasError('required')">Required field.</span>
          <span *ngIf="registrationForm.form.controls['businessName']?.hasError('minlength')">Minimum length is 1 characters.</span>
-         <span *ngIf="registrationForm.form.controls['businessName']?.hasError('maxlength')">Maximum length is 30 characters.</span>
+         <span *ngIf="registrationForm.form.controls['businessName']?.hasError('maxlength')">Maximum length is 50 characters.</span>
         </mat-error>
       </mat-form-field>
 

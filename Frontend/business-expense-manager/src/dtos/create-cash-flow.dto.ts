@@ -3,4 +3,3 @@ export interface CreateCashFlowDto {
   categoryId: string;
   monetaryValue: number;
 }
-

@@ -1,0 +1,70 @@
+<article class="panel-wrapper">
+  <section>
+    <button (click)="close()" mat-icon-button color="primary" class="close-button primary-text-color">
+      <mat-icon fontIcon="close"></mat-icon>
+    </button>
+  </section>
+
+  <section class="header-bar">
+    <h2>Goal Cash flows for: {{ goalCard.title }} </h2>
+    <button aria-label="Delete goal" mat-flat-button color="primary" (click)="deleteGoal()">
+      <mat-icon fontIcon="close"></mat-icon>
+      Delete Goal
+    </button>
+  </section>
+  <section>
+    <p> Description: "{{ goalCard.description }}"</p>
+  </section>
+
+  <ng-container *ngIf="!error && !deleteError && dataSource?.data?.length; else noData">
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="Date Captured">
+          <th mat-header-cell *matHeaderCellDef>Date Captured</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.createdDatetime | date : "y-MM-d hh:mm" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Category">
+          <th mat-header-cell *matHeaderCellDef>Category</th>
+          <td mat-cell *matCellDef="let element">{{ element.category }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Goal">
+          <th mat-header-cell *matHeaderCellDef>Goal</th>
+          <td mat-cell *matCellDef="let element">{{ element.goal }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Amount">
+          <th mat-header-cell *matHeaderCellDef>Amount</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.monetaryValue }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[10]" (page)="onPageChange($event)"
+        aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+  </ng-container>
+</article>
+
+<ng-template #noData>
+  <p *ngIf="error">
+    Cash flow history failed to load...
+  </p>
+  <p *ngIf="!error && loading">
+    Loading...
+  </p>
+  <p *ngIf="!error && !loading">
+    There are no cash flows yet, please add some transactions.
+  </p>
+  <p *ngIf="deleteError">
+    Unable to delete goal due to error...
+  </p>
+</ng-template>
