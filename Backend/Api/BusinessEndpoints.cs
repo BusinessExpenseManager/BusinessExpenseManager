@@ -3,6 +3,7 @@ using Backend.Helpers;
 using Backend.Helpers.Cognito;
 using Backend.Types;
 using Backend.Types.Endpoint;
+using Backend.Types.Validators;
 using Dapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -14,7 +15,7 @@ public static class BusinessEndpoints
     {
         var group = app.MapGroup("/business");
         group.MapGet("/", GetBusiness);
-        group.MapPost("/add", AddBusiness);
+        group.MapPost("/add", AddBusiness).AddEndpointFilter<ValidationFilter<BusinessAdd>>();
     }
 
     private static Task<JsonHttpResult<ApiMessage<string>>> AddBusiness(ILogger<Program> logger,
