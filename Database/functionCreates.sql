@@ -75,7 +75,7 @@ BEGIN
                  LEFT JOIN categories ON monetary_flows.category_id = categories.id
                  LEFT JOIN public.businesses b on b.id = monetary_flows.business_id
         WHERE b.user_cognito_identifier = cognito_identifier
-          AND is_deleted = false
+          AND monetary_flows.is_deleted = false
         OFFSET page_offset LIMIT 10;
 EXCEPTION
     WHEN OTHERS THEN
@@ -111,6 +111,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION get_monetary_categories(cognito_identifier varchar(50), page_offset int)
     RETURNS TABLE
             (
+                category_id    int,
                 name           varchar(50),
                 balance        money,
                 monthly_budget money
@@ -119,7 +120,7 @@ AS
 $$
 BEGIN
     RETURN QUERY
-        SELECT c.name, SUM(m.monetary_value) AS balance, b.monthly_budget
+        SELECT c.id, c.name, SUM(m.monetary_value) AS balance, b.monthly_budget
         FROM monetary_flows as m
                  INNER JOIN businesses bus on bus.id = m.business_id
                  INNER JOIN categories c on c.id = m.category_id
@@ -127,7 +128,7 @@ BEGIN
         WHERE bus.user_cognito_identifier = cognito_identifier
           AND m.created_datetime >= NOW() - interval '1 month'
           AND m.created_datetime < NOW()
-        GROUP BY m.goal_id, c.name, b.monthly_budget
+        GROUP BY m.goal_id, c.name, b.monthly_budget, c.id
         OFFSET page_offset LIMIT 10;
 EXCEPTION
     WHEN OTHERS THEN
@@ -140,16 +141,19 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION get_monetary_goals(cognito_identifier varchar(50), page_offset int)
     RETURNS TABLE
             (
-                goal_id        integer,
-                name           varchar(50),
-                monetary_value money,
-                goal_value     money
+                goal_id             integer,
+                goal_name           varchar(15),
+                goal_description    varchar(150),
+                goal_current_value  money,
+                goal_monetary_value money,
+                created_datetime    timestamp,
+                goal_due_datetime   timestamp
             )
 AS
 $$
 BEGIN
     RETURN QUERY
-        SELECT g.id, g.name, SUM(m.monetary_value), g.monetary_value
+        SELECT g.id, g.name, g.description, SUM(m.monetary_value), g.monetary_value, g.due_datetime, g.created_datetime
         FROM monetary_flows as m
                  INNER JOIN public.goals g on g.id = m.goal_id
                  INNER JOIN businesses b on b.id = m.business_id
@@ -193,3 +197,58 @@ EXCEPTION
 END;
 $$ LANGUAGE plpgsql;
 --rollback DROP FUNCTION "get_flows_cats";
+
+
+--changeset ryan:ddl:createFunction:add_goal
+CREATE OR REPLACE FUNCTION add_goal(
+    cognito_identifier varchar(50),
+    name varchar(15),
+    description varchar(150),
+    monetary_value money,
+    due_datetime timestamp
+)
+    RETURNS int AS
+$$
+DECLARE
+    business_id          int;
+    new_monetary_flow_id int;
+BEGIN
+    SELECT id INTO business_id FROM businesses WHERE user_cognito_identifier = cognito_identifier;
+    INSERT INTO monetary_flows (business_id, goal_id, category_id, monetary_value)
+    VALUES (business_id, goal_id, category_id, monetary_value)
+    RETURNING id INTO new_monetary_flow_id;
+    RETURN new_monetary_flow_id;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'An error occurred while adding the monetary flow: %', SQLERRM;
+END;
+$$ LANGUAGE plpgsql;
+--rollback DROP FUNCTION "add_new_monetary_flow";
+
+
+--changeset ryan:ddl:createFunction:delete_monetary_flow
+CREATE OR REPLACE FUNCTION delete_goal(
+    cognito_identifier varchar(50),
+    goal_id integer
+)
+    RETURNS int AS
+$$
+DECLARE
+    user_business_id         int;
+    removed_monetary_flow_id int;
+BEGIN
+    SELECT id INTO user_business_id FROM businesses WHERE user_business_id = cognito_identifier;
+
+    UPDATE goals
+    SET is_deleted = TRUE
+    WHERE business_id = user_business_id
+      AND id = goal_id
+    RETURNING id INTO removed_monetary_flow_id;
+
+    RETURN removed_monetary_flow_id;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'An error occurred while removing monetary flow: %', SQLERRM;
+END;
+$$ LANGUAGE plpgsql;
+--rollback DROP FUNCTION "delete_monetary_flow";

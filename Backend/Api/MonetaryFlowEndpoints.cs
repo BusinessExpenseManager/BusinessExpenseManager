@@ -17,7 +17,6 @@ public static class MonetaryFlowEndpoints
         group.MapGet("/", GetAllMonetaryFlow).AddEndpointFilter<ValidationFilter<PagingData>>();
         group.MapPost("/add", AddMonetaryFlow);
         group.MapDelete("/delete/{id:int}", DeleteMonetaryFlow);
-        group.MapGet("/goal", GetMonetaryFlowsForGoal);
         group.MapGet("/category", GetMonetaryFlowsForCategories);
     }
 
@@ -56,18 +55,6 @@ public static class MonetaryFlowEndpoints
             ));
 
 
-    private static Task<JsonHttpResult<ApiMessage<IEnumerable<MonetaryFlowGoalItems>>>> GetMonetaryFlowsForGoal(
-        ILogger<Program> logger,
-        DbDataSource source,
-        ICognitoService cognito,
-        PagingData page) =>
-        source.RunSqlQuery(logger, "Unable to monetary goal flow", con =>
-            con.QueryAsync<MonetaryFlowGoalItems>(
-                "SELECT * FROM get_monetary_goals(@UserCognitoIdentifier, @PageOffset)",
-                new DynamicParameters(page).MergeObject(cognito.Get())
-            ));
-
-
     private static Task<JsonHttpResult<ApiMessage<IEnumerable<MonetaryFlowCatItems>>>> GetMonetaryFlowsForCategories(
         ILogger<Program> logger,
         DbDataSource source,
@@ -78,29 +65,4 @@ public static class MonetaryFlowEndpoints
                 "SELECT * FROM get_monetary_categories(@UserCognitoIdentifier, @PageOffset)",
                 new DynamicParameters(page).MergeObject(cognito.Get())
             ));
-
-
-    /*private static Task<JsonHttpResult<ApiMessage<int>>> GetMonetaryFlowsForGoal(
-        ILogger<Program> logger,
-        DbDataSource source,
-        ICognitoService cognito,
-        PagingData page,
-        int id) =>
-        source.RunSqlQuery(logger, "Unable to delete monetary flow", con =>
-            con.QuerySingleAsync<int>(
-                "SELECT * FROM delete_monetary_flow(@UserCognitoIdentifier, @FlowId)",
-                new DynamicParameters(new { FlowId = id }).MergeObject(cognito.Get())
-            ));
-
-    private static Task<JsonHttpResult<ApiMessage<int>>> GetMonetaryFlowsForCategory(
-        ILogger<Program> logger,
-        DbDataSource source,
-        ICognitoService cognito,
-        PagingData page,
-        int id) =>
-        source.RunSqlQuery(logger, "Unable to delete monetary flow", con =>
-            con.QuerySingleAsync<int>(
-                "SELECT * FROM delete_monetary_flow(@UserCognitoIdentifier, @FlowId)",
-                new DynamicParameters(new { FlowId = id }).MergeObject(cognito.Get())
-            ));*/
 }

@@ -9,14 +9,18 @@ CREATE TABLE businesses
 --rollback DROP TABLE "businesses";
 
 --changeset karl:ddl:createTable:goals
+-- ALTER TABLE goals ADD is_deleted       BOOL         NOT NULL DEFAULT false;
+-- ALTER TABLE goals ADD business_id       BOOL         NOT NULL DEFAULT false;
 CREATE TABLE goals
 (
     id               SERIAL PRIMARY KEY,
+    business_id      INTEGER      NOT NULL REFERENCES businesses (id),
     name             VARCHAR(15)  NOT NULL,
     description      VARCHAR(150) NOT NULL,
     monetary_value   MONEY        NOT NULL,
     due_datetime     TIMESTAMP    NOT NULL,
-    created_datetime TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_datetime TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    is_deleted       BOOL         NOT NULL DEFAULT false
 );
 --rollback DROP TABLE "goals";
 
@@ -50,3 +54,4 @@ CREATE TABLE monetary_flows
     is_deleted       BOOLEAN   NOT NULL DEFAULT FALSE
 );
 --rollback DROP TABLE "monetary_flows";
+
