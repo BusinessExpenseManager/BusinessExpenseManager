@@ -1,11 +1,21 @@
 <article class="panel-wrapper">
-  <button (click)="close()" mat-flat-button class="close-button primary-text-color">
-    <mat-icon fontIcon="close"></mat-icon>
-  </button>
-
+  <section>
+    <button
+      (click)="close()"
+      mat-icon-button
+      class="close-button primary-text-color"
+    >
+      <mat-icon fontIcon="close"></mat-icon>
+    </button>
+  </section>
   <section class="header-bar">
-    <h2>Category budget for: {{ categoryCard.title }} </h2>
-    <button (click)="editBudget()" aria-label="Edit category budget" mat-flat-button color="primary">
+    <h2>Category budget for: {{ categoryCard.title }}</h2>
+    <button
+      (click)="editBudget()"
+      aria-label="Edit category budget"
+      mat-flat-button
+      color="primary"
+    >
       <mat-icon fontIcon="edit"></mat-icon>
       Edit Budget
     </button>
@@ -50,12 +60,8 @@
 </article>
 
 <ng-template #noData>
-  <p *ngIf="error">
-    Cash flow history failed to load...
-  </p>
-  <p *ngIf="!error && loading">
-    Loading...
-  </p>
+  <p *ngIf="error">Cash flow history failed to load...</p>
+  <p *ngIf="!error && loading">Loading...</p>
   <p *ngIf="!error && !loading">
     There are no cash flows yet, please add some transactions.
   </p>
