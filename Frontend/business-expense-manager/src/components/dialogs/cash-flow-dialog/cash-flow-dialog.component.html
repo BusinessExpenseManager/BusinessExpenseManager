@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Cash Flow</h2>
 <mat-dialog-content>
-  <form #cashFlowForm="ngForm" (ngSubmit)="onSubmit(cashFlowForm)">
+  <form #cashFlowForm="ngForm">
     <mat-form-field>
       <mat-label>Type</mat-label>
       <mat-select required [(ngModel)]="cashFlow.type" name="type" (selectionChange)="checkCategoryCashFlowType(cashFlowForm)">
@@ -66,7 +66,15 @@
 
     <mat-dialog-actions>
       <button mat-flat-button color="primary" type="button" (click)="dialogRef.close(false)">Cancel</button>
-      <button mat-flat-button color="primary" type="submit" [disabled]="!cashFlowForm.form.valid || typeError || disableSubmit">Add</button>
+      <button appPreventDoubleClick
+              (debounceClick)="onSubmit(cashFlowForm)"
+              mat-flat-button
+              color="primary"
+              type="submit"
+              [disabled]="!cashFlowForm.form.valid || typeError || disableSubmit"
+      >
+        Add
+      </button>
     </mat-dialog-actions>
 
   </form>
