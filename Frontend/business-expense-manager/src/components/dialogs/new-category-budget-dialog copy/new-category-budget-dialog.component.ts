@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, provideExperimentalZonelessChangeDetection } from '@angular/core';
 import {
   MatDialogActions,
   MatDialogContent,
@@ -84,12 +84,9 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.categories = [{id: 0, name: 'Default Category!'}];
+    this.getCategories();
     this.checkAvailableCategories();
-    // this.categoryService.getAllCategories().subscribe({
-    //   next: (response) => {
-    //     this.categories = response;
-    //   },
-    // });
   }
 
   public onSubmit(): void {
@@ -151,24 +148,20 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
   public checkAvailableCategories() {
     this.getCategories();
     this.getCategoryBudgets();
-    let categoriesFromCategoryBudgets: Category[] = [];
+
+    let categoryNamesFromCategoryBudgets: string[] = [];
 
     console.log('Categories:', this.categories);
     console.log('Budgets:', this.categoryBudgets);
     // need to replace categoryBudget.category with string name
-    // this.categoryBudgets.forEach((categoryBudget) => {
-    //   categoriesFromCategoryBudgets.push(categoryBudget.category);
-    // });
-
-    // console.log(this.categories);
-    // console.log(categoriesFromCategoryBudgets);
-    this.availableCategories = []
-    this.availableCategories.push({
-      id: 1,
-      name: 'Not savings',
+    this.categoryBudgets.forEach((categoryBudget) => {
+      categoryNamesFromCategoryBudgets.push(categoryBudget.category);
     });
-    // this.categories.filter(
-    //   (category) => !categoriesFromCategoryBudgets.includes(category)
-    // );
+
+    this.categories.filter(
+      (category) => !categoryNamesFromCategoryBudgets.includes(category.name)
+    );
+
+    this.availableCategories = this.categories;
   }
 }

@@ -7,3 +7,8 @@ export interface Goal {
   createdDatetime: Date;
   goalDueDatetime: Date;
 }
+
+export interface GoalNameOnly {
+  id: number;
+  name: string;
+}

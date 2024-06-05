@@ -1,6 +1,6 @@
 import {MonetaryFlow} from "../models/monetary-flow.model";
 import {CreateCashFlowDto} from "../dtos/create-cash-flow.dto";
-import { Goal } from "../models/goal.model";
+import { Goal, GoalNameOnly } from "../models/goal.model";
 
 export function mapMonetaryFlow(apiResponse: any[]): MonetaryFlow[] {
   return apiResponse.map(item => ({
@@ -13,14 +13,23 @@ export function mapMonetaryFlow(apiResponse: any[]): MonetaryFlow[] {
 }
 
 export function mapGoals(apiResponse: any[]): Goal[] {
-  return apiResponse.map(item => ({
-    id: item.goal_id,
-    name: item.goal_name,
-    description: item.goal_description,
-    goalCurrentValue: item.goal_current_value,
-    goalTargetValue: item.goal_monetary_value,
-    goalDueDatetime: new Date(item.goal_due_datetime),
-    createdDatetime: new Date(item.created_datetime),
+  console.log("Api response:", apiResponse);
+  return apiResponse.map((item) => ({
+    id: item.goalId,
+    name: item.goalName,
+    description: item.goalDescription,
+    goalCurrentValue: item.goalCurrentValue,
+    goalTargetValue: item.goalMonetaryValue,
+    goalDueDatetime: new Date(item.goalDueDatetime),
+    createdDatetime: new Date(item.createdDatetime),
     
+  }));
+}
+
+export function mapGoalNames(apiResponse: any[]): GoalNameOnly[] {
+  console.log("Api response:", apiResponse);
+  return apiResponse.map((item) => ({
+    id: item.id,
+    name: item.name,
   }));
 }

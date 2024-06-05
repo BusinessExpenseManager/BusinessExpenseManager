@@ -71,6 +71,7 @@ export class GoalPanelComponent implements OnInit, AfterViewInit {
     private snackBar: MatSnackBar
   ) {
     this.goalCard = data;
+    console.log("gc:", this.goalCard);
   }
 
   ngOnInit() {

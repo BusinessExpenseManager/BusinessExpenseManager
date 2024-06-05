@@ -4,8 +4,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, map, of } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
 import { Category } from '../models/category.model';
-import { Goal } from '../models/goal.model';
-import { mapGoals } from '../mappers/mapper';
+import { Goal, GoalNameOnly } from '../models/goal.model';
+import { mapGoalNames, mapGoals } from '../mappers/mapper';
 import { CreateGoalDto } from '../dtos/create-goal.dto';
 import { DeleteGoalDto } from '../dtos/delete-goal.dto';
 
@@ -25,6 +25,22 @@ export class GoalService {
         map(response => {
           if (response.success) {
             response.data = mapGoals(response.data);
+          }
+          return response;
+        })
+      );
+  }
+
+  getAllGoalNames(page: number): Observable<ApiResponse<GoalNameOnly[]>> {
+    console.log("In here");
+    return this
+      .httpClient
+      .get<ApiResponse<GoalNameOnly[]>>(`${this.baseUrl}/goal/names?page=1`)
+      .pipe(
+        map(response => {
+          console.log(response);
+          if (response.success) {
+            response.data = mapGoalNames(response.data);
           }
           return response;
         })

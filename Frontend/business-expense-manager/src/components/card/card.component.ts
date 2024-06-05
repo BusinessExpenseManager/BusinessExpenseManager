@@ -48,6 +48,9 @@ export class CardComponent {
     else if(this.card.colour === 'Blue'){
       status = 'active';
     }
+    else if(this.card.colour === 'Yellow'){
+      status = 'active';
+    }
 
     return status;
   }
