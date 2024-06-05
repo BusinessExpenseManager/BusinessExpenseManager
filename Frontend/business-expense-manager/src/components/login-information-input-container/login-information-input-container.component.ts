@@ -12,6 +12,8 @@ import {DOCUMENT, NgIf, Location} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
 import {environment} from "../../../environment";
 import {finalize} from "rxjs";
+import {MatButton} from "@angular/material/button";
+import {PreventDoubleClick} from "../../directives/prevent-double-click.directive";
 
 @Component({
   selector: 'app-login-information-input-container',
@@ -28,6 +30,8 @@ import {finalize} from "rxjs";
     MatSelect,
     NgIf,
     MatIconModule,
+    MatButton,
+    PreventDoubleClick,
   ],
   templateUrl: './login-information-input-container.component.html',
   styleUrl: './login-information-input-container.component.css'
@@ -84,6 +88,8 @@ export class LoginInformationInputContainerComponent implements OnInit {
     if (registrationForm.form.valid) {
       sessionStorage.setItem('registrationBusinessName', this.businessName);
       this.document.location.href = this.authorizationUrl;
+    } else {
+      this.snackBar.open('Please Enter Business Name.', 'Ok', {"duration": 4000});
     }
   }
 

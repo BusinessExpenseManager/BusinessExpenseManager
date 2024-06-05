@@ -17,6 +17,7 @@ import {GoalService} from "../../../services/goal.service";
 import {Goal} from "../../../models/goal.model";
 import {CreateCashFlowDto} from "../../../dtos/create-cash-flow.dto";
 import {finalize} from "rxjs";
+import {PreventDoubleClick} from "../../../directives/prevent-double-click.directive";
 
 
 @Component({
@@ -35,6 +36,7 @@ import {finalize} from "rxjs";
     DecimalPipe,
     MatButtonModule,
     FormsModule,
+    PreventDoubleClick,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './cash-flow-dialog.component.html',
