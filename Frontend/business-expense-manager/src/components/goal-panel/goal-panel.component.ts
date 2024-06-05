@@ -25,6 +25,7 @@ import {
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSortHeader, MatSortModule } from '@angular/material/sort';
 import { Card } from '../../models/card.model';
+import { DeleteGoalDto } from '../../dtos/delete-goal.dto';
 
 @Component({
   selector: 'app-goal-panel',
@@ -87,7 +88,31 @@ export class GoalPanelComponent implements OnInit, AfterViewInit {
   }
 
   public deleteGoal(): void {
-    console.log('Deleting goal!');
+    const goal: DeleteGoalDto = {
+      name: this.goalCard.title,
+      monetary_value: this.goalCard.goalAmount,
+    };
+    this.goalService.deleteGoal(goal).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.dialog.close;
+        } else {
+          const errorMessage = response.message ?? 'Unable to delete goal';
+          this.snackBar.open(errorMessage + ':' + response.message, 'X', {
+            duration: 4000,
+          });
+          this.error = true;
+        }
+      },
+      error: (err) => {
+        this.error = true;
+        this.snackBar.open(
+          'An error has occurred fetching the cash flow.' + err,
+          'X',
+          { duration: 4000 }
+        );
+      },
+    });
   }
 
   public getCashFlows() {

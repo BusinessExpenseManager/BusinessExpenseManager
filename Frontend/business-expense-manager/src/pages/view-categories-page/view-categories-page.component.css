@@ -15,7 +15,7 @@
 
   & h2 {
     display: inline-block;
-    border-bottom: 0.3rem solid var(--secondary);
+    border-bottom: 0.2rem solid var(--secondary);
   }
 }
 

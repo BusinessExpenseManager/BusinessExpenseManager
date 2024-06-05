@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, map, of } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
 import { Category } from '../models/category.model';
 import { Goal } from '../models/goal.model';
 import { mapGoals } from '../mappers/mapper';
 import { CreateGoalDto } from '../dtos/create-goal.dto';
+import { DeleteGoalDto } from '../dtos/delete-goal.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -59,5 +60,18 @@ export class GoalService {
       return this
         .httpClient
         .post<ApiResponse<Goal>>(`${this.baseUrl}/goal/add`, goal)
+  }
+
+  deleteGoal(goal: DeleteGoalDto): Observable<ApiResponse<Goal>> {
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      body: goal,
+    };
+
+    return this
+      .httpClient
+      .delete<ApiResponse<Goal>>(`${this.baseUrl}/goal/delete`, options)
   }
 }

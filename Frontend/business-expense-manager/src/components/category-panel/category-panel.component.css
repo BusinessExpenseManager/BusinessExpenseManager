@@ -1,32 +1,60 @@
-@import '../../pages/view-goals-page/view-goals-page.component.css';
+@import "../../pages/view-goals-page/view-goals-page.component.css";
 
 .panel-wrapper {
-    /* height: 100vh; */
-    background-color: white;
-    height: 100%;
-    position: fixed !important;
-    top: 0;
-    right: 0;
-    padding: 2rem;
-    border-top-left-radius: 2rem;
-    border-bottom-left-radius: 2rem;
+  /* height: 100vh; */
+  background-color: white;
+  height: 100%;
+  position: fixed !important;
+  top: 0;
+  right: 0;
+  padding: 2rem;
+  border-top-left-radius: 2rem;
+  border-bottom-left-radius: 2rem;
 
-    @media only screen and (min-width: 915px){
-        left: auto;
-        width: 50%;
-    }
+  @media only screen and (min-width: 915px) {
+    left: auto;
+    width: 50%;
+  }
 
-    @media (max-width: 914px){
-        width: 100%;
-        left: auto;
-    }
+  @media (max-width: 914px) {
+    width: 100%;
+    left: auto;
+  }
+
+  > .panel-spacing {
+    padding-bottom: 0.5rem;
+  }
 }
 
 .close-button {
-    background-color: white;
-    border-width: 0;
+  background-color: white;
+  border-width: 0;
 }
 
 .delete-button {
-    background-color: palevioletred;
+  background-color: palevioletred;
 }
+
+.edit-button {
+  width: 5rem;
+  background-color: var(--primary);
+  display: flex;
+  justify-content: space-between;
+  border-width: 0;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+
+  > p {
+    font-size: 0.9rem;
+  }
+}
+
+.mat-mdc-header-row {
+  background-color: rgba(30, 31, 31, 0.62);
+  color: var(--tertiary);
+}
+.mat-mdc-row {
+  background-color: var(--secondary);
+  color: var(--tertiary);
+}
+

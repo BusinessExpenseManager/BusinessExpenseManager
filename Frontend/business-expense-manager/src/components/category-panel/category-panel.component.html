@@ -2,11 +2,11 @@
   <button (click)="close()" mat-flat-button class="close-button">
     <mat-icon fontIcon="close"></mat-icon>
   </button>
-  <div class="header-bar">
+  <div class="header-bar panel-spacing">
     <h2>Category budget for: {{ categoryCard.title }} </h2>
-    <button (click)="editBudget()" aria-label="Edit category budget" class="add-button">
+    <button (click)="editBudget()" mat-flat-button class="edit-button">
       <mat-icon fontIcon="edit"></mat-icon>
-      <p>Edit budget</p>
+      <p>Edit</p>
     </button>
   </div>
   <ng-container *ngIf="!error && dataSource?.data?.length; else noData">

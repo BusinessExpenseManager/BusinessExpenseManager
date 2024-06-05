@@ -22,6 +22,10 @@
     }
 }
 
+.description-bar {
+    padding: 1rem 0;
+}
+
 .close-button {
     background-color: white;
     border-width: 0;
@@ -30,3 +34,13 @@
 .delete-button {
     background-color: palevioletred;
 }
+
+.mat-mdc-header-row {
+    background-color: rgba(30, 31, 31, 0.62);
+    color: var(--tertiary);
+  }
+  .mat-mdc-row {
+    background-color: var(--secondary);
+    color: var(--tertiary);
+  }
+  
