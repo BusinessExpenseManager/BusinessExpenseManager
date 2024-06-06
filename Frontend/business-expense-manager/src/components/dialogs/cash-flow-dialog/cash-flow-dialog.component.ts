@@ -117,6 +117,9 @@ export class CashFlowDialogComponent implements OnInit {
           next: response => {
             if (response.success) {
               this.dialogRef.close(true);
+              this.snackBar.open('Cashflow added successfully', 'Ok', {
+                duration: 4000,
+              });
             }
           },
         })

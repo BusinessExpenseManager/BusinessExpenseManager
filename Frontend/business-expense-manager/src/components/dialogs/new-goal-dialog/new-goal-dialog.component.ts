@@ -1,20 +1,25 @@
-import {Component, OnInit} from '@angular/core';
-import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle,} from '@angular/material/dialog';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {provideNativeDateAdapter} from '@angular/material/core';
-import {MatSelectModule} from '@angular/material/select';
-import {DecimalPipe, NgIf} from '@angular/common';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MatIcon} from '@angular/material/icon';
-import {Category} from '../../../models/category.model';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {MatButtonModule} from '@angular/material/button';
-import {GoalService} from '../../../services/goal.service';
-import {CreateGoalDto} from '../../../dtos/create-goal.dto';
+import { Component, OnInit } from '@angular/core';
+import {
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { DecimalPipe, NgIf } from '@angular/common';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatIcon } from '@angular/material/icon';
+import { Category } from '../../../models/category.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatButtonModule } from '@angular/material/button';
+import { GoalService } from '../../../services/goal.service';
+import { CreateGoalDto } from '../../../dtos/create-goal.dto';
 import { PreventDoubleClick } from '../../../directives/prevent-double-click.directive';
-import {finalize} from "rxjs";
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-new-goal-dialog',
@@ -42,7 +47,7 @@ export class NewGoalDialogComponent {
   categories: Category[] = [];
   goals: string[] = [];
   disableSubmit: boolean = false;
-  currentDate = new Date()
+  currentDate = new Date();
 
   numRegex = /^-?\d*[.,]?\d{0,2}$/;
   newGoalForm = this.fb.group({
@@ -78,10 +83,10 @@ export class NewGoalDialogComponent {
         description: form.goalDescription as string,
         goalMonetaryValue: form.amount as number,
         goalDueDatetime: form.dueDate as Date,
-
       };
 
-      this.goalService.addGoal(request)
+      this.goalService
+        .addGoal(request)
         .pipe(
           finalize(() => {
             this.disableSubmit = false;
@@ -90,10 +95,13 @@ export class NewGoalDialogComponent {
         .subscribe({
           next: (response) => {
             if (response.success) {
-               this.dialogRef.close(true);
+              this.dialogRef.close(true);
+              this.snackBar.open('Goal added successfully', 'Ok', {
+                duration: 4000,
+              });
             }
           },
-      });
+        });
 
       return;
     }
