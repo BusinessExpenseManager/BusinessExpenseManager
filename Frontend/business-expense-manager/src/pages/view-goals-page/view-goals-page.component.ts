@@ -11,13 +11,14 @@ import { GoalPanelComponent } from '../../components/goal-panel/goal-panel.compo
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import {MatButton} from "@angular/material/button";
+import {PreventDoubleClick} from "../../directives/prevent-double-click.directive";
 
 @Component({
   selector: 'app-view-goals-page',
   standalone: true,
   templateUrl: './view-goals-page.component.html',
   styleUrl: './view-goals-page.component.css',
-    imports: [MatIconModule, CardComponent, NgFor, MatPaginatorModule, MatButton, NgIf],
+  imports: [MatIconModule, CardComponent, NgFor, MatPaginatorModule, MatButton, NgIf, PreventDoubleClick],
 })
 export class ViewGoalsPageComponent implements OnInit {
   public progressCard: Card = {
@@ -57,7 +58,6 @@ export class ViewGoalsPageComponent implements OnInit {
   public currentBalance: number = 0;
   public error = false;
   public loading = true;
-  public page: number = 1;
   public newCard: Card = {
     id: 3,
     title: 'Covid-19 vaccine',
@@ -80,15 +80,20 @@ export class ViewGoalsPageComponent implements OnInit {
 
   }
 
-  retrieveGoals(){
-
-    console.log("attempting to retrieve goals:", this.page);
+  isLastPage: boolean = false;
+  retrieveGoals(nextPage: boolean = false){
 
     this.goalService.getAllGoals(this.page).subscribe({
       next: (response) => {
         if (response.success) {
+          this.isLastPage = !response.data.length;
+          if (nextPage && this.isLastPage) {
+            this.page--;
+            this.snackBar.open('On Last Page.', 'Ok', {"duration": 4000});
+            return;
+          }
+
           this.goalData = response.data;
-          console.log("goal response returned:", this.goalData);
           this.loading = false;
           this.error = false;
           this.setCards(); // TODO: set setCards with goalData properly + should work now
@@ -100,25 +105,16 @@ export class ViewGoalsPageComponent implements OnInit {
     });
   }
 
-  onPageChange(event: PageEvent) {
-    this.page = event.pageIndex + 1;
-    this.retrieveGoals();
-  }
-
   public setCards(): void {
 
-    console.log("Goal data:", this.goalData);
     this.cards = [];
     this.goalData.forEach((goal) => {
-      console.log(goal);
       const balanceAmount = goal.goalCurrentValue; // change to proper val
       const goalAmount = goal.goalTargetValue;
 
-      console.log("balance > goal?:", balanceAmount >= goalAmount)
 
       const colour = (balanceAmount >= goalAmount ? 'Green': 'Yellow');
-                                              
-      console.log(balanceAmount, goalAmount, colour);
+
       this.newCard = {
         id: goal.id,
         title: goal.name,
@@ -128,12 +124,10 @@ export class ViewGoalsPageComponent implements OnInit {
         type: 'Goal',
         colour: colour,
       }
-      console.log('new card here!', this.newCard);
+
       this.cards.push(this.newCard);
-      console.log('cards', this.cards);
       if(this.newCard.colour === 'Yellow'){
         this.inProgressCards.push(this.newCard);
-        console.log(this.inProgressCards);
       }
       else if(this.newCard.colour === 'Green'){
         this.completedCards.push(this.newCard);
@@ -162,4 +156,21 @@ export class ViewGoalsPageComponent implements OnInit {
       data: card,
     });
   }
+
+  page: number = 1
+  previousPage() {
+    if (this.page === 1) {
+      this.snackBar.open('On First Page.', 'Ok', {"duration": 4000});
+      return;
+    }
+
+    this.page--;
+    this.retrieveGoals()
+  }
+
+  nextPage() {
+    this.page++;
+    this.retrieveGoals(true)
+  }
+
 }

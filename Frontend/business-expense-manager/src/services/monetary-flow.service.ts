@@ -35,7 +35,7 @@ export class MonetaryFlowService {
   getCashFlowsForGoal(page: number, goalId: number){
     return this.httpClient
       .get<ApiResponse<MonetaryFlow[]>>(
-        `${this.baseUrl}/monetary_flow/goal/${goalId}?page=${1}`
+        `${this.baseUrl}/monetary_flow/goal/${goalId}?page=${page}`
       )
       .pipe(
         map((response) => {

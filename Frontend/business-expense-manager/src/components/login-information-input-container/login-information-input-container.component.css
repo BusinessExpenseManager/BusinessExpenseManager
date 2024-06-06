@@ -30,11 +30,11 @@ input {
 
 ::placeholder {
   text-align: center;
-  color: white;
+  color: var(--tertiary)!important;
 }
 
 input:focus::placeholder {
-  color: transparent;
+  color: transparent!important;
 }
 
 button {
