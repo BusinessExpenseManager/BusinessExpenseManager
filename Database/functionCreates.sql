@@ -128,6 +128,7 @@ BEGIN
         WHERE bus.user_cognito_identifier = cognito_identifier
           AND m.created_datetime >= NOW() - interval '1 month'
           AND m.created_datetime < NOW()
+          AND m.is_deleted = FALSE
         GROUP BY m.goal_id, c.name, b.monthly_budget, c.id
         OFFSET page_offset LIMIT 10;
 EXCEPTION
@@ -158,6 +159,7 @@ BEGIN
                  INNER JOIN public.goals g on g.id = m.goal_id
                  INNER JOIN businesses b on b.id = m.business_id
         WHERE b.user_cognito_identifier = cognito_identifier
+          AND m.is_deleted = FALSE
         GROUP BY m.goal_id, g.name, g.monetary_value, g.id
         OFFSET page_offset LIMIT 10;
 EXCEPTION
@@ -188,7 +190,9 @@ BEGIN
                  LEFT JOIN monetary_flows mf on categories.id = mf.category_id
                  LEFT JOIN public.businesses b on b.id = cb.business_id
         WHERE b.user_cognito_identifier = cognito_identifier
-        group by cb.monthly_budget, categories.name, categories.id
+          AND mf.is_deleted = FALSE
+        GROUP by cb.monthly_budget, categories.name,
+                 categories.id
         LIMIT 10 OFFSET page_offset;
 
 EXCEPTION
@@ -210,7 +214,7 @@ CREATE OR REPLACE FUNCTION add_goal(
     RETURNS int AS
 $$
 DECLARE
-    _business_id         int;
+    _business_id int;
     new_goal_id  int;
 BEGIN
     SELECT id INTO _business_id FROM businesses WHERE user_cognito_identifier = cognito_identifier;
@@ -270,8 +274,11 @@ DECLARE
     new_budget_category_id int;
 BEGIN
     SELECT id INTO user_business_id FROM businesses WHERE user_cognito_identifier = cognito_identifier;
-    SELECT business_id, category_id FROM category_budgets WHERE category_id = _category_id AND business_id = monthly_budget;
-    
+    SELECT business_id, category_id
+    FROM category_budgets
+    WHERE category_id = _category_id
+      AND business_id = monthly_budget;
+
     INSERT INTO category_budgets(business_id, category_id, monthly_budget)
     VALUES (user_business_id, _category_id, _monetary_value)
     RETURNING id INTO new_budget_category_id;
@@ -320,7 +327,6 @@ EXCEPTION
 END;
 $$ LANGUAGE plpgsql;
 --rollback DROP FUNCTION "retrieve_monetary_flows_for_goal";
-
 
 
 --changeset ryan:ddl:createFunction:retrieve_monetary_flows_for_cat
