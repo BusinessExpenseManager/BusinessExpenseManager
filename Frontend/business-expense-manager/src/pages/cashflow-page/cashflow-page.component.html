@@ -45,7 +45,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
     </table>
-    <section class="pagination" *ngIf="dataSource.data.length === 10">
+    <section class="pagination" *ngIf="dataSource.data.length">
       <button aria-label="Previous" mat-flat-button color="primary" appPreventDoubleClick (debounceClick)="previousPage()" >
         <mat-icon fontIcon="arrow_back_ios"></mat-icon>
           Previous Page

@@ -14,7 +14,6 @@ export function mapMonetaryFlow(apiResponse: any[]): MonetaryFlow[] {
 }
 
 export function mapGoals(apiResponse: any[]): Goal[] {
-  console.log("Api response:", apiResponse);
   return apiResponse.map((item) => ({
     id: item.goalId,
     name: item.goalName,
@@ -23,12 +22,11 @@ export function mapGoals(apiResponse: any[]): Goal[] {
     goalTargetValue: item.goalMonetaryValue,
     goalDueDatetime: new Date(item.goalDueDatetime),
     createdDatetime: new Date(item.createdDatetime),
-    
+
   }));
 }
 
 export function mapGoalNames(apiResponse: any[]): GoalNameOnly[] {
-  console.log("Api response:", apiResponse);
   return apiResponse.map((item) => ({
     id: item.id,
     name: item.name,
@@ -36,7 +34,6 @@ export function mapGoalNames(apiResponse: any[]): GoalNameOnly[] {
 }
 
 export function mapCategoryBudget(apiResponse: any[]): CategoryBudget[] {
-  console.log("Api response catBudg:", apiResponse);
   return apiResponse.map((item) => ({
     id: item.id,
     category: item.name,

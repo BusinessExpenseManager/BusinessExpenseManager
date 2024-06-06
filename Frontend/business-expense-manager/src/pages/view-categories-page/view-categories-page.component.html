@@ -16,7 +16,6 @@
     <app-card
       *ngFor="let card of categoryCards"
       [card]="card"
-      (cardClicked)="showCategoryClicked(card)"
     >
     </app-card>
   </section>
@@ -25,7 +24,6 @@
   <p *ngIf="error && !isReturnEmpty">Goal retrieval failed to load...</p>
   <p *ngIf="!error && loading">Loading...</p>
   <p *ngIf="isReturnEmpty">
-    There are no goals with logged monetary flows, please add monetary flows for
-    your goals.
+    There are categories with set budgets.
   </p>
 </ng-template>

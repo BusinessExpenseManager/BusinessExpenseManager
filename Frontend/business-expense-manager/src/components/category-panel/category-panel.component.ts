@@ -64,7 +64,6 @@ export class CategoryPanelComponent implements OnInit, AfterViewInit {
 
   public error = false;
   public loading = true;
-  public page = 1;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -97,9 +96,6 @@ export class CategoryPanelComponent implements OnInit, AfterViewInit {
 
   public deleteBudget(): void {
     this.categoryBudgetId = this.categoryCard.id;
-    console.log('Deleting budget goal!');
-
-    console.log('deleting category budget:', this.categoryBudgetId);
 
     this.categoryService
       .deleteCategoryBudget(this.categoryBudgetId)
@@ -119,18 +115,22 @@ export class CategoryPanelComponent implements OnInit, AfterViewInit {
       });
   }
 
-  public getCashFlows() {
+  isLastPage: boolean = false;
+  public getCashFlows(nextPage: boolean = false) {
     this.error = false;
-    console.log("calling cashflows", this.page, this.categoryId);
     this.monetaryFlowService.getCashFlowsForCategory(this.page, this.categoryId).subscribe({
       next: (response) => {
         if (response.success) {
-          console.log("bruh:", response.data);
+          this.isLastPage = !response.data.length;
+          if (nextPage && this.isLastPage) {
+            this.page--;
+            this.snackBar.open('On Last Page.', 'Ok', {"duration": 4000});
+            return;
+          }
           this.dataSource = new MatTableDataSource<MonetaryFlow[]>(
             response.data
           );
           this.loading = false;
-          console.log("Cashflows retrieved:", this.dataSource);
         }
       },
       error: (err) => {
@@ -139,4 +139,21 @@ export class CategoryPanelComponent implements OnInit, AfterViewInit {
       },
     });
   }
+
+  page: number = 1
+  previousPage() {
+    if (this.page === 1) {
+      this.snackBar.open('On First Page.', 'Ok', {"duration": 4000});
+      return;
+    }
+
+    this.page--;
+    this.getCashFlows()
+  }
+
+  nextPage() {
+    this.page++;
+    this.getCashFlows(true)
+  }
+
 }

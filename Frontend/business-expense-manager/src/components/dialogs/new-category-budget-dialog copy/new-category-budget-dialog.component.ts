@@ -69,8 +69,7 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
     id: [1, Validators.required],
     businessId: [1, Validators.required],
     categoryName: [null, [Validators.required, Validators.maxLength(15)]],
-    budgetAmount: [
-      0.00,
+    budgetAmount: [null,
       [
         Validators.required,
         Validators.min(0.01),
@@ -89,7 +88,7 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
   ngOnInit() {
     this.categories = [{id: 0, name: 'Default Category!'}];
     this.getCategories();
-    this.checkAvailableCategories();
+    // this.checkAvailableCategories();
   }
 
   public onSubmit(): void {
@@ -97,24 +96,21 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
       // create request
       const form = this.newCategoryBudgetForm.getRawValue();
       const tempCategory = form.categoryName as any as Category;
-      console.log(tempCategory);
+      const budget = form.budgetAmount as any as number
       const request: CreateCategoryBudgetDto = {
         categoryId: tempCategory?.id,
-        monthlyBudget: form.budgetAmount as number,
+        monthlyBudget: budget,
       };
-      console.log('Attempting to add to CategoryBudget:', request);
       this.categoryService.addCategoryBudget(request).subscribe({
         next: (response) => {
           if (response.success) {
-             console.log(response, "Success!");
-             this.dialogRef.close();
+             this.dialogRef.close(true);
              this.snackBar.open('Catergory Budget added successfully', 'Ok', {
               duration: 4000,
             });
           }
         }
       });
-      console.log('Added to catBudg');
       return;
     }
 
@@ -127,6 +123,7 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
         if (response.success) {
           this.error = false;
           this.categories = response.data;
+          this.getCategoryBudgets();
         }
       },
       error: (err) => {
@@ -140,6 +137,7 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
       next: (response) => {
         if (response.success) {
           this.categoryBudgets = response.data;
+          this.checkAvailableCategories()
         }
       },
       error: (err) => {
@@ -154,14 +152,9 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
   }
 
   public checkAvailableCategories() {
-    this.getCategories();
-    this.getCategoryBudgets();
 
     let categoryNamesFromCategoryBudgets: string[] = [];
 
-    console.log('Categories:', this.categories);
-    console.log('Budgets:', this.categoryBudgets);
-    // need to replace categoryBudget.category with string name
     this.categoryBudgets.forEach((categoryBudget) => {
       categoryNamesFromCategoryBudgets.push(categoryBudget.category);
     });

@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import { Card } from '../../models/card.model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
@@ -10,7 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   templateUrl: './card.component.html',
   styleUrl: './card.component.css',
 })
-export class CardComponent {
+export class CardComponent implements OnInit {
 
   @Input() card: Card = {
     id: 1,
@@ -20,6 +20,10 @@ export class CardComponent {
     type: 'Goal',
     colour: 'Yellow'
   };
+
+  ngOnInit() {
+    this.card.balanceAmount = Math.abs(this.card?.balanceAmount);
+  }
 
   @Output() cardClicked = new EventEmitter<Card>();
 

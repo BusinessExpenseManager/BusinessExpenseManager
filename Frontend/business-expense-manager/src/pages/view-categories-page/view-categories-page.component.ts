@@ -63,13 +63,11 @@ export class ViewCategoriesPageComponent implements OnInit {
 
   retrieveCategoryBudgets(){
 
-    console.log("Attempting to retrieve catBudgs" );
 
     this.categoryService.getAllCategoryBudgets(1).subscribe({
       next: (response) => {
         if (response.success) {
           this.categoryBudgetData = response.data;
-          console.log("retrieved", this.categoryBudgetData );
           this.loading = false;
           this.error = false;
 
@@ -85,21 +83,13 @@ export class ViewCategoriesPageComponent implements OnInit {
       },
     });
 
-    console.log("error:", this.error, "loading:", this.loading);
   }
 
-  // onPageChange(event: PageEvent) {
-  //   this.page = event.pageIndex + 1;
-  //   this.retrieveCategories();
-  // }
-
   public setCards(): void {
-    
-    console.log("Catbudg data:", this.categoryBudgetData);
-    
+
     this.categoryCards = this.categoryBudgetData.map(catBudget => {
-      
-      const balanceAmount = catBudget.balance; // change to proper val
+
+      const balanceAmount = Math.abs(catBudget.balance); // change to proper val
       const goalAmount = catBudget.monthlyBudget;
 
       const colour = balanceAmount > goalAmount ? 'Red' : 'Blue';
@@ -115,10 +105,6 @@ export class ViewCategoriesPageComponent implements OnInit {
     });
 
     this.categoryCards = this.categoryCards.slice(0, this.numCategories);
-
-    // temporary, until API working
-
-    // this.categoryCards.push(this.categoryCard);
   }
 
   public addCategoryBudget(): void {
@@ -126,6 +112,12 @@ export class ViewCategoriesPageComponent implements OnInit {
       width: '35%',
       enterAnimationDuration: '200ms',
       exitAnimationDuration: '200ms',
+    });
+
+    dialogRef.afterClosed().subscribe(confirmation => {
+      if (confirmation === true) {
+        this.retrieveCategoryBudgets();
+      }
     });
   }
 

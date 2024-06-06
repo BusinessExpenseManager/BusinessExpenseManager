@@ -32,13 +32,11 @@ export class GoalService {
   }
 
   getAllGoalNames(page: number): Observable<ApiResponse<GoalNameOnly[]>> {
-    console.log("In here");
     return this
       .httpClient
       .get<ApiResponse<GoalNameOnly[]>>(`${this.baseUrl}/goal/names?page=1`)
       .pipe(
         map(response => {
-          console.log(response);
           if (response.success) {
             response.data = mapGoalNames(response.data);
           }

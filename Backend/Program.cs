@@ -18,7 +18,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("OurCors", builder =>
     {
-        builder.WithOrigins(["http://localhost:4200", "https://web.karle.co.za"])
+        builder.WithOrigins(["https://web.karle.co.za"])
             .WithHeaders(["Content-Type", "Authorization"])
             .WithMethods([HttpMethods.Get, HttpMethods.Post, HttpMethods.Delete, HttpMethods.Options]).Build();
     });
