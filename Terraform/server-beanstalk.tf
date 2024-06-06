@@ -43,7 +43,7 @@ resource "aws_elastic_beanstalk_environment" "backend_beanstalk" {
   depends_on = [aws_elastic_beanstalk_application_version.default]
 
   lifecycle {
-    ignore_changes = [version_label]
+    ignore_changes = all
   }
 
   setting {
