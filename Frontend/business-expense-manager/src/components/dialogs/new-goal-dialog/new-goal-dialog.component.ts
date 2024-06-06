@@ -96,6 +96,7 @@ export class NewGoalDialogComponent implements OnInit {
         next: (response) => {
           if (response.success) {
              console.log(response, "Success!");
+             this.dialogRef.close();
           }
         },
       });
