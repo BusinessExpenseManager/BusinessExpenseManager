@@ -52,7 +52,7 @@ export class LoginInformationInputContainerComponent implements OnInit {
   ngOnInit() {
     // already logged In
     if (sessionStorage.getItem('id_token')) {
-      this.router.navigate(['/home', {outlets: {'navBar': ['dashboard-page']}}]);
+      this.router.navigate(['/home', {outlets: {'navBar': ['goals']}}]);
     }
 
     // login/signUp
@@ -120,7 +120,7 @@ export class LoginInformationInputContainerComponent implements OnInit {
 
               setTimeout(() => {
                 sessionStorage.setItem('businessName', response.data)
-                this.router.navigate(['/home', {outlets: {'navBar': ['dashboard-page']}}]);
+                this.router.navigate(['/home', {outlets: {'navBar': ['goals']}}]);
               }, 2000);
             }
           },
@@ -157,7 +157,7 @@ export class LoginInformationInputContainerComponent implements OnInit {
             if (response.success) {
               // business exists
               sessionStorage.setItem('businessName', response.data?.name)
-              this.router.navigate(['/home', {outlets: {'navBar': ['dashboard-page']}}]);
+              this.router.navigate(['/home', {outlets: {'navBar': ['goals']}}]);
             }
           },
           error: () => {

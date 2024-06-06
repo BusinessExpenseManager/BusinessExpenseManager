@@ -1,6 +1,5 @@
 import {Routes} from '@angular/router';
 import {LoginPageComponent} from "../pages/login-page/login-page.component";
-import {DashboardPageComponent} from "../pages/dashboard-page/dashboard-page.component";
 import {ViewGoalsPageComponent} from "../pages/view-goals-page/view-goals-page.component";
 import {ViewCategoriesPageComponent} from "../pages/view-categories-page/view-categories-page.component";
 import {CashflowPageComponent} from "../pages/cashflow-page/cashflow-page.component";
@@ -22,11 +21,6 @@ export const routes: Routes = [
     component: NavbarComponent,
     canActivateChild: [AuthGuard],
     children: [
-      {
-        path: 'dashboard-page',
-        component: DashboardPageComponent,
-        outlet: 'navBar'
-      },
       {
         path: 'goals',
         component: ViewGoalsPageComponent,

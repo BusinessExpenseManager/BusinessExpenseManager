@@ -72,7 +72,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     if (lastVisitedRoute) {
       this.router.navigateByUrl(lastVisitedRoute);
     } else {
-      this.router.navigate(['/home', { outlets: { 'navBar': ['dashboard-page'] } }]);
+      this.router.navigate(['/home', { outlets: { 'navBar': ['cashflow'] } }]);
     }
   }
 

@@ -8,6 +8,17 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none';
+        frame-src 'self';
+        script-src 'self';
+        style-src 'self' 'unsafe-inline';
+        font-src 'self' https://fonts.gstatic.com/ https://fonts.googleapis.com/;
+        img-src 'self' data:;
+        connect-src 'self' https://api.karle.co.za"
+  >
+
+
 </head>
 <body class="mat-typography">
   <app-root></app-root>
