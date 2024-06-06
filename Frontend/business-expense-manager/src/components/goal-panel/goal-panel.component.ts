@@ -27,6 +27,7 @@ import { MatSortHeader, MatSortModule } from '@angular/material/sort';
 import { Card } from '../../models/card.model';
 import { DeleteGoalDto } from '../../dtos/delete-goal.dto';
 import { MatButton, MatIconButton } from '@angular/material/button';
+import {PreventDoubleClick} from "../../directives/prevent-double-click.directive";
 
 @Component({
   selector: 'app-goal-panel',
@@ -43,11 +44,12 @@ import { MatButton, MatIconButton } from '@angular/material/button';
     MatSortModule,
     MatIconButton,
     MatButton,
+    PreventDoubleClick,
   ],
   templateUrl: './goal-panel.component.html',
   styleUrl: './goal-panel.component.css',
 })
-export class GoalPanelComponent implements OnInit, AfterViewInit {
+export class GoalPanelComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator = new MatPaginator(
     new MatPaginatorIntl(),
     ChangeDetectorRef.prototype
@@ -59,7 +61,6 @@ export class GoalPanelComponent implements OnInit, AfterViewInit {
   public error = false;
   public deleteError = false;
   public loading = true;
-  public page = 1;
   public goalCard: Card;
   public cashflowsForBusiness: MonetaryFlow[] = [];
   private goalId: number = -1;
@@ -72,21 +73,11 @@ export class GoalPanelComponent implements OnInit, AfterViewInit {
     private snackBar: MatSnackBar
   ) {
     this.goalCard = data;
-    console.log("gc:", this.goalCard);
   }
 
   ngOnInit() {
-    
+
     this.goalId = this.goalCard.id;
-    this.getCashFlows();
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
-
-  public onPageChange(event: PageEvent): void {
-    this.page = event.pageIndex + 1;
     this.getCashFlows();
   }
 
@@ -95,10 +86,8 @@ export class GoalPanelComponent implements OnInit, AfterViewInit {
   }
 
   public deleteGoal(): void {
-
     this.goalId = this.goalCard.id;
 
-    console.log("Attemping to delete goal:", this.goalId);
     this.goalService.deleteGoal(this.goalId).subscribe({
       next: (response) => {
         if (response.success) {
@@ -115,11 +104,18 @@ export class GoalPanelComponent implements OnInit, AfterViewInit {
     });
   }
 
-  public getCashFlows() {
+  isLastPage: boolean = false;
+  public getCashFlows(nextPage: boolean = false) {
     this.error = false;
     this.monetaryFlowService.getCashFlowsForGoal(this.page, this.goalId).subscribe({
       next: (response) => {
         if (response.success) {
+          this.isLastPage = !response.data.length;
+          if (nextPage && this.isLastPage) {
+            this.page--;
+            this.snackBar.open('On Last Page.', 'Ok', {"duration": 4000});
+            return;
+          }
 
           this.dataSource = new MatTableDataSource<MonetaryFlow[]>(
             response.data
@@ -132,5 +128,21 @@ export class GoalPanelComponent implements OnInit, AfterViewInit {
         this.error = true;
       },
     });
+  }
+
+  page: number = 1
+  previousPage() {
+    if (this.page === 1) {
+      this.snackBar.open('On First Page.', 'Ok', {"duration": 4000});
+      return;
+    }
+
+    this.page--;
+    this.getCashFlows()
+  }
+
+  nextPage() {
+    this.page++;
+    this.getCashFlows(true)
   }
 }

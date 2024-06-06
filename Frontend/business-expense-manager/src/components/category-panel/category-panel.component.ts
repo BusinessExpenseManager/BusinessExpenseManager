@@ -26,6 +26,7 @@ import { MatSortHeader, MatSortModule } from '@angular/material/sort';
 import { Card } from '../../models/card.model';
 import { MatButtonModule } from '@angular/material/button';
 import { CategoryService } from '../../services/category.service';
+import {PreventDoubleClick} from "../../directives/prevent-double-click.directive";
 
 @Component({
   selector: 'app-category-panel',
@@ -41,6 +42,7 @@ import { CategoryService } from '../../services/category.service';
     MatSortHeader,
     MatSortModule,
     MatButtonModule,
+    PreventDoubleClick,
   ],
   templateUrl: './category-panel.component.html',
   styleUrl: './category-panel.component.css',
@@ -133,7 +135,7 @@ export class CategoryPanelComponent implements OnInit, AfterViewInit {
       },
       error: (err) => {
         this.error = true;
-        
+
       },
     });
   }

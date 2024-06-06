@@ -42,3 +42,13 @@ article {
 .pagination-style {
   justify-content: right;
 }
+
+.pagination {
+  background-color: var(--tertiary);
+  padding: 1rem 0;
+  border-top: none;
+
+  > span {
+    color: var(--secondary);
+  }
+}
