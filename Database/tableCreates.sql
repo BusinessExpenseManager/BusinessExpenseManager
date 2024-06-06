@@ -19,8 +19,7 @@ CREATE TABLE goals
     description      VARCHAR(150) NOT NULL,
     monetary_value   MONEY        NOT NULL,
     due_datetime     TIMESTAMP    NOT NULL,
-    created_datetime TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    is_deleted       BOOL         NOT NULL DEFAULT false
+    created_datetime TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 --rollback DROP TABLE "goals";
 
@@ -38,7 +37,8 @@ CREATE TABLE category_budgets
     id             SERIAL PRIMARY KEY,
     business_id    INTEGER NOT NULL REFERENCES businesses (id),
     category_id    INTEGER NOT NULL REFERENCES categories (id),
-    monthly_budget MONEY   NOT NULL
+    monthly_budget MONEY   NOT NULL,
+    CONSTRAINT unique_business_category UNIQUE (business_id, category_id)
 );
 --rollback DROP TABLE "category_budgets";
 
