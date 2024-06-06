@@ -29,6 +29,7 @@ import { Goal } from '../../../models/goal.model';
 import { CreateGoalDto } from '../../../dtos/create-goal.dto';
 import { CreateCategoryBudgetDto } from '../../../dtos/create-category-budget.dto';
 import { CategoryBudget } from '../../../models/category-budget.model';
+import { PreventDoubleClick } from '../../../directives/prevent-double-click.directive';
 
 @Component({
   selector: 'app-new-category-budget-dialog',
@@ -47,6 +48,7 @@ import { CategoryBudget } from '../../../models/category-budget.model';
     DecimalPipe,
     MatButtonModule,
     FormsModule,
+    PreventDoubleClick,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './new-category-budget-dialog.component.html',

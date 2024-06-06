@@ -66,15 +66,7 @@
 
     <mat-dialog-actions>
       <button mat-flat-button color="primary" type="button" (click)="dialogRef.close(false)">Cancel</button>
-      <button appPreventDoubleClick
-              (debounceClick)="onSubmit(cashFlowForm)"
-              mat-flat-button
-              color="primary"
-              type="submit"
-              [disabled]="!cashFlowForm.form.valid || typeError || disableSubmit"
-      >
-        Add
-      </button>
+      <button mat-flat-button appPreventDoubleClick color="primary" type="submit" [disabled]="!cashFlowForm.form.valid || typeError || disableSubmit" (debounceClick)="onSubmit(cashFlowForm)">Add</button>
     </mat-dialog-actions>
 
   </form>

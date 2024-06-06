@@ -32,6 +32,36 @@ export class MonetaryFlowService {
       );
   }
 
+  getCashFlowsForGoal(page: number, goalId: number){
+    return this.httpClient
+      .get<ApiResponse<MonetaryFlow[]>>(
+        `${this.baseUrl}/monetary_flow/goal/${goalId}?page=${1}`
+      )
+      .pipe(
+        map((response) => {
+          if (response.success) {
+            response.data = mapMonetaryFlow(response.data);
+          }
+          return response;
+        })
+      );
+  }
+
+  getCashFlowsForCategory(page: number, categoryId: number){
+    return this.httpClient
+      .get<ApiResponse<MonetaryFlow[]>>(
+        `${this.baseUrl}/monetary_flow/cat/${categoryId}?page=${page}`
+      )
+      .pipe(
+        map((response) => {
+          if (response.success) {
+            response.data = mapMonetaryFlow(response.data);
+          }
+          return response;
+        })
+      );
+  }
+
   deleteCashFlow(cashFlowId: number): Observable<ApiResponse<number>> {
     return this.httpClient.delete<ApiResponse<number>>(
       `${this.baseUrl}/monetary_flow/delete/${cashFlowId}`

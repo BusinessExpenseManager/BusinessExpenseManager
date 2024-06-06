@@ -33,22 +33,6 @@ export class ViewCategoriesPageComponent implements OnInit {
     colour: 'Blue',
   };
 
-  public completedCard: Card = {
-    id: 2,
-    title: 'Generator',
-    balanceAmount: 10000,
-    goalAmount: 10000,
-    type: 'Goal',
-    colour: 'Green',
-  };
-  public expiredCard: Card = {
-    id: 3,
-    title: 'Covid-19 vaccine',
-    balanceAmount: 180,
-    goalAmount: 100000,
-    type: 'Goal',
-    colour: 'Red',
-  };
 
   public businessId: number = 0;
 
@@ -102,23 +86,21 @@ export class ViewCategoriesPageComponent implements OnInit {
   // }
 
   public setCards(): void {
-    // get goals or categories from DB
-    // filter is that of 'Goal'
-
-    // this.goals.foreach( (goal) => {
-
-    // })
-
+    
+    console.log("Catbudg data:", this.categoryBudgetData);
+    
     this.categoryCards = this.categoryBudgetData.map(catBudget => {
+      
       const balanceAmount = catBudget.balance; // change to proper val
       const goalAmount = catBudget.monthlyBudget;
+
       return {
         id: catBudget.id,
         title: catBudget.category,
         balanceAmount: catBudget.balance,
         goalAmount: catBudget.monthlyBudget,
         type: 'Category',
-        colour: balanceAmount >= goalAmount ? 'Green' : 'Red',
+        colour: balanceAmount >= goalAmount ? 'Red' : 'Yellow',
       };
     });
 

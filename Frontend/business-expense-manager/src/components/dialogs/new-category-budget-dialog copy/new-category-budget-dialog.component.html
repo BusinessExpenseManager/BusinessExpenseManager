@@ -23,5 +23,5 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button color="primary" (click)="dialogRef.close(false)">Cancel</button>
-  <button mat-flat-button color="primary" type="submit" [disabled]="!newCategoryBudgetForm.valid" (click)="onSubmit()">Add</button>
+  <button mat-flat-button appPreventDoubleClick color="primary" type="submit" [disabled]="!newCategoryBudgetForm.valid" (debounceClick)="onSubmit()">Add</button>
 </mat-dialog-actions>

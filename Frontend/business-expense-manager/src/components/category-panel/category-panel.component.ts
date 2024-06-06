@@ -52,6 +52,7 @@ export class CategoryPanelComponent implements OnInit, AfterViewInit {
 
   public categoryCard: Card;
   public categoryBudgetId: number = -1;
+  public categoryId: number = -1;
   public deleteError = false;
 
   @ViewChild(MatPaginator) paginator: MatPaginator = new MatPaginator(
@@ -75,6 +76,7 @@ export class CategoryPanelComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.categoryId = this.categoryCard.id;
     this.getCashFlows();
   }
 
@@ -117,7 +119,7 @@ export class CategoryPanelComponent implements OnInit, AfterViewInit {
 
   public getCashFlows() {
     this.error = false;
-    this.monetaryFlowService.getCashFlowsForBusiness(this.page).subscribe({
+    this.monetaryFlowService.getCashFlowsForCategory(this.page, this.categoryId).subscribe({
       next: (response) => {
         if (response.success) {
           this.dataSource = new MatTableDataSource<MonetaryFlow[]>(

@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environment';
 import { HttpClient } from '@angular/common/http';
 import { Category } from '../models/category.model';
-import { Observable, of } from 'rxjs';
+import { Observable, map, of } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
 import { CreateCategoryBudgetDto } from '../dtos/create-category-budget.dto';
 import { CategoryBudget } from '../models/category-budget.model';
+import { mapCategoryBudget } from '../mappers/mapper';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +25,13 @@ export class CategoryService {
   getAllCategoryBudgets(page: number): Observable<ApiResponse<CategoryBudget[]>> {
     return this.httpClient.get<ApiResponse<CategoryBudget[]>>(
       `${this.baseUrl}/categorybudgets?page=${page}`
+    ).pipe(
+      map((response) => {
+        if (response.success) {
+          response.data = mapCategoryBudget(response.data);
+        }
+        return response;
+      })
     );
   }
 
