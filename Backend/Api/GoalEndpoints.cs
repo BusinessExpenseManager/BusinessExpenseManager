@@ -17,7 +17,7 @@ public static class GoalEndpoints
         group.MapGet("/", GetMonetaryFlowsForGoal).AddEndpointFilter<ValidationFilter<PagingData>>();
         group.MapGet("/names", GetAllGoals).AddEndpointFilter<ValidationFilter<PagingData>>();
         group.MapPost("/add", AddGoal).AddEndpointFilter<ValidationFilter<GoalAdd>>();
-        group.MapPost("/delete", DeleteGoal);
+        // group.MapPost("/delete", DeleteGoal);
     }
 
     private static Task<JsonHttpResult<ApiMessage<int>>> DeleteGoal(ILogger<Program> logger,
