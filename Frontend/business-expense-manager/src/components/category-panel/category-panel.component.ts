@@ -122,6 +122,7 @@ export class CategoryPanelComponent implements OnInit, AfterViewInit {
     this.monetaryFlowService.getCashFlowsForCategory(this.page, this.categoryId).subscribe({
       next: (response) => {
         if (response.success) {
+          console.log("bruh:", response.data);
           this.dataSource = new MatTableDataSource<MonetaryFlow[]>(
             response.data
           );
