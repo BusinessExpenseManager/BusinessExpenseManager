@@ -2,5 +2,5 @@
 
 public record CategoryBudgetAdd(
     int CategoryId,
-    int MonthlyBudget
+    decimal MonthlyBudget
 );
