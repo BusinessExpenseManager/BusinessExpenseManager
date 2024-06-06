@@ -10,7 +10,7 @@
   </section>
   <section class="header-bar">
     <h2>Category budget for: {{ categoryCard.title }}</h2>
-    <button
+    <!-- <button
       (click)="deleteBudget()"
       aria-label="Delete category budget"
       mat-flat-button
@@ -18,7 +18,7 @@
     >
       <mat-icon fontIcon="close"></mat-icon>
       Delete
-    </button>
+    </button> -->
   </section>
 
   <ng-container *ngIf="!error && dataSource?.data?.length; else noData">

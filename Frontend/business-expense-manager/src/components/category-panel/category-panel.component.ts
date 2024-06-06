@@ -119,6 +119,7 @@ export class CategoryPanelComponent implements OnInit, AfterViewInit {
 
   public getCashFlows() {
     this.error = false;
+    console.log("calling cashflows", this.page, this.categoryId);
     this.monetaryFlowService.getCashFlowsForCategory(this.page, this.categoryId).subscribe({
       next: (response) => {
         if (response.success) {
