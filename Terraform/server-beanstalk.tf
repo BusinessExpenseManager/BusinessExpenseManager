@@ -196,4 +196,7 @@ resource "aws_elastic_beanstalk_environment" "backend_beanstalk" {
     value     = module.rds.db_instance_address
     resource  = ""
   }
-}
+
+  lifecycle {
+    ignore_changes = all
+  }
