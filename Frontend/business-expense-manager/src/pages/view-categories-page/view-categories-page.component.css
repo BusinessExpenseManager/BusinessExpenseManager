@@ -46,3 +46,7 @@
 .pagination-style {
     justify-content: right;
 }
+
+p {
+  margin-top: 2rem;
+}

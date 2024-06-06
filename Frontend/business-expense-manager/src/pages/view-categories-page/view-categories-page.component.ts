@@ -3,7 +3,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {CardComponent} from '../../components/card/card.component';
 import {Card} from '../../models/card.model';
 import {Goal} from '../../models/goal.model';
-import {NgFor} from '@angular/common';
+import {NgFor, NgIf} from '@angular/common';
 import {MatDialog} from '@angular/material/dialog';
 import {GoalService} from '../../services/goal.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -21,7 +21,7 @@ import { CategoryBudget } from '../../models/category-budget.model';
   standalone: true,
   templateUrl: './view-categories-page.component.html',
   styleUrl: './view-categories-page.component.css',
-    imports: [MatIconModule, CardComponent, NgFor, MatPaginatorModule, MatButton],
+    imports: [MatIconModule, CardComponent, NgFor, MatPaginatorModule, MatButton, NgIf],
 })
 export class ViewCategoriesPageComponent implements OnInit {
   public categoryCard: Card = {
@@ -39,6 +39,7 @@ export class ViewCategoriesPageComponent implements OnInit {
   public numCategories: number = 20;
   public categoryBudgetData: CategoryBudget[] = [];
   public loading = true;
+  public isReturnEmpty = false;
 
   public categoryCards: Card[] = [];
 
@@ -71,6 +72,11 @@ export class ViewCategoriesPageComponent implements OnInit {
           console.log("retrieved", this.categoryBudgetData );
           this.loading = false;
           this.error = false;
+
+          if(this.categoryBudgetData.length === 0){
+            this.error = true;
+            this.isReturnEmpty = true;
+          }
           this.setCards(); // TODO: set setCards with categoryBudget data properly
         }
       },
@@ -78,6 +84,8 @@ export class ViewCategoriesPageComponent implements OnInit {
         this.error = true;
       },
     });
+
+    console.log("error:", this.error, "loading:", this.loading);
   }
 
   // onPageChange(event: PageEvent) {
