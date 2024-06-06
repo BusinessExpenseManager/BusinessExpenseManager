@@ -230,32 +230,32 @@ $$ LANGUAGE plpgsql;
 --rollback DROP FUNCTION "add_new_monetary_flow";
 
 
---changeset ryan:ddl:createFunction:delete_monetary_flow
-CREATE OR REPLACE FUNCTION delete_goal(
-    cognito_identifier varchar(50),
-    goal_id integer
-)
-    RETURNS int AS
-$$
-DECLARE
-    user_business_id         int;
-    removed_monetary_flow_id int;
-BEGIN
-    SELECT id INTO user_business_id FROM businesses WHERE user_cognito_identifier = cognito_identifier;
-
-    UPDATE goals
-    SET is_deleted = TRUE
-    WHERE business_id = user_business_id
-      AND id = goal_id
-    RETURNING id INTO removed_monetary_flow_id;
-
-    RETURN removed_monetary_flow_id;
-EXCEPTION
-    WHEN OTHERS THEN
-        RAISE EXCEPTION 'An error occurred while removing monetary flow: %', SQLERRM;
-END;
-$$ LANGUAGE plpgsql;
---rollback DROP FUNCTION "delete_monetary_flow";
+-- --changeset ryan:ddl:createFunction:delete_monetary_flow
+-- CREATE OR REPLACE FUNCTION delete_goal(
+--     cognito_identifier varchar(50),
+--     goal_id integer
+-- )
+--     RETURNS int AS
+-- $$
+-- DECLARE
+--     user_business_id         int;
+--     removed_monetary_flow_id int;
+-- BEGIN
+--     SELECT id INTO user_business_id FROM businesses WHERE user_cognito_identifier = cognito_identifier;
+-- 
+--     UPDATE goals
+--     SET is_deleted = TRUE
+--     WHERE business_id = user_business_id
+--       AND id = goal_id
+--     RETURNING id INTO removed_monetary_flow_id;
+-- 
+--     RETURN removed_monetary_flow_id;
+-- EXCEPTION
+--     WHEN OTHERS THEN
+--         RAISE EXCEPTION 'An error occurred while removing monetary flow: %', SQLERRM;
+-- END;
+-- $$ LANGUAGE plpgsql;
+-- --rollback DROP FUNCTION "delete_monetary_flow";
 
 --changeset ryan:ddl:createFunction:add_budget_category
 CREATE OR REPLACE FUNCTION add_budget_category(
@@ -270,6 +270,8 @@ DECLARE
     new_budget_category_id int;
 BEGIN
     SELECT id INTO user_business_id FROM businesses WHERE user_cognito_identifier = cognito_identifier;
+    SELECT business_id, category_id FROM category_budgets WHERE category_id = _category_id AND business_id = monthly_budget;
+    
     INSERT INTO category_budgets(business_id, category_id, monthly_budget)
     VALUES (user_business_id, _category_id, _monetary_value)
     RETURNING id INTO new_budget_category_id;

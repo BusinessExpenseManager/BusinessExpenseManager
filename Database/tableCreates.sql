@@ -37,7 +37,8 @@ CREATE TABLE category_budgets
     id             SERIAL PRIMARY KEY,
     business_id    INTEGER NOT NULL REFERENCES businesses (id),
     category_id    INTEGER NOT NULL REFERENCES categories (id),
-    monthly_budget MONEY   NOT NULL
+    monthly_budget MONEY   NOT NULL,
+    CONSTRAINT unique_business_category UNIQUE (business_id, category_id)
 );
 --rollback DROP TABLE "category_budgets";
 
