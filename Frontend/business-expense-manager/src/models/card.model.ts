@@ -5,5 +5,5 @@ export interface Card {
     balanceAmount: number;
     goalAmount: number;
     type: 'Goal' | 'Category';
-    colour: 'Yellow' | 'Blue' | 'Green' | 'Red';
+    colour: 'Yellow' | 'Blue' | 'Green' | 'Red' | 'Orange';
 }

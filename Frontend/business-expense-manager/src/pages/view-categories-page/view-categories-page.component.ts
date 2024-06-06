@@ -110,7 +110,7 @@ export class ViewCategoriesPageComponent implements OnInit {
         balanceAmount: catBudget.balance,
         goalAmount: catBudget.monthlyBudget,
         type: 'Category',
-        colour: balanceAmount >= goalAmount ? 'Red' : 'Blue',
+        colour: balanceAmount >= goalAmount ? 'Orange' : 'Blue',
       };
     });
 
