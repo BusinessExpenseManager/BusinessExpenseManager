@@ -14,6 +14,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {GoalService} from '../../../services/goal.service';
 import {CreateGoalDto} from '../../../dtos/create-goal.dto';
 import { PreventDoubleClick } from '../../../directives/prevent-double-click.directive';
+import {finalize} from "rxjs";
 
 @Component({
   selector: 'app-new-goal-dialog',
@@ -37,10 +38,11 @@ import { PreventDoubleClick } from '../../../directives/prevent-double-click.dir
   templateUrl: './new-goal-dialog.component.html',
   styleUrl: './new-goal-dialog.component.css',
 })
-export class NewGoalDialogComponent implements OnInit {
+export class NewGoalDialogComponent {
   categories: Category[] = [];
   goals: string[] = [];
-  canAddGoal: boolean = false;
+  disableSubmit: boolean = false;
+  currentDate = new Date()
 
   numRegex = /^-?\d*[.,]?\d{0,2}$/;
   newGoalForm = this.fb.group({
@@ -59,8 +61,6 @@ export class NewGoalDialogComponent implements OnInit {
     ],
   });
 
-  // GoalCategories: string[] = ['savings'];
-
   constructor(
     public dialogRef: MatDialogRef<NewGoalDialogComponent>,
     private fb: FormBuilder,
@@ -68,37 +68,31 @@ export class NewGoalDialogComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {}
 
-  ngOnInit() {
-    // this.categoryService.getAllCategories().subscribe({
-    //   next: (response) => {
-    //     this.categories = response;
-    //   },
-    // });
-  }
-
   public onSubmit(): void {
-    console.log("Calling onsubmit");
     if (this.newGoalForm.valid) {
-      // create request
-      const form = this.newGoalForm.getRawValue();
+      this.disableSubmit = true;
 
+      const form = this.newGoalForm.getRawValue();
       const request: CreateGoalDto = {
         name: form.goalName as string,
         description: form.goalDescription as string,
         goalMonetaryValue: form.amount as number,
         goalDueDatetime: form.dueDate as Date,
-        
+
       };
 
-      console.log("Attempting to add goal:", request);
-
-      this.goalService.addGoal(request).subscribe({
-        next: (response) => {
-          if (response.success) {
-             console.log(response, "Success!");
-             this.dialogRef.close();
-          }
-        },
+      this.goalService.addGoal(request)
+        .pipe(
+          finalize(() => {
+            this.disableSubmit = false;
+          })
+        )
+        .subscribe({
+          next: (response) => {
+            if (response.success) {
+               this.dialogRef.close(true);
+            }
+          },
       });
 
       return;

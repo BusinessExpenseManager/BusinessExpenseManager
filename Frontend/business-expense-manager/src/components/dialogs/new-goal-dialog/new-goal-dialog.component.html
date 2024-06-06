@@ -24,7 +24,7 @@
 
     <mat-form-field>
       <mat-label>Due Date of goal</mat-label>
-      <input matInput [matDatepicker]="picker" formControlName="dueDate">
+      <input matInput [matDatepicker]="picker" [min]="currentDate" formControlName="dueDate">
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
       <mat-error *ngIf="newGoalForm.controls['dueDate']?.errors">
@@ -45,5 +45,5 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button color="primary" (click)="dialogRef.close(false)">Cancel</button>
-  <button mat-flat-button appPreventDoubleClick color="primary" type="submit" [disabled]="!newGoalForm.valid" (debounceClick)="onSubmit()">Add</button>
+  <button mat-flat-button appPreventDoubleClick color="primary" type="submit" [disabled]="!newGoalForm.valid || disableSubmit" (debounceClick)="onSubmit()">Add</button>
 </mat-dialog-actions>
