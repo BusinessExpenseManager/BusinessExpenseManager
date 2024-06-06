@@ -108,7 +108,9 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
           if (response.success) {
              console.log(response, "Success!");
              this.dialogRef.close();
-             this.snackBar.open("Successfully added");
+             this.snackBar.open('Catergory Budget added successfully', 'Ok', {
+              duration: 4000,
+            });
           }
         }
       });
