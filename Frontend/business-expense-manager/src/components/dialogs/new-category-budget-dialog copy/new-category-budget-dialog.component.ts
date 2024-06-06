@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
-import { DecimalPipe, NgIf } from '@angular/common';
+import { DecimalPipe, NgFor, NgIf } from '@angular/common';
 import {
   FormBuilder,
   FormsModule,
@@ -49,6 +49,7 @@ import { PreventDoubleClick } from '../../../directives/prevent-double-click.dir
     MatButtonModule,
     FormsModule,
     PreventDoubleClick,
+    NgFor,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './new-category-budget-dialog.component.html',
@@ -69,7 +70,7 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
     businessId: [1, Validators.required],
     categoryName: [null, [Validators.required, Validators.maxLength(15)]],
     budgetAmount: [
-      1,
+      0.00,
       [
         Validators.required,
         Validators.min(0.01),
@@ -96,6 +97,7 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
       // create request
       const form = this.newCategoryBudgetForm.getRawValue();
       const tempCategory = form.categoryName as any as Category;
+      console.log(tempCategory);
       const request: CreateCategoryBudgetDto = {
         categoryId: tempCategory?.id,
         monthlyBudget: form.budgetAmount as number,
@@ -105,6 +107,8 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
         next: (response) => {
           if (response.success) {
              console.log(response, "Success!");
+             this.dialogRef.close();
+             this.snackBar.open("Successfully added");
           }
         }
       });
@@ -160,10 +164,8 @@ export class NewCategoryBudgetDialogComponent implements OnInit {
       categoryNamesFromCategoryBudgets.push(categoryBudget.category);
     });
 
-    this.categories.filter(
+    this.availableCategories = this.categories.filter(
       (category) => !categoryNamesFromCategoryBudgets.includes(category.name)
     );
-
-    this.availableCategories = this.categories;
   }
 }

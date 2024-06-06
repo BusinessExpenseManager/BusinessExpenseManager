@@ -94,13 +94,15 @@ export class ViewCategoriesPageComponent implements OnInit {
       const balanceAmount = catBudget.balance; // change to proper val
       const goalAmount = catBudget.monthlyBudget;
 
+      const colour = balanceAmount > goalAmount ? 'Red' : 'Blue';
+
       return {
         id: catBudget.id,
         title: catBudget.category,
         balanceAmount: catBudget.balance,
         goalAmount: catBudget.monthlyBudget,
         type: 'Category',
-        colour: balanceAmount >= goalAmount ? 'Red' : 'Yellow',
+        colour: balanceAmount >= goalAmount ? 'Red' : 'Blue',
       };
     });
 
