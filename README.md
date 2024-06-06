@@ -44,6 +44,10 @@ builder.Services.AddCors(options =>
     });
 });
 ```
+ - /Frontend/business-expense-manager/src/index.html
+```
+connect-src 'self' http://localhost:5000 https://fonts.googleapis.com/ https://fonts.gstatic.com/"
+```
 
 ## Running docker-compose
 If you prefer to run the containers in detached mode (in the background), use the -d flag:
