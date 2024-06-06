@@ -324,7 +324,7 @@ END;
 $$ LANGUAGE plpgsql;
 --rollback DROP FUNCTION "retrieve_monetary_flows_for_goal";
 
-
+-- DROP FUNCTION retrieve_monetary_flows_for_cat;
 --changeset ryan:ddl:createFunction:retrieve_monetary_flows_for_cat
 CREATE OR REPLACE FUNCTION retrieve_monetary_flows_for_cat(
     cognito_identifier varchar(50),
@@ -334,7 +334,6 @@ CREATE OR REPLACE FUNCTION retrieve_monetary_flows_for_cat(
     RETURNS TABLE
             (
                 flow_id          int,
-                goal_name        varchar,
                 category_name    varchar,
                 monetary_value   money,
                 created_datetime timestamp
@@ -349,7 +348,7 @@ BEGIN
                monetary_flows.created_datetime
         FROM monetary_flows
                  LEFT JOIN categories ON monetary_flows.category_id = categories.id
-                 LEFT JOIN public.businesses b ON b.id = monetary_flows.business_id
+                 CROSS JOIN businesses b
         WHERE b.user_cognito_identifier = cognito_identifier
           AND category_id = _cat_id
           AND monetary_flows.is_deleted = false
