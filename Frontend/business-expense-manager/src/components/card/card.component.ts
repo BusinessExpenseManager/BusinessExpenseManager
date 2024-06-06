@@ -51,6 +51,9 @@ export class CardComponent {
     else if(this.card.colour === 'Yellow'){
       status = 'active';
     }
+    else if(this.card.colour === 'Orange'){
+      status = 'exceeded';
+    }
 
     return status;
   }

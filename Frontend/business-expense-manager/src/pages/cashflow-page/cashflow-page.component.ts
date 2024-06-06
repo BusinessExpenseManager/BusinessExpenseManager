@@ -1,6 +1,6 @@
 import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {MatIconModule} from "@angular/material/icon";
-import {MatPaginator, MatPaginatorIntl, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
+import {MatPaginator, MatPaginatorIntl, MatPaginatorModule} from "@angular/material/paginator";
 import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {MatSortHeader, MatSortModule} from '@angular/material/sort';
 import {MatDialog,} from '@angular/material/dialog';
@@ -11,6 +11,8 @@ import {DatePipe, NgIf} from "@angular/common";
 import {CashFlowDialogComponent} from "../../components/dialogs/cash-flow-dialog/cash-flow-dialog.component";
 import {MatButtonModule} from "@angular/material/button";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {PreventDoubleClick} from "../../directives/prevent-double-click.directive";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 
 @Component({
@@ -24,7 +26,9 @@ import {MatSnackBar} from "@angular/material/snack-bar";
     MatSortModule,
     NgIf,
     DatePipe,
-    MatButtonModule
+    MatButtonModule,
+    PreventDoubleClick,
+    MatProgressBarModule
   ],
   templateUrl: './cashflow-page.component.html',
   styleUrl: './cashflow-page.component.css'
@@ -47,22 +51,25 @@ export class CashflowPageComponent implements OnInit, AfterViewInit {
     this.getCashFlows();
   }
 
-  page: number = 1
-  onPageChange(event: PageEvent) {
-    this.page = event.pageIndex + 1;
-    this.getCashFlows();
-  }
-
   error: boolean = false;
   loading: boolean = true;
-  getCashFlows() {
+  isLastPage: boolean = false;
+  getCashFlows(nextPage: boolean = false) {
     this.error = false;
     this.monetaryFlowService.getCashFlowsForBusiness(this.page)
       .subscribe({
         next: response => {
           if (response.success) {
+            this.isLastPage = !response.data.length;
+            if (nextPage && this.isLastPage) {
+              this.page--;
+              this.snackBar.open('On Last Page.', 'Ok', {"duration": 4000});
+              return;
+            }
+
             this.dataSource = new MatTableDataSource<MonetaryFlow>(response.data);
             this.loading = false;
+
           } else {
             this.error = true;
           }
@@ -115,5 +122,21 @@ export class CashflowPageComponent implements OnInit, AfterViewInit {
         this.getCashFlows()
       }
     })
+  }
+
+  page: number = 1
+  previousPage() {
+    if (this.page === 1) {
+      this.snackBar.open('On First Page.', 'Ok', {"duration": 4000});
+      return;
+    }
+
+    this.page--;
+    this.getCashFlows()
+  }
+
+  nextPage() {
+    this.page++;
+    this.getCashFlows(true)
   }
 }

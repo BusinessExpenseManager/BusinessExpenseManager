@@ -1,17 +1,17 @@
-<section *ngIf="!error; else noData">
-  <section class="header-bar">
-    <h2>Categories</h2>
-    <button
-      (click)="addCategoryBudget()"
-      aria-label="Add new category budget"
-      mat-flat-button
-      color="primary"
-    >
-      <mat-icon fontIcon="add"></mat-icon>
-      Add
-    </button>
-  </section>
+<section class="header-bar">
+  <h2>Categories</h2>
+  <button
+    (click)="addCategoryBudget()"
+    aria-label="Add new category budget"
+    mat-flat-button
+    color="primary"
+  >
+    <mat-icon fontIcon="add"></mat-icon>
+    Add
+  </button>
+</section>
 
+<section *ngIf="!error; else noData">
   <section class="categories-container">
     <app-card
       *ngFor="let card of categoryCards"
@@ -22,9 +22,9 @@
   </section>
 </section>
 <ng-template #noData>
-  <p *ngIf="error">Goal retrieval failed to load...</p>
+  <p *ngIf="error && !isReturnEmpty">Goal retrieval failed to load...</p>
   <p *ngIf="!error && loading">Loading...</p>
-  <p *ngIf="!error && !loading">
+  <p *ngIf="isReturnEmpty">
     There are no goals with logged monetary flows, please add monetary flows for
     your goals.
   </p>

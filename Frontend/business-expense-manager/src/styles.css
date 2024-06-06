@@ -78,3 +78,24 @@ body {
 .mat-drawer-inner-container::-webkit-scrollbar {
   display: none;
 }
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  background-color: var(--secondary);
+  padding: 1rem;
+  border-top: var(--tertiary) solid 1px;
+
+  & button {
+    border-radius: 0.1em;
+    box-shadow: 0 0.2em 0.2em rgba(0, 0, 0, 0.3);;
+    color: var(--secondary)!important;
+  }
+
+  > span {
+    color: var(--tertiary);
+    text-align: center;
+  }
+}
