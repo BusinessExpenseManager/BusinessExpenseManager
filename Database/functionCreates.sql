@@ -274,10 +274,6 @@ DECLARE
     new_budget_category_id int;
 BEGIN
     SELECT id INTO user_business_id FROM businesses WHERE user_cognito_identifier = cognito_identifier;
-    SELECT business_id, category_id
-    FROM category_budgets
-    WHERE category_id = _category_id
-      AND business_id = monthly_budget;
 
     INSERT INTO category_budgets(business_id, category_id, monthly_budget)
     VALUES (user_business_id, _category_id, _monetary_value)
@@ -328,7 +324,7 @@ END;
 $$ LANGUAGE plpgsql;
 --rollback DROP FUNCTION "retrieve_monetary_flows_for_goal";
 
-
+-- DROP FUNCTION retrieve_monetary_flows_for_cat;
 --changeset ryan:ddl:createFunction:retrieve_monetary_flows_for_cat
 CREATE OR REPLACE FUNCTION retrieve_monetary_flows_for_cat(
     cognito_identifier varchar(50),
@@ -338,7 +334,6 @@ CREATE OR REPLACE FUNCTION retrieve_monetary_flows_for_cat(
     RETURNS TABLE
             (
                 flow_id          int,
-                goal_name        varchar,
                 category_name    varchar,
                 monetary_value   money,
                 created_datetime timestamp
@@ -353,7 +348,7 @@ BEGIN
                monetary_flows.created_datetime
         FROM monetary_flows
                  LEFT JOIN categories ON monetary_flows.category_id = categories.id
-                 LEFT JOIN public.businesses b ON b.id = monetary_flows.business_id
+                 CROSS JOIN businesses b
         WHERE b.user_cognito_identifier = cognito_identifier
           AND category_id = _cat_id
           AND monetary_flows.is_deleted = false
