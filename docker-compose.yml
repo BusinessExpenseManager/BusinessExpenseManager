@@ -1,21 +1,90 @@
-﻿# Compose that will be responsible for running the fullstack app.  
-services:
-#  Do the migration stuff for the db 
-  postgres:
-    image: postgres:latest
-    container_name: postgres_web_test_2
+﻿services:
+  #  DATABASE
+  db:
+    image: postgres:alpine
+    container_name: postgres_db
+    restart: always
     ports:
-      - "6500:5432"
+      - 5432:5432
+    environment:
+      POSTGRES_DB: bem
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: pass
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin -d ExpenseTrackerDB" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - expense-net
+
+  liquibase:
+    container_name: liquibase_migration
+    image: liquibase/liquibase:alpine
+    command: liquibase --url="jdbc:postgresql://db:5432/bem?user=admin&password=pass" --changeLogFile=changelog.yaml update
+    depends_on:
+      db:
+        condition: service_healthy
     volumes:
-      - progresDB:/var/lib/postgresql/data
-    env_file:
-      - ./.env
-  
+      - ./Database/changelog.yaml:/liquibase/changelog.yaml
+      - ./Database:/liquibase/Database
+    networks:
+      - expense-net
+
+  adminer:
+    image: adminer
+    container_name: dbms
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+      liquibase:
+        condition: service_completed_successfully
+    ports:
+      - 8080:8080
+    networks:
+      - expense-net
+
+  # BACKEND
   backend:
-    image: backend
     build:
       context: .
       dockerfile: Backend/Dockerfile
+    environment:
+      DB_URL: db,
+      DB_USERNAME: admin
+      DB_PASSWORD: pass
+      DB_DATABASE: bem
+      DB_PORT: 5432
+    ports:
+      - 5000:8080
+    depends_on:
+      db:
+        condition: service_healthy
+      liquibase:
+        condition: service_completed_successfully
+    networks:
+      - expense-net
 
-volumes:
-  progresDB:
+
+#   FRONTEND
+  frontend:
+    depends_on:
+      db:
+        condition: service_healthy
+      backend:
+        condition: service_started
+    build:
+      context: ./Frontend/business-expense-manager
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./Frontend/business-expense-manager:/src/app
+    ports:
+      - 4200:4200
+    networks:
+      - expense-net
+
+networks:
+  expense-net:
+    driver: bridge

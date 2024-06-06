@@ -1,5 +1,9 @@
 ﻿namespace Backend.Types.Endpoint;
 
 public record CategoryBudget(
-    int Id, int CategoryId, decimal MonthlyBudget
+    int Id,
+    string Name,
+    int CategoryId,
+    decimal MonthlyBudget,
+    decimal Mon
 );

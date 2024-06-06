@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Cash Flow</h2>
 <mat-dialog-content>
-  <form #cashFlowForm="ngForm" >
+  <form #cashFlowForm="ngForm">
     <mat-form-field>
       <mat-label>Type</mat-label>
       <mat-select required [(ngModel)]="cashFlow.type" name="type" (selectionChange)="checkCategoryCashFlowType(cashFlowForm)">
