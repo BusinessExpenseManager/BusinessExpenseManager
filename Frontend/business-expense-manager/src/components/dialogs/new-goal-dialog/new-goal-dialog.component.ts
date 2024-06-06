@@ -13,6 +13,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatButtonModule} from '@angular/material/button';
 import {GoalService} from '../../../services/goal.service';
 import {CreateGoalDto} from '../../../dtos/create-goal.dto';
+import { PreventDoubleClick } from '../../../directives/prevent-double-click.directive';
 
 @Component({
   selector: 'app-new-goal-dialog',
@@ -30,6 +31,7 @@ import {CreateGoalDto} from '../../../dtos/create-goal.dto';
     MatIcon,
     DecimalPipe,
     MatButtonModule,
+    PreventDoubleClick,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './new-goal-dialog.component.html',
